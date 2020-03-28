@@ -8,6 +8,7 @@
 package io.github.cornflower.util;
 
 import io.github.cornflower.mixin.CampfireBlockAccessor;
+import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -15,11 +16,9 @@ import net.minecraft.world.World;
 public class CampfireUtil {
 
     public static boolean isCampfireLitUnder(World world, BlockPos pos) {
-        BlockPos campfirePos = pos.down(1);
-        if(world.getBlockEntity(campfirePos) == null) return false;
-        if(!world.getBlockEntity(campfirePos).getType().equals(BlockEntityType.CAMPFIRE)) return false;
-        if(!CampfireBlockAccessor.callIsLitCampfire(world.getBlockState(campfirePos))) return false;
-
-        return true;
+        BlockEntity campfire = world.getBlockEntity(pos.down(1));
+        if(campfire == null) return false;
+        if(!campfire.getType().equals(BlockEntityType.CAMPFIRE)) return false;
+        return CampfireBlockAccessor.callIsLitCampfire(world.getBlockState(pos.down(1)));
     }
 }

@@ -11,6 +11,10 @@ archivesBaseName = project.archives_base_name
 version = "${project.mod_version}+fabric.${project.minecraft_version}"
 group = project.maven_group
 
+minecraft {
+	refmapName = "cornflower.refmap.json"
+}
+
 repositories {
 	maven {
 		name = "Spinnery"
@@ -24,8 +28,8 @@ dependencies {
 	modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
 	modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
 
-	modImplementation "com.github.vini2003:spinnery:${project.spinnery_version}"
-	include "com.github.vini2003:spinnery:${project.spinnery_version}"
+	//modImplementation "com.github.vini2003:spinnery:${project.spinnery_version}"
+	//include "com.github.vini2003:spinnery:${project.spinnery_version}"
 }
 
 license {
@@ -53,7 +57,7 @@ tasks.withType(JavaCompile) {
 	options.encoding = "UTF-8"
 }
 task sourcesJar(type: Jar, dependsOn: classes) {
-	classifier = "sources"
+	archiveClassifier = "sources"
 	from sourceSets.main.allSource
 }
 

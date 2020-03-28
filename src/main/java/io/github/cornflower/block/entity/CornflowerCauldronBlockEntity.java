@@ -23,9 +23,8 @@ public class CornflowerCauldronBlockEntity extends BlockEntity implements Tickab
     public void tick() {
         if((this.world != null ? this.world.getBlockState(this.pos).get(CauldronBlock.LEVEL) : 0) > 0) {
             if(CampfireUtil.isCampfireLitUnder(this.world, this.pos)) {
-                CornflowerCauldronBlock.spawnBubbleParticles(this.world, this.pos, this.world.getBlockState(this.pos).get(CauldronBlock.LEVEL));
+                // run recipe checks
             }
         }
     }
-
 }

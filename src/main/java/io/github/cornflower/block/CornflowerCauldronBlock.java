@@ -9,10 +9,13 @@ package io.github.cornflower.block;
 
 
 import io.github.cornflower.block.entity.CornflowerCauldronBlockEntity;
+import io.github.cornflower.util.CampfireUtil;
 import net.fabricmc.fabric.api.block.FabricBlockSettings;
 import net.minecraft.block.*;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.particle.ParticleTypes;
+import net.minecraft.sound.SoundCategory;
+import net.minecraft.sound.SoundEvents;
 import net.minecraft.state.property.IntProperty;
 import net.minecraft.state.property.Properties;
 import net.minecraft.util.DyeColor;
@@ -43,5 +46,23 @@ public class CornflowerCauldronBlock extends CauldronBlock implements BlockEntit
                 0.0D,
                 0.005D,
                 0.0D);
+    }
+
+    @Override
+    public void randomDisplayTick(BlockState state, World world, BlockPos pos, Random random) {
+        if(world.getBlockState(pos).get(CornflowerCauldronBlock.LEVEL) > 0) {
+            if(CampfireUtil.isCampfireLitUnder(world, pos)) {
+                CornflowerCauldronBlock.spawnBubbleParticles(world, pos, world.getBlockState(pos).get(CornflowerCauldronBlock.LEVEL));
+                world.playSound(pos.getX() + 0.5d,
+                        pos.getY() + 0.5d,
+                        pos.getZ() + 0.5d,
+                        SoundEvents.BLOCK_BUBBLE_COLUMN_BUBBLE_POP,
+                        SoundCategory.BLOCKS,
+                        0.2F + random.nextFloat() * 0.2F,
+                        0.9F + random.nextFloat() * 0.15F,
+                        false
+                );
+            }
+        }
     }
 }
