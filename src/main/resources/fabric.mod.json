@@ -1,37 +1,49 @@
 {
   "schemaVersion": 1,
-  "id": "modid",
+  "id": "cornflower",
   "version": "${version}",
 
-  "name": "Example Mod",
-  "description": "This is an example description! Tell everyone what your mod is about!",
+  "name": "Cornflower",
+  "description": "ModFest 1.15 submission from Team Cornflower.",
   "authors": [
-    "Me!"
+    {
+      "name": "JoeZwet",
+      "contact": {
+
+      }
+    },
+    {
+      "name": "Chriss",
+      "contact": {
+
+      }
+    },
+    {
+      "name": "SovietPropaganda",
+      "contact": {
+
+      }
+    }
   ],
   "contact": {
-    "homepage": "https://fabricmc.net/",
-    "sources": "https://github.com/FabricMC/fabric-example-mod"
+    "sources": "https://github.com/Modfest-1-15-Team-Cornflower/Cornflower"
   },
 
-  "license": "CC0-1.0",
-  "icon": "assets/modid/icon.png",
+  "license": "GPL-3.0-only",
+  "icon": "assets/cornflower/icon.png",
 
   "environment": "*",
   "entrypoints": {
-    "main": [
-      "net.fabricmc.example.ExampleMod"
-    ]
+    "main": [ "io.github.cornflower.Cornflower" ],
+    "cleint": [ "io.github.cornflower.client.CornflowerClient" ]
   },
   "mixins": [
-    "modid.mixins.json"
+    "cornflower.mixins.json"
   ],
 
   "depends": {
     "fabricloader": ">=0.7.4",
     "fabric": "*",
     "minecraft": "1.15.x"
-  },
-  "suggests": {
-    "flamingo": "*"
   }
 }
