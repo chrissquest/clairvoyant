@@ -8,6 +8,9 @@
 package io.github.cornflower;
 
 
+import io.github.cornflower.block.CornflowerBlocks;
+import io.github.cornflower.block.entity.CornflowerBlockEntities;
+import io.github.cornflower.util.ModBootstrap;
 import net.fabricmc.api.ModInitializer;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -18,6 +21,9 @@ public class Cornflower implements ModInitializer {
 
     @Override
     public void onInitialize() {
-
+        long startTime = System.currentTimeMillis();
+        LOGGER.info("[Cornflower] Starting Initialization.");
+        ModBootstrap.bootstrap(); // init things like blocks and items.
+        LOGGER.info("[Cornflower] Finished Initialization. (Took {}ms)", System.currentTimeMillis()-startTime);
     }
 }

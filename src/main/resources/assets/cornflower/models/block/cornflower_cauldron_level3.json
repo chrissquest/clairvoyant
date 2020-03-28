@@ -5,9 +5,9 @@
         "top": "cornflower:block/cornflower_cauldron_top",
         "bottom": "cornflower:block/cornflower_cauldron_bottom",
         "side": "cornflower:block/cornflower_cauldron_side",
-		"side2": "cornflower:block/cornflower_cauldron_side_leak",
-        "inside": "cornflower:block/cornflower_cauldron_inner"
-        "water": "block/water_still"
+		"east": "cornflower:block/cornflower_cauldron_side_leak",
+        "inside": "cornflower:block/cornflower_cauldron_inner",
+        "water": "minecraft:block/water_still"
     },
     "elements": [
         {
