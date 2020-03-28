@@ -35,7 +35,7 @@
   "environment": "*",
   "entrypoints": {
     "main": [ "io.github.cornflower.Cornflower" ],
-    "cleint": [ "io.github.cornflower.client.CornflowerClient" ]
+    "client": [ "io.github.cornflower.client.CornflowerClient" ]
   },
   "mixins": [
     "cornflower.mixins.json"
