@@ -9,6 +9,8 @@ package io.github.cornflower.mixin;
 
 import io.github.cornflower.block.CornflowerBlocks;
 import io.github.cornflower.block.entity.CornflowerCauldronBlockEntity;
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.block.CauldronBlock;
@@ -16,7 +18,11 @@ import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
+import net.minecraft.particle.ParticleTypes;
 import net.minecraft.server.world.ServerWorld;
+import net.minecraft.sound.SoundCategory;
+import net.minecraft.sound.SoundEvent;
+import net.minecraft.sound.SoundEvents;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Clearable;
 import net.minecraft.util.Hand;
@@ -27,6 +33,8 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
+
+import java.util.Random;
 
 
 @Mixin(CauldronBlock.class)
@@ -46,6 +54,10 @@ public class CauldronBlockMixin {
                 w.setBlockState(pos, CornflowerBlocks.CORNFLOWER_CAULDRON.getDefaultState());
                 w.updateNeighbors(pos, CornflowerBlocks.CORNFLOWER_CAULDRON);
                 itemStack.decrement(1);
+
+                Random random = new Random();
+                player.playSound(SoundEvents.ENTITY_ZOMBIE_VILLAGER_CURE, SoundCategory.BLOCKS, 0.2F + random.nextFloat() * 0.2F, 0.9F + random.nextFloat() * 0.15F);
+
                 ci.setReturnValue(ActionResult.SUCCESS);
                 ci.cancel();
             }

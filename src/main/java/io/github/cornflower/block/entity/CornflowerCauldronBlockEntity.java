@@ -7,9 +7,9 @@
 
 package io.github.cornflower.block.entity;
 
-import io.github.cornflower.block.CornflowerCauldronBlock;
 import io.github.cornflower.util.CampfireUtil;
 import net.minecraft.block.CauldronBlock;
+import net.minecraft.block.MaterialColor;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.util.Tickable;
 
@@ -19,12 +19,22 @@ public class CornflowerCauldronBlockEntity extends BlockEntity implements Tickab
         super(CornflowerBlockEntities.CORNFLOWER_CAULDRON);
     }
 
+    private int waterColor = MaterialColor.MAGENTA.color;
+
     @Override
     public void tick() {
         if((this.world != null ? this.world.getBlockState(this.pos).get(CauldronBlock.LEVEL) : 0) > 0) {
             if(CampfireUtil.isCampfireLitUnder(this.world, this.pos)) {
-                // run recipe checks
+                // might need this later
             }
         }
+    }
+
+    public int getWaterColor() {
+        return this.waterColor;
+    }
+
+    public void setWaterColor(int waterColor) {
+        this.waterColor = waterColor;
     }
 }
