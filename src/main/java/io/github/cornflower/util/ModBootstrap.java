@@ -9,11 +9,13 @@ package io.github.cornflower.util;
 
 import io.github.cornflower.block.CornflowerBlocks;
 import io.github.cornflower.block.entity.CornflowerBlockEntities;
+import io.github.cornflower.entity.CornflowerEntities;
 
 public class ModBootstrap {
 
     public static void bootstrap() {
         CornflowerBlocks.init();
         CornflowerBlockEntities.init();
+        CornflowerEntities.init();
     }
 }
