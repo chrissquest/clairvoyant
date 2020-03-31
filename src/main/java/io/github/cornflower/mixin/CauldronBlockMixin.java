@@ -43,10 +43,23 @@ public class CauldronBlockMixin {
     //TODO replace with real crafting thing
     @Inject(method = "onUse", at = @At("TAIL"), cancellable = true)
     private void onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hit, CallbackInfoReturnable<ActionResult> ci) {
-        if(world.isClient) return;
         if(world.getBlockState(pos).getBlock().equals(Blocks.CAULDRON)) {
             ItemStack itemStack = player.getStackInHand(hand);
             if(itemStack.getItem().equals(Items.CORNFLOWER)) {
+                if(world.isClient) {
+                    Random random = new Random();
+                    for (int i = 0; i < 30; i++) {
+                        world.addParticle(ParticleTypes.CLOUD,
+                                (double)pos.getX() + 0.5D + random.nextDouble() / 4.0D * (double)(random.nextBoolean() ? 1 : -1),
+                                (double)pos.getY() + 0.5D + random.nextDouble() / 4.0D * (double)(random.nextBoolean() ? 1 : -1),
+                                (double)pos.getZ() + 0.5D + random.nextDouble() / 4.0D * (double)(random.nextBoolean() ? 1 : -1),
+                                0,
+                                0,
+                                0
+                        );
+                    }
+                    return;
+                }
                 ServerWorld w = (ServerWorld)world;
                 BlockEntity blockEntity = w.getBlockEntity(pos);
                 Clearable.clear(blockEntity);
@@ -54,9 +67,6 @@ public class CauldronBlockMixin {
                 w.setBlockState(pos, CornflowerBlocks.CORNFLOWER_CAULDRON.getDefaultState());
                 w.updateNeighbors(pos, CornflowerBlocks.CORNFLOWER_CAULDRON);
                 itemStack.decrement(1);
-
-                Random random = new Random();
-                player.playSound(SoundEvents.ENTITY_ZOMBIE_VILLAGER_CURE, SoundCategory.BLOCKS, 0.2F + random.nextFloat() * 0.2F, 0.9F + random.nextFloat() * 0.15F);
 
                 ci.setReturnValue(ActionResult.SUCCESS);
                 ci.cancel();

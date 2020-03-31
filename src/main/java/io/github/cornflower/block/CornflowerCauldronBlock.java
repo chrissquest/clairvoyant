@@ -14,14 +14,13 @@ import net.fabricmc.fabric.api.block.FabricBlockSettings;
 import net.minecraft.block.*;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.item.BucketItem;
 import net.minecraft.item.DyeItem;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.Items;
 import net.minecraft.particle.ParticleTypes;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvents;
-import net.minecraft.state.property.IntProperty;
-import net.minecraft.state.property.Properties;
-import net.minecraft.tag.ItemTags;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.DyeColor;
 import net.minecraft.util.Hand;
@@ -53,19 +52,61 @@ public class CornflowerCauldronBlock extends CauldronBlock implements BlockEntit
                 0.0D,
                 0.005D,
                 0.0D);
+        BlockEntity be = world.getBlockEntity(pos);
+        if(be != null) {
+            if(be instanceof CornflowerCauldronBlockEntity) {
+                if(((CornflowerCauldronBlockEntity) be).getCraftingStage() == CornflowerCauldronBlockEntity.CraftingStage.CRAFTING) {
+                    world.addParticle(ParticleTypes.END_ROD,
+                            (double)pos.getX() + 0.5D + rand.nextDouble() / 4.0D * (double)(rand.nextBoolean() ? 1 : -1),
+                            (double)pos.getY() + (4*pixel) + ((waterLevel*3+2)*pixel),
+                            (double)pos.getZ() + 0.5D + rand.nextDouble() / 4.0D * (double)(rand.nextBoolean() ? 1 : -1),
+                            (rand.nextBoolean() ? 1 : -1) * 0.05d,
+                            (rand.nextBoolean() ? 1 : -1) * 0.05d,
+                            (rand.nextBoolean() ? 1 : -1) * 0.05d
+                    );
+                }
+            }
+        }
     }
 
     @Override
     public ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hit) {
         if(world.isClient) return super.onUse(state, world, pos, player, hand, hit);
+        ItemStack stack = player.getStackInHand(hand);
+        if(!stack.isEmpty()) {
+            if(stack.getItem() == Items.WATER_BUCKET || stack.getItem() == Items.BUCKET || stack.getItem() == Items.GLASS_BOTTLE) {
+                return super.onUse(state, world, pos, player, hand, hit);
+            }
+            if(world.getBlockEntity(pos) instanceof CornflowerCauldronBlockEntity) {
+                CornflowerCauldronBlockEntity cauldron = (CornflowerCauldronBlockEntity) world.getBlockEntity(pos);
+                if((cauldron != null ? cauldron.getCraftingStage() : CornflowerCauldronBlockEntity.CraftingStage.NONE) == CornflowerCauldronBlockEntity.CraftingStage.NONE) {
+
+                }
+            }
+        }
+
+
+
+        return super.onUse(state, world, pos, player, hand, hit);
+        /*
+        if(world.isClient) return super.onUse(state, world, pos, player, hand, hit);
         ItemStack itemStack = player.getStackInHand(hand);
         if(!itemStack.isEmpty()) {
             if(itemStack.getItem() instanceof DyeItem) {
-                ((CornflowerCauldronBlockEntity)world.getBlockEntity(pos)).setWaterColor(((DyeItem) itemStack.getItem()).getColor().getMaterialColor().color);
-                return ActionResult.SUCCESS;
+                BlockEntity cauldron = world.getBlockEntity(pos);
+                if(cauldron instanceof CornflowerCauldronBlockEntity) {
+                    if(((CornflowerCauldronBlockEntity) cauldron).getCraftingStage() == CornflowerCauldronBlockEntity.CraftingStage.NONE) {
+                        ((CornflowerCauldronBlockEntity) cauldron).setCraftingStage(CornflowerCauldronBlockEntity.CraftingStage.CRAFTING);
+                        ItemStack s = itemStack.copy();
+                        s.setCount(1);
+                        ((CornflowerCauldronBlockEntity)cauldron).addItem(s);
+                        return ActionResult.SUCCESS;
+                    }
+                }
             }
         }
         return super.onUse(state, world, pos, player, hand, hit);
+        */
     }
 
     @Override
