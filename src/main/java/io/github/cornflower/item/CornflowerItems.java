@@ -10,12 +10,12 @@ import static io.github.cornflower.group.CornflowerGroup.CORNFLOWER_GROUP;
 
 public class CornflowerItems {
 
-  public static final Item CORNFLOWER_WAND = registerItem(new CornflowerWand(), "wand_cornflower");
+    public static final Item CORNFLOWER_WAND = registerItem(new CornflowerWand(), "wand_cornflower");
 
 
-  private static Item registerItem(Item item, String id) {
-    return Registry.register(Registry.ITEM, new Identifier(ModConstants.MOD_ID, id), new Item(new Item.Settings().group(CORNFLOWER_GROUP)));
-  }
+    private static Item registerItem(Item item, String id) {
+        return Registry.register(Registry.ITEM, new Identifier(ModConstants.MOD_ID, id), new Item(new Item.Settings().group(CORNFLOWER_GROUP)));
+    }
 
-  public static void init() {}
+    public static void init() {}
 }

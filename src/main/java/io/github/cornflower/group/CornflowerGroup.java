@@ -8,8 +8,8 @@ import net.minecraft.util.Identifier;
 
 public class CornflowerGroup {
 
-  public static final ItemGroup CORNFLOWER_GROUP = FabricItemGroupBuilder.create(new Identifier(ModConstants.MOD_ID, "cornflower_group"))
-      .icon(Items.CORNFLOWER::getStackForRender).build();
+    public static final ItemGroup CORNFLOWER_GROUP = FabricItemGroupBuilder.create(new Identifier(ModConstants.MOD_ID, "cornflower_group"))
+            .icon(Items.CORNFLOWER::getStackForRender).build();
 
-  public static void init() {}
+    public static void init() {}
 }
