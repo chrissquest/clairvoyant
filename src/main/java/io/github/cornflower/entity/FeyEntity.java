@@ -2,29 +2,25 @@ package io.github.cornflower.entity;
 
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.*;
-import net.minecraft.entity.ai.TargetPredicate;
 import net.minecraft.entity.attribute.EntityAttributes;
 import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.data.DataTracker;
 import net.minecraft.entity.data.TrackedData;
 import net.minecraft.entity.data.TrackedDataHandlerRegistry;
 import net.minecraft.entity.mob.AmbientEntity;
-import net.minecraft.entity.passive.BatEntity;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.sound.SoundEvent;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
-import net.minecraft.world.IWorld;
 import net.minecraft.world.World;
-
-import java.util.Random;
 
 public class FeyEntity extends AmbientEntity {
     private static final TrackedData<Byte> FEY_FLAGS;
-    private static final TargetPredicate CLOSE_PLAYER_PREDICATE;
-    private BlockPos hangingPosition;
+    // Item transport Fey
+    private BlockPos inputBlock;
+    private BlockPos outputBlock;
 
     public FeyEntity(EntityType<? extends FeyEntity> entityType, World world) {
         super(entityType, world);
@@ -79,18 +75,15 @@ public class FeyEntity extends AmbientEntity {
     protected void mobTick() {
         super.mobTick();
         BlockPos blockPos = new BlockPos(this);
-        BlockPos blockPos2 = blockPos.up();
-            if (this.hangingPosition != null && (!this.world.isAir(this.hangingPosition) || this.hangingPosition.getY() < 1)) {
-                this.hangingPosition = null;
+        // Guessing this just chooses a random location to move to every mob tick and goes
+
+        if (this.random.nextInt(30) == 0 || blockPos.isWithinDistance(this.getPos(), 2.0D)) {
+            blockPos = new BlockPos(this.getX() + (double)this.random.nextInt(7) - (double)this.random.nextInt(7), this.getY() + (double)this.random.nextInt(6) - 2.0D, this.getZ() + (double)this.random.nextInt(7) - (double)this.random.nextInt(7));
             }
 
-            if (this.hangingPosition == null || this.random.nextInt(30) == 0 || this.hangingPosition.isWithinDistance(this.getPos(), 2.0D)) {
-                this.hangingPosition = new BlockPos(this.getX() + (double)this.random.nextInt(7) - (double)this.random.nextInt(7), this.getY() + (double)this.random.nextInt(6) - 2.0D, this.getZ() + (double)this.random.nextInt(7) - (double)this.random.nextInt(7));
-            }
-
-            double d = (double)this.hangingPosition.getX() + 0.5D - this.getX();
-            double e = (double)this.hangingPosition.getY() + 0.1D - this.getY();
-            double f = (double)this.hangingPosition.getZ() + 0.5D - this.getZ();
+            double d = (double)blockPos.getX() + 0.5D - this.getX();
+            double e = (double)blockPos.getY() + 0.1D - this.getY();
+            double f = (double)blockPos.getZ() + 0.5D - this.getZ();
             Vec3d vec3d = this.getVelocity();
             Vec3d vec3d2 = vec3d.add((Math.signum(d) * 0.5D - vec3d.x) * 0.10000000149011612D, (Math.signum(e) * 0.699999988079071D - vec3d.y) * 0.10000000149011612D, (Math.signum(f) * 0.5D - vec3d.z) * 0.10000000149011612D);
             this.setVelocity(vec3d2);
@@ -139,7 +132,6 @@ public class FeyEntity extends AmbientEntity {
     }
 
     static {
-        FEY_FLAGS = DataTracker.registerData(BatEntity.class, TrackedDataHandlerRegistry.BYTE);
-        CLOSE_PLAYER_PREDICATE = (new TargetPredicate()).setBaseMaxDistance(4.0D).includeTeammates();
+        FEY_FLAGS = DataTracker.registerData(FeyEntity.class, TrackedDataHandlerRegistry.BYTE);
     }
 }

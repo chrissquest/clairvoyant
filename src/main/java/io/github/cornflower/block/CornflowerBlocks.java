@@ -8,19 +8,15 @@
 package io.github.cornflower.block;
 
 import io.github.cornflower.util.ModConstants;
-import net.fabricmc.fabric.api.client.itemgroup.FabricItemGroupBuilder;
 import net.minecraft.block.Block;
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.Item;
-import net.minecraft.item.ItemGroup;
-import net.minecraft.item.Items;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.registry.Registry;
 
-public class CornflowerBlocks {
+import static io.github.cornflower.group.CornflowerGroup.CORNFLOWER_GROUP;
 
-    public static final ItemGroup CORNFLOWER_GROUP = FabricItemGroupBuilder.create(new Identifier(ModConstants.MOD_ID, "cornflower_group"))
-            .icon(Items.CORNFLOWER::getStackForRender).build();
+public class CornflowerBlocks {
 
     public static final CornflowerCauldronBlock CORNFLOWER_CAULDRON = (CornflowerCauldronBlock) registerBlock(new CornflowerCauldronBlock(), "cornflower_cauldron");
 
