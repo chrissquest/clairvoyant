@@ -100,6 +100,11 @@ public class FeyCollectGoal extends Goal {
                 ItemStack stack = targetInventory.getInvStack(targetSlot);
                 targetInventory.removeInvStack(targetSlot);
                 feyInventory.setInvStack(feySlot, stack);
+
+                // Now, set target back to input inventory
+                if(feyEntity.getOutputBlock() != null) {
+                    feyEntity.setPositionTarget(feyEntity.getOutputBlock(), 0);
+                }
             }
         }
     }

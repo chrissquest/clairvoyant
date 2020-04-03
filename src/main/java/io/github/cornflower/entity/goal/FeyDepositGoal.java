@@ -77,6 +77,11 @@ public class FeyDepositGoal extends Goal {
                 ItemStack stack = feyInventory.getInvStack(feySlot);
                 feyInventory.removeInvStack(feySlot);
                 targetInventory.setInvStack(targetSlot, stack);
+
+                // Now, set target back to input inventory
+                if(feyEntity.getInputBlock() != null) {
+                    feyEntity.setPositionTarget(feyEntity.getInputBlock(), 0);
+                }
             }
         }
     }
