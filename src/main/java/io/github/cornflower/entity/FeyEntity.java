@@ -54,10 +54,10 @@ public class FeyEntity extends MobEntityWithAi {
 
     @Override
     protected void initGoals() {
-        this.goalSelector.add(1, new FeyIdleGoal(this));
-        this.goalSelector.add(2, new FeyCollectGoal(this));
-        this.goalSelector.add(2, new FeyDepositGoal(this));
-        this.targetSelector.add(1, new FeyMoveGoal(this));
+        this.goalSelector.add(3, new FeyIdleGoal(this));
+        this.goalSelector.add(2, new FeyMoveGoal(this));
+        this.goalSelector.add(1, new FeyCollectGoal(this));
+        this.goalSelector.add(1, new FeyDepositGoal(this));
     }
 
     @Override

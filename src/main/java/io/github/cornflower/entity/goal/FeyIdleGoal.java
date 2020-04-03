@@ -44,16 +44,5 @@ public class FeyIdleGoal extends Goal {
         float h = MathHelper.wrapDegrees(g - feyEntity.yaw);
         feyEntity.forwardSpeed = 0.5F;
         feyEntity.yaw += h;
-
-        // Check if targets have been updated
-        if(feyEntity.hasItems()) {
-            if(feyEntity.getOutputBlock() != null) {
-                feyEntity.setPositionTarget(feyEntity.getOutputBlock(), 0);
-            }
-        } else {
-            if(feyEntity.getInputBlock() != null) {
-                feyEntity.setPositionTarget(feyEntity.getInputBlock(), 0);
-            }
-        }
     }
 }

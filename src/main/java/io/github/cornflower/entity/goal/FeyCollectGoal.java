@@ -12,7 +12,7 @@ public class FeyCollectGoal extends Goal {
      * The distance the Fey can access inventories from.
      * TODO: Make this modifiable by the user?
      */
-    private static final int pickupDistance = 3;
+    public static final int pickupDistance = 2;
 
     /**
      * If the Fey should wait until its inventory is full before leaving the input block.
@@ -73,7 +73,7 @@ public class FeyCollectGoal extends Goal {
                 // Check if target inventory is empty
                 int targetSlot = -1;
                 for(int i = 0; i < targetInventory.getInvSize(); i++) {
-                    if(targetInventory.getInvStack(i) != null) {
+                    if(!targetInventory.getInvStack(i).isEmpty()) {
                         targetSlot = i;
                         break;
                     }
@@ -86,7 +86,7 @@ public class FeyCollectGoal extends Goal {
                 // Check if there is an empty spot in the fey inventory
                 int feySlot = -1;
                 for(int i = 0; i < feyInventory.getInvSize(); i++) {
-                    if(feyInventory.getInvStack(i) == null) {
+                    if(feyInventory.getInvStack(i).isEmpty()) {
                         feySlot = i;
                         break;
                     }

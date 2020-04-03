@@ -12,7 +12,7 @@ public class FeyDepositGoal extends Goal {
      * The distance the Fey can access inventories from.
      * TODO: Make this modifiable by the user?
      */
-    private static final int depositDistance = 3;
+    public static final int depositDistance = 2;
 
     private FeyEntity feyEntity;
 
@@ -50,7 +50,7 @@ public class FeyDepositGoal extends Goal {
                 // Check if target inventory is full
                 int targetSlot = -1;
                 for(int i = 0; i < targetInventory.getInvSize(); i++) {
-                    if(targetInventory.getInvStack(i) == null) {
+                    if(targetInventory.getInvStack(i).isEmpty()) {
                         targetSlot = i;
                         break;
                     }
@@ -63,7 +63,7 @@ public class FeyDepositGoal extends Goal {
                 // Check if fey has item stack to give.
                 int feySlot = -1;
                 for(int i = 0; i < feyInventory.getInvSize(); i++) {
-                    if(feyInventory.getInvStack(i) != null) {
+                    if(!feyInventory.getInvStack(i).isEmpty()) {
                         feySlot = i;
                         break;
                     }
