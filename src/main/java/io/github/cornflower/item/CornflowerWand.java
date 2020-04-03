@@ -1,6 +1,8 @@
 package io.github.cornflower.item;
 
+import io.github.cornflower.entity.FeyEntity;
 import io.github.cornflower.group.CornflowerGroup;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -27,20 +29,67 @@ public class CornflowerWand extends Item {
 
     @Override
     public ActionResult useOnBlock(ItemUsageContext context) {
+        System.out.println("Block right clicked on: " + context.getBlockPos());
+
+        if(context.getPlayer() != null) {
+            if(context.getPlayer().isSneaking()) {
+                // Set output block
+                blockOutput = context.getBlockPos();
+                context.getPlayer().addChatMessage(new TranslatableText("item.cornflower.wand_cornflower.use_output"), true);
+
+                return ActionResult.SUCCESS;
+            }
+        }
+
+        // Set input block
         blockInput = context.getBlockPos();
+        if(context.getPlayer() != null) {
+            context.getPlayer().addChatMessage(new TranslatableText("item.cornflower.wand_cornflower.use_input"), true);
+        }
+        return ActionResult.SUCCESS;
+    }
 
-        System.out.println("Block right clicked on: " + blockInput);
-        Objects.requireNonNull(context.getPlayer()).addChatMessage(new TranslatableText("item.cornflower.wand_cornflower.use"), true);
+    @Override
+    public boolean useOnEntity(ItemStack stack, PlayerEntity user, LivingEntity entity, Hand hand) {
+        System.out.println("Entity right clicked on: " + entity.getBlockPos());
 
-        return super.useOnBlock(context);
+        // Handle clicking on a Fey to set the input/output block
+        if(entity instanceof FeyEntity) {
+            FeyEntity feyEntity = (FeyEntity)entity;
+
+            feyEntity.setInputBlock(this.blockInput);
+            feyEntity.setOutputBlock(this.blockOutput);
+
+            user.addChatMessage(new TranslatableText("item.cornflower.wand_cornflower.use_fey"), true);
+
+            return true;
+        }
+
+        // Handle user sneaking to set the output block
+        if(user != null) {
+            if(user.isSneaking()) {
+                // Set output block
+                blockOutput = entity.getBlockPos();
+                user.addChatMessage(new TranslatableText("item.cornflower.wand_cornflower.use_output"), true);
+
+                return true;
+            }
+        }
+
+        // Set input block
+        blockInput = entity.getBlockPos();
+        if(user != null) {
+            user.addChatMessage(new TranslatableText("item.cornflower.wand_cornflower.use_input"), true);
+        }
+        return true;
     }
 
     @Override
     public TypedActionResult<ItemStack> use(World world, PlayerEntity user, Hand hand) {
-        blockInput = user.getBlockPos();
+        /*blockInput = user.getBlockPos();
 
         System.out.println("User pos: " + blockInput);
-        user.addChatMessage(new TranslatableText("item.cornflower.wand_cornflower.use"), true);
+        user.addChatMessage(new TranslatableText("item.cornflower.wand_cornflower.use"), true);*/
 
 
         return super.use(world, user, hand);
