@@ -60,8 +60,7 @@ public class FeyMoveGoal extends Goal {
     @Override
     public void tick() {
         if(feyEntity.getNavigation().isIdle()) {
-            feyEntity.getNavigation().startMovingTo(this.targetPos.getX(), this.targetPos.getY(), this.targetPos.getZ(), 1.0d);
-            //.startMovingAlong(feyEntity.getNavigation().findPathTo(this.targetPos, 1), 1.0d);
+            feyEntity.getNavigation().startMovingAlong(feyEntity.getNavigation().findPathTo(this.targetPos, 2), 1.0d);
         }
     }
 

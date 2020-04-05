@@ -6,6 +6,7 @@ import io.github.cornflower.entity.goal.FeyIdleGoal;
 import io.github.cornflower.entity.goal.FeyMoveGoal;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.*;
+import net.minecraft.entity.ai.control.FlightMoveControl;
 import net.minecraft.entity.ai.control.JumpControl;
 import net.minecraft.entity.ai.goal.GoalSelector;
 import net.minecraft.entity.ai.pathing.BirdNavigation;
@@ -49,6 +50,8 @@ public class FeyEntity extends MobEntityWithAi implements Flutterer {
 
     public FeyEntity(EntityType<? extends FeyEntity> entityType, World world) {
         super(entityType, world);
+
+        this.moveControl = new FlightMoveControl(this, 20, true);
     }
 
     @Override
