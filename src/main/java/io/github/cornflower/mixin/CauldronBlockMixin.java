@@ -40,7 +40,6 @@ import java.util.Random;
 @Mixin(CauldronBlock.class)
 public class CauldronBlockMixin {
 
-    //TODO replace with real crafting thing
     @Inject(method = "onUse", at = @At("TAIL"), cancellable = true)
     private void onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hit, CallbackInfoReturnable<ActionResult> ci) {
         if(world.getBlockState(pos).getBlock().equals(Blocks.CAULDRON)) {

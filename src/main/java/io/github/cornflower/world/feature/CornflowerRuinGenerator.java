@@ -7,7 +7,6 @@
 
 package io.github.cornflower.world.feature;
 
-import io.github.cornflower.Cornflower;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.structure.*;
 import net.minecraft.structure.processor.BlockIgnoreStructureProcessor;
@@ -17,6 +16,7 @@ import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockBox;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.ChunkPos;
+import net.minecraft.world.Heightmap;
 import net.minecraft.world.IWorld;
 import net.minecraft.world.gen.chunk.ChunkGenerator;
 import net.minecraft.world.gen.feature.DefaultFeatureConfig;
@@ -25,11 +25,11 @@ import java.util.List;
 import java.util.Random;
 
 public class CornflowerRuinGenerator {
-    public static final Identifier id = new Identifier("cornflower", "ruin/ruin.nbt");
+    public static final Identifier id = new Identifier("cornflower:ruin");
 
-    public static void addParts(StructureManager structureManager, BlockPos blockPos, BlockRotation rotation, List<StructurePiece> list_1, Random random, DefaultFeatureConfig defaultFeatureConfig)
+    public static void addParts(StructureManager structureManager, BlockPos blockPos, BlockRotation rotation, List<StructurePiece> pieces, Random random, DefaultFeatureConfig defaultFeatureConfig)
     {
-        list_1.add(new CornflowerRuinGenerator.Piece(structureManager, id, blockPos, rotation));
+        pieces.add(new CornflowerRuinGenerator.Piece(structureManager, id, blockPos, rotation));
     }
 
     public static class Piece extends SimpleStructurePiece
@@ -80,7 +80,9 @@ public class CornflowerRuinGenerator {
         @Override
         public boolean generate(IWorld world, ChunkGenerator<?> generator, Random rand, BlockBox box, ChunkPos pos)
         {
-           return  super.generate(world, generator, rand, box, pos);
+            int yHeight = world.getTopY(Heightmap.Type.WORLD_SURFACE_WG, this.pos.getX() + 8, this.pos.getZ() + 8);
+            this.pos = this.pos.add(0, yHeight - 1, 0);
+            return super.generate(world, generator, rand, box, pos);
         }
     }
 }

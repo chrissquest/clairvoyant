@@ -8,6 +8,7 @@
 package io.github.cornflower.world.feature;
 
 import com.mojang.datafixers.Dynamic;
+import io.github.cornflower.Cornflower;
 import net.minecraft.structure.StructureManager;
 import net.minecraft.structure.StructureStart;
 import net.minecraft.util.BlockRotation;
@@ -42,7 +43,7 @@ public class CornflowerRuinFeature extends AbstractTempleFeature<DefaultFeatureC
 
     @Override
     public String getName() {
-        return "cornflower:ruin_structure";
+        return "cornflower_ruin";
     }
 
     @Override
