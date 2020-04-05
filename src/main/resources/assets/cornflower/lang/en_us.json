@@ -19,6 +19,8 @@
   "block.cornflower.timeworn_brick_wall": "Timeworn Brick Wall",
 
 
-  "advancements.cornflower.cornflower_intro.title": "Cornflower!",
-  "advancements.cornflower.cornflower_intro.description": "Wonder what you get if you break enough of them?"
+  "advancements.cornflower.cornflower_intro.title": "Cornflower",
+  "advancements.cornflower.cornflower_intro.description": "Wonder what you get if you break enough of them?",
+  "advancements.cornflower.create_fey.title": "Automated",
+  "advancements.cornflower.create_fey.description": "Just a fancy tech mod."
 }

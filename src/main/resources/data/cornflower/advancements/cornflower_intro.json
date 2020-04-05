@@ -12,7 +12,8 @@
     "frame": "task",
     "show_toast": true,
     "announce_to_chat": true,
-    "hidden": false
+    "hidden": false,
+    "background": "cornflower:textures/block/timeworn_bricks.png"
   },
   "criteria": {
     "cornflower": {

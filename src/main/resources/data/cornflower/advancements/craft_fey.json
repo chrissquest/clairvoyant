@@ -1,0 +1,35 @@
+{
+  "parent": "cornflower:cornflower_intro",
+  "display": {
+    "icon": {
+      "item": "cornflower:bottled_essence"
+    },
+    "title": {
+      "translate": "advancements.cornflower.create_fey.title"
+    },
+    "description": {
+      "translate": "advancements.cornflower.create_fey.description"
+    },
+    "frame": "goal",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "fey": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "item": "cornflower:bottled_fey"
+          }
+        ]
+      }
+    }
+  },
+  "requirements": [
+    [
+      "fey"
+    ]
+  ]
+}
