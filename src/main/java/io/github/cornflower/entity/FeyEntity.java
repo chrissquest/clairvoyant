@@ -1,3 +1,10 @@
+/*
+ * This file is part of Cornflower
+ * Copyright (C) 2020, Team Cornflower.
+ *
+ * This code is licensed under GNU General Public License v3.0, the full license text can be found in LICENSE
+ */
+
 package io.github.cornflower.entity;
 
 import io.github.cornflower.entity.goal.FeyCollectGoal;
@@ -198,7 +205,7 @@ public class FeyEntity extends MobEntityWithAi implements Flutterer {
 
                 float f = this.random.nextFloat() * 0.5F;
                 float g = this.random.nextFloat() * 6.2831855F;
-                itemEntity.setVelocity((double)(-MathHelper.sin(g) * f), 0.20000000298023224D, (double)(MathHelper.cos(g) * f));
+                itemEntity.setVelocity((-MathHelper.sin(g) * f), 0.20000000298023224D, (MathHelper.cos(g) * f));
 
                 items.removeInvStack(i);
             }
