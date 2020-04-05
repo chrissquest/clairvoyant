@@ -2,6 +2,9 @@
   "itemGroup.cornflower.cornflower_group": "Cornfloweries",
 
   "item.cornflower.wand_cornflower": "Cornflower Wand",
+  "item.cornflower.wand_cornflower.use_input": "Set input",
+  "item.cornflower.wand_cornflower.use_output": "Set output",
+  "item.cornflower.wand_cornflower.use_fey": "Transferred to fey",
   "item.cornflower.wand_cornflower.tooltip1": "Input Block: ",
   "item.cornflower.wand_cornflower.tooltip2": "Output Block: ",
   "item.cornflower.cornflower_essence": "Cornflower Essence",
