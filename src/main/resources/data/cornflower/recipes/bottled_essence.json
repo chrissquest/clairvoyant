@@ -7,7 +7,7 @@
   ],
   "key": {
     "E": { "item": "cornflower:cornflower_essence" },
-    "B": { "item": "minecraft:bottle" }
+    "B": { "item": "minecraft:glass_bottle" }
   },
   "result": {
     "item": "cornflower:bottled_essence",

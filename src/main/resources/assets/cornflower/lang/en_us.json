@@ -10,7 +10,11 @@
 
   "block.cornflower.cornflower_cauldron": "Cornflower Cauldron",
   "block.cornflower.bottled_fey": "Bottled Fey",
-  "block.cornflower.timeworn_bricks": "Timeworn Bricks",
+  "block.cornflower.timeworn_brick": "Timeworn Bricks",
+  "block.cornflower.timeworn_brick_slab": "Timeworn Brick Slab",
+  "block.cornflower.timeworn_brick_stairs": "Timeworn Brick Stairs",
+  "block.cornflower.timeworn_brick_wall": "Timeworn Brick Wall",
+
 
   "advancements.cornflower.cornflower_intro.title": "Cornflower!",
   "advancements.cornflower.cornflower_intro.description": "Wonder what you get if you break enough of them?"

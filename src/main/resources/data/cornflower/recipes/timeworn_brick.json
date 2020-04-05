@@ -1,0 +1,11 @@
+{
+  "type": "cornflower:cauldron",
+  "items": [
+    { "item": "cornflower:cornflower_essence" },
+    { "item": "minecraft:bricks", "count": 4 }
+  ],
+  "result": {
+    "item": "cornflower:timeworn_brick",
+    "count": 4
+  }
+}
