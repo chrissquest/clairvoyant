@@ -16,11 +16,13 @@ import io.github.cornflower.entity.FeyEntityRenderer;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
+import net.fabricmc.fabric.api.blockrenderlayer.v1.BlockRenderLayerMap;
 import net.fabricmc.fabric.api.client.rendereregistry.v1.EntityRendererRegistry;
 import net.fabricmc.fabric.api.client.rendering.v1.ColorProviderRegistry;
 import net.minecraft.block.MaterialColor;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.client.color.world.BiomeColors;
+import net.minecraft.client.render.RenderLayer;
 
 @Environment(EnvType.CLIENT)
 public class CornflowerClient implements ClientModInitializer {
@@ -45,6 +47,8 @@ public class CornflowerClient implements ClientModInitializer {
         }, CornflowerBlocks.CORNFLOWER_CAULDRON);
 
         EntityRendererRegistry.INSTANCE.register(CornflowerEntities.FEY, (entityRenderDispatcher, context) -> new FeyEntityRenderer(entityRenderDispatcher));
+
+        BlockRenderLayerMap.INSTANCE.putBlock(CornflowerBlocks.BOTTLED_FEY, RenderLayer.getTranslucent());
 
         Cornflower.LOGGER.info("[Cornflower] Client initialization complete. (Took {}ms)", System.currentTimeMillis()-startTime);
     }

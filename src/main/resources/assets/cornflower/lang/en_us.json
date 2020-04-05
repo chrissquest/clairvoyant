@@ -2,11 +2,14 @@
   "itemGroup.cornflower.cornflower_group": "Cornfloweries",
 
   "item.cornflower.wand_cornflower": "Cornflower Wand",
-  "item.cornflower.cornflower_essence": "Cornflower Essence",
   "item.cornflower.wand_cornflower.tooltip1": "Input Block: ",
   "item.cornflower.wand_cornflower.tooltip2": "Output Block: ",
+  "item.cornflower.cornflower_essence": "Cornflower Essence",
+  "item.cornflower.bottled_essence": "Bottled Essence",
+
 
   "block.cornflower.cornflower_cauldron": "Cornflower Cauldron",
+  "block.cornflower.bottled_fey": "Bottled Fey",
   "block.cornflower.timeworn_bricks": "Timeworn Bricks",
 
   "advancements.cornflower.cornflower_intro.title": "Cornflower!",
