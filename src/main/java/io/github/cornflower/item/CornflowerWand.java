@@ -84,14 +84,4 @@ public class CornflowerWand extends Item {
         return true;
     }
 
-    @Override
-    public TypedActionResult<ItemStack> use(World world, PlayerEntity user, Hand hand) {
-        /*blockInput = user.getBlockPos();
-
-        System.out.println("User pos: " + blockInput);
-        user.addChatMessage(new TranslatableText("item.cornflower.wand_cornflower.use"), true);*/
-
-
-        return super.use(world, user, hand);
-    }
 }

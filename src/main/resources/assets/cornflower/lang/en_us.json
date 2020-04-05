@@ -2,6 +2,10 @@
   "itemGroup.cornflower.cornflower_group": "Cornfloweries",
 
   "item.cornflower.wand_cornflower": "Cornflower Wand",
+  "item.cornflower.cornflower_essence": "Cornflower Essence",
 
-  "block.cornflower.cornflower_cauldron": "Cornflower Cauldron"
+  "block.cornflower.cornflower_cauldron": "Cornflower Cauldron",
+
+  "advancements.cornflower.cornflower_intro.title": "Cornflower!",
+  "advancements.cornflower.cornflower_intro.description": "Wonder what you get if you break enough of them?"
 }
