@@ -19,6 +19,8 @@ import static io.github.cornflower.group.CornflowerGroup.CORNFLOWER_GROUP;
 public class CornflowerBlocks {
 
     public static final CornflowerCauldronBlock CORNFLOWER_CAULDRON = (CornflowerCauldronBlock) registerBlock(new CornflowerCauldronBlock(), "cornflower_cauldron");
+    public static final TimewornBricks TIMEWORN_BRICKS = (TimewornBricks) registerBlock(new TimewornBricks(), "timeworn_bricks");
+
 
     private static Block registerBlockWithoutItem(Block block, String id) {
         return Registry.register(Registry.BLOCK, new Identifier(ModConstants.MOD_ID, id), block);
