@@ -12,6 +12,7 @@ import io.github.cornflower.block.entity.CornflowerBlockEntities;
 import io.github.cornflower.entity.CornflowerEntities;
 import io.github.cornflower.group.CornflowerGroup;
 import io.github.cornflower.item.CornflowerItems;
+import io.github.cornflower.recipe.CornflowerRecipes;
 
 public class ModBootstrap {
 
@@ -21,5 +22,6 @@ public class ModBootstrap {
         CornflowerBlocks.init();
         CornflowerBlockEntities.init();
         CornflowerEntities.init();
+        CornflowerRecipes.init();
     }
 }
