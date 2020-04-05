@@ -13,6 +13,7 @@ import io.github.cornflower.entity.CornflowerEntities;
 import io.github.cornflower.group.CornflowerGroup;
 import io.github.cornflower.item.CornflowerItems;
 import io.github.cornflower.recipe.CornflowerRecipes;
+import net.minecraft.world.biome.Biome;
 
 public class ModBootstrap {
 
@@ -24,4 +25,5 @@ public class ModBootstrap {
         CornflowerEntities.init();
         CornflowerRecipes.init();
     }
+
 }

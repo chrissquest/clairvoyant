@@ -28,6 +28,7 @@ public class FeyIdleGoal extends Goal {
      */
     @Override
     public void tick() {
+        /*
         BlockPos blockPos = feyEntity.getBlockPos();
 
         if (this.random.nextInt(30) == 0 || blockPos.isWithinDistance(feyEntity.getPos(), 2.0D)) {
@@ -44,5 +45,6 @@ public class FeyIdleGoal extends Goal {
         float h = MathHelper.wrapDegrees(g - feyEntity.yaw);
         feyEntity.forwardSpeed = 0.5F;
         feyEntity.yaw += h;
+        */
     }
 }

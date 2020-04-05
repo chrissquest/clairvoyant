@@ -3,15 +3,20 @@ package io.github.cornflower.item;
 import io.github.cornflower.entity.FeyEntity;
 import io.github.cornflower.group.CornflowerGroup;
 import net.minecraft.block.entity.LootableContainerBlockEntity;
+import net.minecraft.client.item.TooltipContext;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemUsageContext;
+import net.minecraft.text.Text;
 import net.minecraft.text.TranslatableText;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.World;
+
+import java.util.List;
 
 import static io.github.cornflower.group.CornflowerGroup.CORNFLOWER_GROUP;
 
@@ -67,6 +72,14 @@ public class CornflowerWand extends Item {
         return super.useOnEntity(stack, user, entity, hand);
     }
 
+    @Override
+    public void appendTooltip(ItemStack itemStack, World world, List<Text> tooltip, TooltipContext tooltipContext) {
+        if(blockInput == null) tooltip.add(new TranslatableText("item.cornflower.wand_cornflower.tooltip1"));
+        else tooltip.add(new TranslatableText("item.cornflower.wand_cornflower.tooltip1").append(blockInput.toShortString()));
+        if(blockOutput == null) tooltip.add(new TranslatableText("item.cornflower.wand_cornflower.tooltip2"));
+        else tooltip.add(new TranslatableText("item.cornflower.wand_cornflower.tooltip2").append(blockOutput.toShortString()));
+    }
+
     public void setBlockInput(BlockPos blockInput) {
         this.blockInput = blockInput;
     }
@@ -74,4 +87,5 @@ public class CornflowerWand extends Item {
     public void setBlockOutput(BlockPos blockOutput) {
         this.blockOutput = blockOutput;
     }
+
 }
