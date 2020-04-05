@@ -25,21 +25,15 @@ public class CauldronRecipe implements Recipe<Inventory> {
     private final Identifier id;
     private final DefaultedList<Ingredient> ingredients;
     private final ItemStack result;
-    private final int waterLevel;
 
-    public CauldronRecipe(Identifier id, DefaultedList<Ingredient> ingredients, ItemStack result, int waterLevel) {
+    public CauldronRecipe(Identifier id, DefaultedList<Ingredient> ingredients, ItemStack result) {
         this.id = id;
         this.ingredients = ingredients;
         this.result = result;
-        this.waterLevel = waterLevel;
     }
 
     public DefaultedList<Ingredient> getIngredients() {
         return this.ingredients;
-    }
-
-    public int getWaterLevel() {
-        return this.waterLevel;
     }
 
     @Override
@@ -92,19 +86,14 @@ public class CauldronRecipe implements Recipe<Inventory> {
 
         @Override
         public CauldronRecipe read(Identifier id, JsonObject json) {
-            int waterLevel = JsonHelper.getInt(json, "water", 1);
             DefaultedList<Ingredient> ingredients = getIngredients(JsonHelper.getArray(json, "items"));
-            if(waterLevel < 1) {
-                throw new JsonParseException("Water level must be at least one.");
-            } else if(waterLevel > 3) {
-                throw new JsonParseException("Water level must be three or lower.");
-            } else if(ingredients.isEmpty()) {
+            if(ingredients.isEmpty()) {
                 throw new JsonParseException("No ingredients for cauldron recipe.");
             } else if(ingredients.size() > 5) {
                 throw new JsonParseException("Too many ingredients for cauldron recipe.");
             } else {
                 ItemStack stack = ShapedRecipe.getItemStack(JsonHelper.getObject(json, "result"));
-                return new CauldronRecipe(id, ingredients, stack, waterLevel);
+                return new CauldronRecipe(id, ingredients, stack);
             }
         }
 
@@ -119,12 +108,11 @@ public class CauldronRecipe implements Recipe<Inventory> {
             }
 
             ItemStack stack = buf.readItemStack();
-            return new CauldronRecipe(id, ingredients, stack, waterLevel);
+            return new CauldronRecipe(id, ingredients, stack);
         }
 
         @Override
         public void write(PacketByteBuf buf, CauldronRecipe recipe) {
-            buf.writeInt(recipe.getWaterLevel());
             buf.writeVarInt(recipe.getIngredients().size());
 
             for (Ingredient ingredient : recipe.ingredients) {

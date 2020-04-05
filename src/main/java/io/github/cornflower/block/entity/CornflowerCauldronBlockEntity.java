@@ -7,15 +7,20 @@
 
 package io.github.cornflower.block.entity;
 
+import io.github.cornflower.recipe.CauldronRecipe;
+import io.github.cornflower.recipe.CornflowerRecipes;
 import io.github.cornflower.util.CampfireUtil;
 import net.fabricmc.fabric.api.block.entity.BlockEntityClientSerializable;
 import net.minecraft.block.CauldronBlock;
 import net.minecraft.block.entity.BlockEntity;
+import net.minecraft.inventory.BasicInventory;
 import net.minecraft.inventory.Inventories;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.util.DefaultedList;
 import net.minecraft.util.Tickable;
+
+import java.util.Optional;
 
 public class CornflowerCauldronBlockEntity extends BlockEntity implements Tickable, BlockEntityClientSerializable {
 
@@ -50,11 +55,22 @@ public class CornflowerCauldronBlockEntity extends BlockEntity implements Tickab
     }
 
     public void addItem(ItemStack stack) {
-        this.inv.set(0, stack);
-        this.updateListeners();
+        if(!this.isInvFull()) {
+            this.inv.set(this.inv.indexOf(ItemStack.EMPTY), stack);
+            this.updateListeners();
+            if(this.isInvFull() && this.getRecipeForInvContent().isPresent()) this.setCraftingStage(CraftingStage.DONE);
+        }
     }
+
     public DefaultedList<ItemStack> getInv() {
         return this.inv;
+    }
+
+    public boolean isInvFull() {
+        for (ItemStack stack : this.inv) {
+            if (stack.isEmpty()) return false;
+        }
+        return true;
     }
 
     @Override
@@ -79,6 +95,10 @@ public class CornflowerCauldronBlockEntity extends BlockEntity implements Tickab
     @Override
     public CompoundTag toClientTag(CompoundTag compoundTag) {
         return this.toTag(compoundTag);
+    }
+
+    public Optional<CauldronRecipe> getRecipeForInvContent() {
+        return this.inv.stream().noneMatch(ItemStack::isEmpty) ? Optional.empty() : this.world.getRecipeManager().getFirstMatch(CornflowerRecipes.CAULDRON_RECIPE_TYPE, new BasicInventory(this.inv.toArray(new ItemStack[]{})), this.world);
     }
 
     public enum CraftingStage {
