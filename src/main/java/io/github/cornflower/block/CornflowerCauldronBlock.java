@@ -90,7 +90,7 @@ public class CornflowerCauldronBlock extends CauldronBlock implements BlockEntit
                         } else {
                             ItemScatterer.spawn(world, pos, cauldron.getInv());
                         }
-                        cauldron.getInv().clear();
+                        cauldron.clearInv();
                         cauldron.setCraftingStage(CornflowerCauldronBlockEntity.CraftingStage.NONE);
                         return ActionResult.SUCCESS;
                     } else {

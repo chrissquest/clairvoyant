@@ -20,6 +20,7 @@ public class CornflowerBlocks {
 
     public static final CornflowerCauldronBlock CORNFLOWER_CAULDRON = (CornflowerCauldronBlock) registerBlock(new CornflowerCauldronBlock(), "cornflower_cauldron");
     public static final TimewornBricks TIMEWORN_BRICKS = (TimewornBricks) registerBlock(new TimewornBricks(), "timeworn_bricks");
+    public static final BottledFeyBlock BOTTLED_FEY = (BottledFeyBlock)registerBlock(new BottledFeyBlock(), "bottled_fey");
 
 
     private static Block registerBlockWithoutItem(Block block, String id) {

@@ -34,7 +34,11 @@ public class CornflowerCauldronBlockEntity extends BlockEntity implements Tickab
     public void tick() {
         if((this.world != null ? this.world.getBlockState(this.pos).get(CauldronBlock.LEVEL) : 0) > 0) {
             if(CampfireUtil.isCampfireLitUnder(this.world, this.pos)) {
-                if(this.getRecipeForInvContent().isPresent()) this.setCraftingStage(CraftingStage.DONE);
+                if(!this.world.isClient()) {
+                    if(this.getRecipeForInvContent().isPresent()) {
+                        this.setCraftingStage(CraftingStage.DONE);
+                    }
+                }
             }
         }
     }
@@ -45,6 +49,12 @@ public class CornflowerCauldronBlockEntity extends BlockEntity implements Tickab
 
     public void setCraftingStage(CraftingStage craftingStage) {
         this.craftingStage = craftingStage;
+        this.updateListeners();
+    }
+
+    public void clearInv() {
+        if(this.world != null && this.world.isClient) return;
+        this.getInv().clear();
         this.updateListeners();
     }
 
@@ -68,6 +78,13 @@ public class CornflowerCauldronBlockEntity extends BlockEntity implements Tickab
     public boolean isInvFull() {
         for (ItemStack stack : this.inv) {
             if (stack.isEmpty()) return false;
+        }
+        return true;
+    }
+
+    public boolean isInvEmpty() {
+        for (ItemStack stack : this.inv) {
+            if (!stack.isEmpty()) return false;
         }
         return true;
     }
@@ -97,6 +114,7 @@ public class CornflowerCauldronBlockEntity extends BlockEntity implements Tickab
     }
 
     public Optional<CauldronRecipe> getRecipeForInvContent() {
+        if(this.isInvEmpty()) return Optional.empty();
         return this.inv.stream().noneMatch(ItemStack::isEmpty) ? Optional.empty() : this.world.getRecipeManager().getFirstMatch(CornflowerRecipes.CAULDRON_RECIPE_TYPE, new BasicInventory(this.inv.toArray(new ItemStack[]{})), this.world);
     }
 
