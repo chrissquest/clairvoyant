@@ -3,6 +3,8 @@
 
   "item.cornflower.wand_cornflower": "Cornflower Wand",
   "item.cornflower.cornflower_essence": "Cornflower Essence",
+  "item.cornflower.wand_cornflower.tooltip1": "Input Block: ",
+  "item.cornflower.wand_cornflower.tooltip2": "Output Block: ",
 
   "block.cornflower.cornflower_cauldron": "Cornflower Cauldron",
 
