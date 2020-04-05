@@ -37,7 +37,7 @@ public class CornflowerWorldFeatures {
                         RUIN_FEATURE.configure(FeatureConfig.DEFAULT)
                                 .createDecoratedFeature(
                                         Decorator.CHANCE_PASSTHROUGH
-                                                .configure(new ChanceDecoratorConfig(100))));
+                                                .configure(new ChanceDecoratorConfig(32))));
             }
         }
     }
