@@ -87,10 +87,10 @@ public class CornflowerCauldronBlock extends CauldronBlock implements BlockEntit
                                             cauldron.getRecipeForInvContent().get().craft(new BasicInventory(cauldron.getInv().toArray(new ItemStack[]{})))
                                     )
                             );
-                            cauldron.getInv().clear();
                         } else {
                             ItemScatterer.spawn(world, pos, cauldron.getInv());
                         }
+                        cauldron.getInv().clear();
                         cauldron.setCraftingStage(CornflowerCauldronBlockEntity.CraftingStage.NONE);
                         return ActionResult.SUCCESS;
                     } else {

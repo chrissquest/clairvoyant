@@ -34,7 +34,7 @@ public class CornflowerCauldronBlockEntity extends BlockEntity implements Tickab
     public void tick() {
         if((this.world != null ? this.world.getBlockState(this.pos).get(CauldronBlock.LEVEL) : 0) > 0) {
             if(CampfireUtil.isCampfireLitUnder(this.world, this.pos)) {
-                // might need this later
+                if(this.getRecipeForInvContent().isPresent()) this.setCraftingStage(CraftingStage.DONE);
             }
         }
     }
@@ -58,7 +58,6 @@ public class CornflowerCauldronBlockEntity extends BlockEntity implements Tickab
         if(!this.isInvFull()) {
             this.inv.set(this.inv.indexOf(ItemStack.EMPTY), stack);
             this.updateListeners();
-            if(this.isInvFull() && this.getRecipeForInvContent().isPresent()) this.setCraftingStage(CraftingStage.DONE);
         }
     }
 

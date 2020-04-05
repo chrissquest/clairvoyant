@@ -2,22 +2,16 @@ package io.github.cornflower.item;
 
 import io.github.cornflower.entity.FeyEntity;
 import io.github.cornflower.group.CornflowerGroup;
-import net.minecraft.client.item.TooltipContext;
+import net.minecraft.block.entity.LootableContainerBlockEntity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemUsageContext;
-import net.minecraft.text.Text;
 import net.minecraft.text.TranslatableText;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
-import net.minecraft.util.TypedActionResult;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
-
-import java.util.List;
-import java.util.Objects;
 
 import static io.github.cornflower.group.CornflowerGroup.CORNFLOWER_GROUP;
 
@@ -31,25 +25,28 @@ public class CornflowerWand extends Item {
     }
 
     @Override
+    public boolean isDamageable() {
+        return false;
+    }
+
+    @Override
     public ActionResult useOnBlock(ItemUsageContext context) {
         System.out.println("Block right clicked on: " + context.getBlockPos());
 
-        if(context.getPlayer() != null) {
+        if(context.getPlayer() != null && context.getWorld().getBlockEntity(context.getBlockPos()) instanceof LootableContainerBlockEntity) {
             if(context.getPlayer().isSneaking()) {
                 // Set output block
                 blockOutput = context.getBlockPos();
                 context.getPlayer().addChatMessage(new TranslatableText("item.cornflower.wand_cornflower.use_output"), true);
-
+                return ActionResult.SUCCESS;
+            } else {
+                // Set input block
+                blockInput = context.getBlockPos();
+                context.getPlayer().addChatMessage(new TranslatableText("item.cornflower.wand_cornflower.use_input"), true);
                 return ActionResult.SUCCESS;
             }
         }
-
-        // Set input block
-        blockInput = context.getBlockPos();
-        if(context.getPlayer() != null) {
-            context.getPlayer().addChatMessage(new TranslatableText("item.cornflower.wand_cornflower.use_input"), true);
-        }
-        return ActionResult.SUCCESS;
+        return ActionResult.PASS;
     }
 
     @Override
@@ -67,32 +64,14 @@ public class CornflowerWand extends Item {
 
             return true;
         }
-
-        // Handle user sneaking to set the output block
-        if(user != null) {
-            if(user.isSneaking()) {
-                // Set output block
-                blockOutput = entity.getBlockPos();
-                user.addChatMessage(new TranslatableText("item.cornflower.wand_cornflower.use_output"), true);
-
-                return true;
-            }
-        }
-
-        // Set input block
-        blockInput = entity.getBlockPos();
-        if(user != null) {
-            user.addChatMessage(new TranslatableText("item.cornflower.wand_cornflower.use_input"), true);
-        }
-        return true;
+        return super.useOnEntity(stack, user, entity, hand);
     }
 
-    @Override
-    public void appendTooltip(ItemStack itemStack, World world, List<Text> tooltip, TooltipContext tooltipContext) {
-        if(blockInput == null) tooltip.add(new TranslatableText("item.cornflower.wand_cornflower.tooltip1"));
-        else tooltip.add(new TranslatableText("item.cornflower.wand_cornflower.tooltip1").append(blockInput.toString()));
-        if(blockOutput == null) tooltip.add(new TranslatableText("item.cornflower.wand_cornflower.tooltip2"));
-        else tooltip.add(new TranslatableText("item.cornflower.wand_cornflower.tooltip2").append(blockOutput.toString()));
+    public void setBlockInput(BlockPos blockInput) {
+        this.blockInput = blockInput;
     }
 
+    public void setBlockOutput(BlockPos blockOutput) {
+        this.blockOutput = blockOutput;
+    }
 }

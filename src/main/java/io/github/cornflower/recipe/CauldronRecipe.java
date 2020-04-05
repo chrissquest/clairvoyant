@@ -99,7 +99,6 @@ public class CauldronRecipe implements Recipe<Inventory> {
 
         @Override
         public CauldronRecipe read(Identifier id, PacketByteBuf buf) {
-            int waterLevel = buf.readInt();
             int stackCount = buf.readVarInt();
             DefaultedList<Ingredient> ingredients = DefaultedList.ofSize(stackCount, Ingredient.EMPTY);
 
