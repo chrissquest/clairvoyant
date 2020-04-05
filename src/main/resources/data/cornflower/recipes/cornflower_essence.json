@@ -1,0 +1,12 @@
+{
+  "type": "crafting_shapeless",
+  "group": "cornflower_essence",
+  "ingredients": [
+    { "item": "minecraft:cornflower" },
+    { "item": "minecraft:redstone" }
+  ],
+  "result": {
+    "item": "cornflower:cornflower_essence",
+    "count": 3
+  }
+}

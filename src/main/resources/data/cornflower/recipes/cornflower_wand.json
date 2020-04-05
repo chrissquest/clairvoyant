@@ -1,0 +1,18 @@
+{
+  "type": "crafting_shaped",
+  "group": "wand_cornflower",
+  "pattern": [
+    "  E",
+    " S ",
+    "G  "
+  ],
+  "key": {
+    "E": { "item": "cornflower:cornflower_essence" },
+    "S": { "item": "minecraft:stick" },
+    "G": { "item": "minecraft:gold_nugget" }
+  },
+  "result": {
+    "item": "cornflower:wand_cornflower",
+    "count": 1
+  }
+}
