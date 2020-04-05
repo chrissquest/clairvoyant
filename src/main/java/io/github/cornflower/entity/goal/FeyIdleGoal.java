@@ -19,7 +19,12 @@ public class FeyIdleGoal extends Goal {
 
     @Override
     public boolean canStart() {
-        return true;
+        return this.feyEntity.getGoalSelector().getRunningGoals().count() == 0;
+    }
+
+    @Override
+    public boolean shouldContinue() {
+        return this.feyEntity.getGoalSelector().getRunningGoals().count() == 1;
     }
 
     /**
@@ -28,10 +33,9 @@ public class FeyIdleGoal extends Goal {
      */
     @Override
     public void tick() {
-        /*
         BlockPos blockPos = feyEntity.getBlockPos();
 
-        if (this.random.nextInt(30) == 0 || blockPos.isWithinDistance(feyEntity.getPos(), 2.0D)) {
+        /*if (this.random.nextInt(30) == 0 || blockPos.isWithinDistance(feyEntity.getPos(), 2.0D)) {
             blockPos = new BlockPos(feyEntity.getX() + (double) this.random.nextInt(7) - (double) this.random.nextInt(7), feyEntity.getY() + (double) this.random.nextInt(6) - 2.0D, feyEntity.getZ() + (double) this.random.nextInt(7) - (double) this.random.nextInt(7));
         }
 
@@ -44,7 +48,6 @@ public class FeyIdleGoal extends Goal {
         float g = (float) (MathHelper.atan2(vec3d2.z, vec3d2.x) * 57.2957763671875D) - 90.0F;
         float h = MathHelper.wrapDegrees(g - feyEntity.yaw);
         feyEntity.forwardSpeed = 0.5F;
-        feyEntity.yaw += h;
-        */
+        feyEntity.yaw += h;*/
     }
 }

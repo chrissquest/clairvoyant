@@ -1,12 +1,14 @@
 package io.github.cornflower.entity.goal;
 
 import io.github.cornflower.entity.FeyEntity;
-import net.minecraft.entity.ai.goal.MoveToTargetPosGoal;
+import net.minecraft.entity.ai.TargetFinder;
+import net.minecraft.entity.ai.goal.Goal;
 import net.minecraft.entity.mob.MobEntityWithAi;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.WorldView;
 
-public class FeyMoveGoal extends MoveToTargetPosGoal {
+public class FeyMoveGoal extends Goal {
 
     /**
      * The maximum distance this fey will move to get to the input or output blocks.
@@ -16,15 +18,10 @@ public class FeyMoveGoal extends MoveToTargetPosGoal {
 
     private FeyEntity feyEntity;
 
-    public FeyMoveGoal(FeyEntity entity) {
-        super(entity, 1.0, maxMoveDistance, maxMoveDistance);
-        this.cooldown = 0;
-        this.feyEntity = entity;
-    }
+    private BlockPos targetPos;
 
-    @Override
-    protected int getInterval(MobEntityWithAi mob) {
-        return 0;
+    public FeyMoveGoal(FeyEntity entity) {
+        this.feyEntity = entity;
     }
 
     @Override
@@ -34,7 +31,7 @@ public class FeyMoveGoal extends MoveToTargetPosGoal {
                 && !feyEntity.hasItems()) {
             // Fey can move to input block
             this.targetPos = feyEntity.getInputBlock();
-            return super.canStart();
+            return true;
         }
 
         if(feyEntity.getOutputBlock() != null
@@ -42,7 +39,7 @@ public class FeyMoveGoal extends MoveToTargetPosGoal {
                 && feyEntity.hasItems()) {
             // Fey can move to output block
             this.targetPos = feyEntity.getOutputBlock();
-            return super.canStart();
+            return true;
         }
 
         return false;
@@ -50,39 +47,26 @@ public class FeyMoveGoal extends MoveToTargetPosGoal {
 
     @Override
     public boolean shouldContinue() {
-        if(targetPos == feyEntity.getInputBlock()
-                && feyEntity.getInputBlock().isWithinDistance(feyEntity.getPos(), FeyCollectGoal.pickupDistance)) {
-            return false;
-        }
-        if(targetPos == feyEntity.getOutputBlock()
-                &&feyEntity.getOutputBlock().isWithinDistance(feyEntity.getPos(), FeyDepositGoal.depositDistance)) {
-            return false;
-        }
-        return super.shouldContinue();
+        return this.canStart();
     }
 
     @Override
-    protected boolean findTargetPos() {
-        if(feyEntity.hasItems()) {
-            if(feyEntity.getOutputBlock() != null && feyEntity.getOutputBlock().isWithinDistance(feyEntity.getPos(), maxMoveDistance)) {
-                this.targetPos = feyEntity.getOutputBlock();
-                return true;
-            }
-        } else {
-            if(feyEntity.getInputBlock() != null && feyEntity.getInputBlock().isWithinDistance(feyEntity.getPos(), maxMoveDistance)) {
-                this.targetPos = feyEntity.getInputBlock();
-                return true;
-            }
-        }
-        return false;
+    public void start() {
+        super.start();
+
+
     }
 
     @Override
-    protected boolean isTargetPos(WorldView world, BlockPos pos) {
-        if(feyEntity.hasItems()) {
-            return feyEntity.getOutputBlock() == pos;
-        } else {
-            return feyEntity.getInputBlock() == pos;
+    public void tick() {
+        if(feyEntity.getNavigation().isIdle()) {
+            feyEntity.getNavigation().startMovingTo(this.targetPos.getX(), this.targetPos.getY(), this.targetPos.getZ(), 1.0d);
+            //.startMovingAlong(feyEntity.getNavigation().findPathTo(this.targetPos, 1), 1.0d);
         }
+    }
+
+    @Override
+    public void stop() {
+        feyEntity.getNavigation().stop();
     }
 }

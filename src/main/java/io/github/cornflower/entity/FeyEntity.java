@@ -6,6 +6,10 @@ import io.github.cornflower.entity.goal.FeyIdleGoal;
 import io.github.cornflower.entity.goal.FeyMoveGoal;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.*;
+import net.minecraft.entity.ai.control.JumpControl;
+import net.minecraft.entity.ai.goal.GoalSelector;
+import net.minecraft.entity.ai.pathing.BirdNavigation;
+import net.minecraft.entity.ai.pathing.EntityNavigation;
 import net.minecraft.entity.attribute.EntityAttributes;
 import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.data.DataTracker;
@@ -13,6 +17,9 @@ import net.minecraft.entity.data.TrackedData;
 import net.minecraft.entity.data.TrackedDataHandlerRegistry;
 import net.minecraft.entity.mob.AmbientEntity;
 import net.minecraft.entity.mob.MobEntityWithAi;
+import net.minecraft.entity.passive.AnimalEntity;
+import net.minecraft.entity.passive.BeeEntity;
+import net.minecraft.entity.passive.PassiveEntity;
 import net.minecraft.inventory.BasicInventory;
 import net.minecraft.inventory.Inventory;
 import net.minecraft.item.ItemStack;
@@ -24,7 +31,7 @@ import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 
-public class FeyEntity extends MobEntityWithAi {
+public class FeyEntity extends MobEntityWithAi implements Flutterer {
     private static final TrackedData<Byte> FEY_FLAGS;
 
     // Item transport Fey
@@ -58,6 +65,16 @@ public class FeyEntity extends MobEntityWithAi {
         this.goalSelector.add(2, new FeyMoveGoal(this));
         this.goalSelector.add(1, new FeyCollectGoal(this));
         this.goalSelector.add(1, new FeyDepositGoal(this));
+    }
+
+    @Override
+    protected void initAttributes() {
+        super.initAttributes();
+        this.getAttributes().register(EntityAttributes.FLYING_SPEED);
+
+        this.getAttributeInstance(EntityAttributes.MAX_HEALTH).setBaseValue(6.0D);
+        this.getAttributeInstance(EntityAttributes.FLYING_SPEED).setBaseValue(0.6000000238418579D);
+        this.getAttributeInstance(EntityAttributes.MOVEMENT_SPEED).setBaseValue(0.30000001192092896D);
     }
 
     @Override
@@ -99,15 +116,38 @@ public class FeyEntity extends MobEntityWithAi {
     }
 
     @Override
-    protected void initAttributes() {
-        super.initAttributes();
-        this.getAttributeInstance(EntityAttributes.MAX_HEALTH).setBaseValue(6.0D);
+    protected EntityNavigation createNavigation(World world) {
+        BirdNavigation birdNavigation = new BirdNavigation(this, world) {
+            public boolean isValidPosition(BlockPos pos) {
+                return !this.world.getBlockState(pos.down()).isAir();
+            }
+
+            public void tick() {
+                //if (!BeeEntity.this.pollinateGoal.isRunning()) {
+                    super.tick();
+                //}
+            }
+        };
+        birdNavigation.setCanPathThroughDoors(false);
+        birdNavigation.setCanSwim(false);
+        birdNavigation.setCanEnterOpenDoors(true);
+        return birdNavigation;
+    }
+
+    @Override
+    public JumpControl getJumpControl() {
+        return new JumpControl(this) {
+            @Override
+            public void tick() {
+                // NO JUMPING ALLOWED
+            }
+        };
     }
 
     @Override
     public void tick() {
         super.tick();
-        this.setVelocity(this.getVelocity().multiply(1.0D, 0.6D, 1.0D));
+        //this.setVelocity(this.getVelocity().multiply(1.0D, 0.6D, 1.0D));
     }
 
     @Override
@@ -122,6 +162,11 @@ public class FeyEntity extends MobEntityWithAi {
 
     @Override
     protected void fall(double heightDifference, boolean onGround, BlockState landedState, BlockPos landedPosition) {
+    }
+
+    @Override
+    protected boolean hasWings() {
+        return true;
     }
 
     @Override
@@ -171,6 +216,10 @@ public class FeyEntity extends MobEntityWithAi {
     @Override
     protected float getActiveEyeHeight(EntityPose pose, EntityDimensions dimensions) {
         return dimensions.height / 2.0F;
+    }
+
+    public GoalSelector getGoalSelector() {
+        return this.goalSelector;
     }
 
     public boolean hasItems() {

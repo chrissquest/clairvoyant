@@ -6,6 +6,7 @@ import net.minecraft.block.entity.LootableContainerBlockEntity;
 import net.minecraft.client.item.TooltipContext;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.inventory.Inventory;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemUsageContext;
@@ -38,7 +39,7 @@ public class CornflowerWand extends Item {
     public ActionResult useOnBlock(ItemUsageContext context) {
         System.out.println("Block right clicked on: " + context.getBlockPos());
 
-        if(context.getPlayer() != null && context.getWorld().getBlockEntity(context.getBlockPos()) instanceof LootableContainerBlockEntity) {
+        if(context.getPlayer() != null && context.getWorld().getBlockEntity(context.getBlockPos()) instanceof Inventory) {
             if(context.getPlayer().isSneaking()) {
                 // Set output block
                 blockOutput = context.getBlockPos();
