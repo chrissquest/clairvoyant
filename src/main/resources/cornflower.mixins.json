@@ -10,6 +10,7 @@
     "LootableContainerBlockEntityMixin"
   ],
   "client": [
+  "PlayerListEntryMixin"
   ],
   "injectors": {
     "defaultRequire": 1
