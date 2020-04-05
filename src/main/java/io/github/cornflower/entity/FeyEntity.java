@@ -25,6 +25,7 @@ import net.minecraft.inventory.BasicInventory;
 import net.minecraft.inventory.Inventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.NbtHelper;
 import net.minecraft.sound.SoundEvent;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.util.math.BlockPos;
@@ -208,12 +209,28 @@ public class FeyEntity extends MobEntityWithAi implements Flutterer {
     public void readCustomDataFromTag(CompoundTag tag) {
         super.readCustomDataFromTag(tag);
         this.dataTracker.set(FEY_FLAGS, tag.getByte("FeyFlags"));
+
+        if(tag.contains("InputContainer")) {
+            this.inputBlock = NbtHelper.toBlockPos(tag.getCompound("InputContainer"));
+        }
+
+        if(tag.contains("OutputContainer")) {
+            this.outputBlock = NbtHelper.toBlockPos(tag.getCompound("OutputContainer"));
+        }
     }
 
     @Override
     public void writeCustomDataToTag(CompoundTag tag) {
         super.writeCustomDataToTag(tag);
         tag.putByte("FeyFlags", this.dataTracker.get(FEY_FLAGS));
+
+        if(inputBlock != null) {
+            tag.put("InputContainer", NbtHelper.fromBlockPos(inputBlock));
+        }
+
+        if(outputBlock != null) {
+            tag.put("OutputContainer", NbtHelper.fromBlockPos(outputBlock));
+        }
     }
 
     @Override
