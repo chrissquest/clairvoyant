@@ -4,16 +4,16 @@
       "item": "minecraft:cornflower"
     },
     "title": {
-      "translate": "advancements.cornflower.cornflower_intro.title"
+      "translate": "advancements.cornflower.root.title"
     },
     "description": {
-      "translate": "advancements.cornflower.cornflower_intro.description"
+      "translate": "advancements.cornflower.root.description"
     },
     "frame": "task",
     "show_toast": true,
     "announce_to_chat": true,
     "hidden": false,
-    "background": "cornflower:textures/block/timeworn_bricks.png"
+    "background": "cornflower:textures/block/timeworn_brick.png"
   },
   "criteria": {
     "cornflower": {

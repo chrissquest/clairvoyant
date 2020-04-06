@@ -1,5 +1,5 @@
 {
-  "parent": "cornflower:cornflower_intro",
+  "parent": "cornflower:root",
   "display": {
     "icon": {
       "item": "cornflower:bottled_essence"
