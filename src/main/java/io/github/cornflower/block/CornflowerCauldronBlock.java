@@ -8,6 +8,7 @@
 package io.github.cornflower.block;
 
 
+import io.github.cornflower.Cornflower;
 import io.github.cornflower.block.entity.CornflowerCauldronBlockEntity;
 import io.github.cornflower.item.CornflowerWand;
 import io.github.cornflower.util.CampfireUtil;
@@ -75,53 +76,57 @@ public class CornflowerCauldronBlock extends CauldronBlock implements BlockEntit
 
     @Override
     public ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hit) {
-        if (world.isClient) return super.onUse(state, world, pos, player, hand, hit);
-        else if (!super.onUse(state, world, pos, player, hand, hit).equals(ActionResult.SUCCESS)) {
-            BlockEntity be = world.getBlockEntity(pos);
-            if (be instanceof CornflowerCauldronBlockEntity) {
-                CornflowerCauldronBlockEntity cauldron = (CornflowerCauldronBlockEntity) be;
-                ItemStack stack = player.getStackInHand(hand);
-                if (!stack.isEmpty()) {
-                    if (stack.getItem() instanceof CornflowerWand && world.getBlockState(pos).get(CornflowerCauldronBlock.LEVEL) > 0) {
-                        // If craftable
-                        if (cauldron.getRecipeForInvContent().isPresent()) {
-                            // Craft the recipe item and lower water level
-                            ItemScatterer.spawn(world, pos, new BasicInventory(cauldron.getRecipeForInvContent().get().craft(new BasicInventory(cauldron.getInv().toArray(new ItemStack[]{})))));
-                            this.setLevel(world, pos, state, state.get(LEVEL) - 1);
-                        } else {
-                            // Else spill out the items
-                            ItemScatterer.spawn(world, pos, cauldron.getInv());
-                        }
-                        cauldron.clearInv();
-                        cauldron.setCraftingStage(CornflowerCauldronBlockEntity.CraftingStage.NONE);
-                        return ActionResult.SUCCESS;
-                    } else {
-                        if (!cauldron.isInvFull()) {
-                            cauldron.addItem(stack.split(1));
-                            // Update water color when added ingredient
-                            if (cauldron.getRecipeForInvContent().isPresent()) cauldron.setCraftingStage(CornflowerCauldronBlockEntity.CraftingStage.DONE);
-                            else cauldron.setCraftingStage(CornflowerCauldronBlockEntity.CraftingStage.CRAFTING);
+        // Runs twice for each hand
+        if (hand == Hand.MAIN_HAND) {
+            if (world.isClient) return super.onUse(state, world, pos, player, hand, hit);
+            else if (!super.onUse(state, world, pos, player, hand, hit).equals(ActionResult.SUCCESS)) {
+                BlockEntity be = world.getBlockEntity(pos);
+                if (be instanceof CornflowerCauldronBlockEntity) {
+                    CornflowerCauldronBlockEntity cauldron = (CornflowerCauldronBlockEntity) be;
+                    ItemStack stack = player.getStackInHand(hand);
+                    if (!stack.isEmpty() && world.getBlockState(pos).get(CornflowerCauldronBlock.LEVEL) > 0) {
+                        if (stack.getItem() instanceof CornflowerWand) {
+                            // If craftable
+                            if (cauldron.getRecipeForInvContent().isPresent()) {
+                                // Craft the recipe item and lower water level
+                                ItemScatterer.spawn(world, pos, new BasicInventory(cauldron.getRecipeForInvContent().get().craft(new BasicInventory(cauldron.getInv().toArray(new ItemStack[]{})))));
+                                this.setLevel(world, pos, state, state.get(LEVEL) - 1);
+                            } else {
+                                // Else spill out the items
+                                ItemScatterer.spawn(world, pos, cauldron.getInv());
+                            }
+                            cauldron.clearInv();
+                            cauldron.setCraftingStage(CornflowerCauldronBlockEntity.CraftingStage.NONE);
                             return ActionResult.SUCCESS;
+                        } else {
+                            if (!cauldron.isInvFull()) {
+                                cauldron.addItem(stack.split(1));
+                                // Update water color when added ingredient
+                                if (cauldron.getRecipeForInvContent().isPresent())
+                                    cauldron.setCraftingStage(CornflowerCauldronBlockEntity.CraftingStage.DONE);
+                                else cauldron.setCraftingStage(CornflowerCauldronBlockEntity.CraftingStage.CRAFTING);
+                                return ActionResult.SUCCESS;
+                            }
                         }
                     }
-                }
-                /* For some reason when you click, this whole method runs twice, once with the item, and once without, so it would put the item in and out at once...
-                else {
-                    // Remove last item in inv when right click with nothing
-                    int lastItem = -1;
-                    for (int i = 0; i < cauldron.getInv().size(); i++) {
-                        if(!cauldron.getInv().get(i).isEmpty()) lastItem = i;
-                    }
-                    if(lastItem > -1) {
+                    else {
+                        // Remove last item in inv when right click with nothing
+                        int lastItem = 0;
+                        for (int i = 0; i < cauldron.getInv().size(); i++) {
+                            if (!cauldron.getInv().get(i).isEmpty()) lastItem = i;
+                        }
                         ItemScatterer.spawn(world, pos.getX(), pos.getY(), pos.getZ(), cauldron.getInv().get(lastItem));
-                        cauldron.getInv().get(lastItem).decrement(1);
+                        cauldron.getInv().set(lastItem, ItemStack.EMPTY);
+
+                        // Update water color here too
+                        if (cauldron.getRecipeForInvContent().isPresent())
+                            cauldron.setCraftingStage(CornflowerCauldronBlockEntity.CraftingStage.DONE);
+                        else if (lastItem > 0)
+                            cauldron.setCraftingStage(CornflowerCauldronBlockEntity.CraftingStage.CRAFTING);
+                        else cauldron.setCraftingStage(CornflowerCauldronBlockEntity.CraftingStage.NONE);
                     }
-                    // Update water color here too
-                    if (cauldron.getRecipeForInvContent().isPresent()) cauldron.setCraftingStage(CornflowerCauldronBlockEntity.CraftingStage.DONE);
-                    else if(lastItem > -1) cauldron.setCraftingStage(CornflowerCauldronBlockEntity.CraftingStage.CRAFTING);
-                    else cauldron.setCraftingStage(CornflowerCauldronBlockEntity.CraftingStage.NONE);
+
                 }
-                */
             }
         }
         return super.onUse(state, world, pos, player, hand, hit);
