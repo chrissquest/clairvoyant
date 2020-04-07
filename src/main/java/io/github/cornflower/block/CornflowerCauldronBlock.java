@@ -8,7 +8,6 @@
 package io.github.cornflower.block;
 
 
-import io.github.cornflower.Cornflower;
 import io.github.cornflower.block.entity.CornflowerCauldronBlockEntity;
 import io.github.cornflower.item.CornflowerWand;
 import io.github.cornflower.util.CampfireUtil;
@@ -108,8 +107,7 @@ public class CornflowerCauldronBlock extends CauldronBlock implements BlockEntit
                                 return ActionResult.SUCCESS;
                             }
                         }
-                    }
-                    else {
+                    } else {
                         // Remove last item in inv when right click with nothing
                         int lastItem = 0;
                         for (int i = 0; i < cauldron.getInv().size(); i++) {
