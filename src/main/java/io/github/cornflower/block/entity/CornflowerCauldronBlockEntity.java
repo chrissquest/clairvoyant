@@ -9,9 +9,7 @@ package io.github.cornflower.block.entity;
 
 import io.github.cornflower.recipe.CauldronRecipe;
 import io.github.cornflower.recipe.CornflowerRecipes;
-import io.github.cornflower.util.CampfireUtil;
 import net.fabricmc.fabric.api.block.entity.BlockEntityClientSerializable;
-import net.minecraft.block.CauldronBlock;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.inventory.BasicInventory;
 import net.minecraft.inventory.Inventories;
@@ -30,9 +28,11 @@ public class CornflowerCauldronBlockEntity extends BlockEntity implements Tickab
     public CornflowerCauldronBlockEntity() {
         super(CornflowerBlockEntities.CORNFLOWER_CAULDRON);
     }
+
     @Override
     public void tick() {
-        if((this.world != null ? this.world.getBlockState(this.pos).get(CauldronBlock.LEVEL) : 0) > 0) {
+        // This shouldnt tick, we only need to check every time you put in an item
+        /*if((this.world != null ? this.world.getBlockState(this.pos).get(CauldronBlock.LEVEL) : 0) > 0) {
             if(CampfireUtil.isCampfireLitUnder(this.world, this.pos)) {
                 if(!this.world.isClient()) {
                     if(this.getRecipeForInvContent().isPresent()) {
@@ -40,7 +40,7 @@ public class CornflowerCauldronBlockEntity extends BlockEntity implements Tickab
                     }
                 }
             }
-        }
+        }*/
     }
 
     public CraftingStage getCraftingStage() {
@@ -53,19 +53,19 @@ public class CornflowerCauldronBlockEntity extends BlockEntity implements Tickab
     }
 
     public void clearInv() {
-        if(this.world != null && this.world.isClient) return;
+        if (this.world != null && this.world.isClient) return;
         this.getInv().clear();
         this.updateListeners();
     }
 
     private void updateListeners() {
-        if(this.getWorld() == null) return;
+        if (this.getWorld() == null) return;
         this.markDirty();
         this.getWorld().updateListeners(this.getPos(), this.getCachedState(), this.getCachedState(), 3);
     }
 
     public void addItem(ItemStack stack) {
-        if(!this.isInvFull()) {
+        if (!this.isInvFull()) {
             this.inv.set(this.inv.indexOf(ItemStack.EMPTY), stack);
             this.updateListeners();
         }
@@ -114,8 +114,9 @@ public class CornflowerCauldronBlockEntity extends BlockEntity implements Tickab
     }
 
     public Optional<CauldronRecipe> getRecipeForInvContent() {
-        if(this.isInvEmpty()) return Optional.empty();
-        return this.inv.stream().noneMatch(ItemStack::isEmpty) ? Optional.empty() : this.world.getRecipeManager().getFirstMatch(CornflowerRecipes.CAULDRON_RECIPE_TYPE, new BasicInventory(this.inv.toArray(new ItemStack[]{})), this.world);
+        BasicInventory binv = new BasicInventory(inv.toArray(new ItemStack[]{}));
+
+        return world.getRecipeManager().getFirstMatch(CornflowerRecipes.CAULDRON_RECIPE_TYPE, binv, world);
     }
 
     public enum CraftingStage {

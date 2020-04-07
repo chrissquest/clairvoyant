@@ -38,18 +38,28 @@ public class CauldronRecipe implements Recipe<Inventory> {
 
     @Override
     public boolean matches(Inventory inv, World world) {
-        RecipeFinder finder = new RecipeFinder();
-        int i = 0;
 
-        for(int j = 0; j < inv.getInvSize(); ++j) {
-            ItemStack stack = inv.getInvStack(j);
-            if (!stack.isEmpty()) {
-                ++i;
-                finder.method_20478(stack, 1);
+        ItemStack[] tempInv = new ItemStack[inv.getInvSize()];
+        int invLength = 0;
+        boolean match = true;
+
+        for (int i = 0; i < tempInv.length; i++) tempInv[i] = inv.getInvStack(i).copy();
+        for (ItemStack stack : tempInv) if (stack != null && !stack.isEmpty()) invLength++;
+
+        if (ingredients.size() != invLength) match = false;
+
+        for (Ingredient ingredient : ingredients) {
+            boolean ingredientFound = false;
+            for (ItemStack stack : tempInv) {
+                if (ingredient.test(stack) && !ingredientFound) {
+                    ingredientFound = true;
+                    stack.decrement(1);
+                }
             }
+            if (!ingredientFound) match = false;
         }
 
-        return i == this.ingredients.size() && finder.findRecipe(this, null);
+        return match;
     }
 
     @Override
@@ -87,9 +97,9 @@ public class CauldronRecipe implements Recipe<Inventory> {
         @Override
         public CauldronRecipe read(Identifier id, JsonObject json) {
             DefaultedList<Ingredient> ingredients = getIngredients(JsonHelper.getArray(json, "items"));
-            if(ingredients.isEmpty()) {
+            if (ingredients.isEmpty()) {
                 throw new JsonParseException("No ingredients for cauldron recipe.");
-            } else if(ingredients.size() > 5) {
+            } else if (ingredients.size() > 5) {
                 throw new JsonParseException("Too many ingredients for cauldron recipe.");
             } else {
                 ItemStack stack = ShapedRecipe.getItemStack(JsonHelper.getObject(json, "result"));
@@ -102,7 +112,7 @@ public class CauldronRecipe implements Recipe<Inventory> {
             int stackCount = buf.readVarInt();
             DefaultedList<Ingredient> ingredients = DefaultedList.ofSize(stackCount, Ingredient.EMPTY);
 
-            for(int j = 0; j < ingredients.size(); ++j) {
+            for (int j = 0; j < ingredients.size(); ++j) {
                 ingredients.set(j, Ingredient.fromPacket(buf));
             }
 
@@ -123,7 +133,7 @@ public class CauldronRecipe implements Recipe<Inventory> {
 
         private static DefaultedList<Ingredient> getIngredients(JsonArray json) {
             DefaultedList<Ingredient> ingredients = DefaultedList.of();
-            for(int i = 0; i < json.size(); ++i) {
+            for (int i = 0; i < json.size(); ++i) {
                 Ingredient ingredient = Ingredient.fromJson(json.get(i));
                 if (!ingredient.isEmpty()) {
                     ingredients.add(ingredient);

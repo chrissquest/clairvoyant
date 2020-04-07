@@ -12,9 +12,11 @@ import io.github.cornflower.block.entity.CornflowerCauldronBlockEntity;
 import io.github.cornflower.item.CornflowerWand;
 import io.github.cornflower.util.CampfireUtil;
 import net.fabricmc.fabric.api.block.FabricBlockSettings;
-import net.minecraft.block.*;
+import net.minecraft.block.BlockEntityProvider;
+import net.minecraft.block.BlockState;
+import net.minecraft.block.Blocks;
+import net.minecraft.block.CauldronBlock;
 import net.minecraft.block.entity.BlockEntity;
-import net.minecraft.block.entity.CampfireBlockEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.BasicInventory;
 import net.minecraft.item.ItemStack;
@@ -47,21 +49,21 @@ public class CornflowerCauldronBlock extends CauldronBlock implements BlockEntit
         Random rand = new Random();
         double pixel = 0.0625d; // one pixel in block pos calculations if the block is 16x16x16
         world.addParticle(ParticleTypes.BUBBLE_POP,
-                (double)pos.getX() + 0.5D + rand.nextDouble() / 4.0D * (double)(rand.nextBoolean() ? 1 : -1),
-                (double)pos.getY() + (4*pixel) + ((waterLevel*3+2)*pixel),
-                (double)pos.getZ() + 0.5D + rand.nextDouble() / 4.0D * (double)(rand.nextBoolean() ? 1 : -1),
+                (double) pos.getX() + 0.5D + rand.nextDouble() / 4.0D * (double) (rand.nextBoolean() ? 1 : -1),
+                (double) pos.getY() + (4 * pixel) + ((waterLevel * 3 + 2) * pixel),
+                (double) pos.getZ() + 0.5D + rand.nextDouble() / 4.0D * (double) (rand.nextBoolean() ? 1 : -1),
                 0.0D,
                 0.005D,
                 0.0D
         );
         BlockEntity be = world.getBlockEntity(pos);
-        if(be != null) {
-            if(be instanceof CornflowerCauldronBlockEntity) {
-                if(((CornflowerCauldronBlockEntity) be).getCraftingStage() == CornflowerCauldronBlockEntity.CraftingStage.CRAFTING) {
+        if (be != null) {
+            if (be instanceof CornflowerCauldronBlockEntity) {
+                if (((CornflowerCauldronBlockEntity) be).getCraftingStage() == CornflowerCauldronBlockEntity.CraftingStage.CRAFTING) {
                     world.addParticle(ParticleTypes.END_ROD,
-                            (double)pos.getX() + 0.5D + rand.nextDouble() / 4.0D * (double)(rand.nextBoolean() ? 1 : -1),
-                            (double)pos.getY() + (4*pixel) + ((waterLevel*3+2)*pixel),
-                            (double)pos.getZ() + 0.5D + rand.nextDouble() / 4.0D * (double)(rand.nextBoolean() ? 1 : -1),
+                            (double) pos.getX() + 0.5D + rand.nextDouble() / 4.0D * (double) (rand.nextBoolean() ? 1 : -1),
+                            (double) pos.getY() + (4 * pixel) + ((waterLevel * 3 + 2) * pixel),
+                            (double) pos.getZ() + 0.5D + rand.nextDouble() / 4.0D * (double) (rand.nextBoolean() ? 1 : -1),
                             (rand.nextBoolean() ? 1 : -1) * 0.05d,
                             (rand.nextBoolean() ? 1 : -1) * 0.05d,
                             (rand.nextBoolean() ? 1 : -1) * 0.05d
@@ -73,34 +75,53 @@ public class CornflowerCauldronBlock extends CauldronBlock implements BlockEntit
 
     @Override
     public ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hit) {
-        if(world.isClient) return super.onUse(state, world, pos, player, hand, hit);
-        if(!super.onUse(state, world, pos, player, hand, hit).equals(ActionResult.SUCCESS)) {
+        if (world.isClient) return super.onUse(state, world, pos, player, hand, hit);
+        else if (!super.onUse(state, world, pos, player, hand, hit).equals(ActionResult.SUCCESS)) {
             BlockEntity be = world.getBlockEntity(pos);
-            if(be instanceof CornflowerCauldronBlockEntity) {
+            if (be instanceof CornflowerCauldronBlockEntity) {
                 CornflowerCauldronBlockEntity cauldron = (CornflowerCauldronBlockEntity) be;
                 ItemStack stack = player.getStackInHand(hand);
-                if(!stack.isEmpty()) {
-                    if(stack.getItem() instanceof CornflowerWand && world.getBlockState(pos).get(CornflowerCauldronBlock.LEVEL) > 0) {
-                        if(cauldron.getRecipeForInvContent().isPresent()) {
-                            ItemScatterer.spawn(world, pos,
-                                    new BasicInventory(
-                                            cauldron.getRecipeForInvContent().get().craft(new BasicInventory(cauldron.getInv().toArray(new ItemStack[]{})))
-                                    )
-                            );
+                if (!stack.isEmpty()) {
+                    if (stack.getItem() instanceof CornflowerWand && world.getBlockState(pos).get(CornflowerCauldronBlock.LEVEL) > 0) {
+                        // If craftable
+                        if (cauldron.getRecipeForInvContent().isPresent()) {
+                            // Craft the recipe item and lower water level
+                            ItemScatterer.spawn(world, pos, new BasicInventory(cauldron.getRecipeForInvContent().get().craft(new BasicInventory(cauldron.getInv().toArray(new ItemStack[]{})))));
+                            this.setLevel(world, pos, state, state.get(LEVEL) - 1);
                         } else {
+                            // Else spill out the items
                             ItemScatterer.spawn(world, pos, cauldron.getInv());
                         }
                         cauldron.clearInv();
                         cauldron.setCraftingStage(CornflowerCauldronBlockEntity.CraftingStage.NONE);
                         return ActionResult.SUCCESS;
                     } else {
-                        if(!cauldron.isInvFull()) {
+                        if (!cauldron.isInvFull()) {
                             cauldron.addItem(stack.split(1));
-                            cauldron.setCraftingStage(CornflowerCauldronBlockEntity.CraftingStage.CRAFTING);
+                            // Update water color when added ingredient
+                            if (cauldron.getRecipeForInvContent().isPresent()) cauldron.setCraftingStage(CornflowerCauldronBlockEntity.CraftingStage.DONE);
+                            else cauldron.setCraftingStage(CornflowerCauldronBlockEntity.CraftingStage.CRAFTING);
                             return ActionResult.SUCCESS;
                         }
                     }
                 }
+                /* For some reason when you click, this whole method runs twice, once with the item, and once without, so it would put the item in and out at once...
+                else {
+                    // Remove last item in inv when right click with nothing
+                    int lastItem = -1;
+                    for (int i = 0; i < cauldron.getInv().size(); i++) {
+                        if(!cauldron.getInv().get(i).isEmpty()) lastItem = i;
+                    }
+                    if(lastItem > -1) {
+                        ItemScatterer.spawn(world, pos.getX(), pos.getY(), pos.getZ(), cauldron.getInv().get(lastItem));
+                        cauldron.getInv().get(lastItem).decrement(1);
+                    }
+                    // Update water color here too
+                    if (cauldron.getRecipeForInvContent().isPresent()) cauldron.setCraftingStage(CornflowerCauldronBlockEntity.CraftingStage.DONE);
+                    else if(lastItem > -1) cauldron.setCraftingStage(CornflowerCauldronBlockEntity.CraftingStage.CRAFTING);
+                    else cauldron.setCraftingStage(CornflowerCauldronBlockEntity.CraftingStage.NONE);
+                }
+                */
             }
         }
         return super.onUse(state, world, pos, player, hand, hit);
@@ -108,8 +129,8 @@ public class CornflowerCauldronBlock extends CauldronBlock implements BlockEntit
 
     @Override
     public void randomDisplayTick(BlockState state, World world, BlockPos pos, Random random) {
-        if(world.getBlockState(pos).get(CornflowerCauldronBlock.LEVEL) > 0) {
-            if(CampfireUtil.isCampfireLitUnder(world, pos)) {
+        if (world.getBlockState(pos).get(CornflowerCauldronBlock.LEVEL) > 0) {
+            if (CampfireUtil.isCampfireLitUnder(world, pos)) {
                 CornflowerCauldronBlock.spawnBubbleParticles(world, pos, world.getBlockState(pos).get(CornflowerCauldronBlock.LEVEL));
                 world.playSound(pos.getX() + 0.5d,
                         pos.getY() + 0.5d,

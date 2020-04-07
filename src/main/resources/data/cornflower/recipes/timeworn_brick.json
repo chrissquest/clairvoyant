@@ -2,7 +2,10 @@
   "type": "cornflower:cauldron",
   "items": [
     { "item": "cornflower:cornflower_essence" },
-    { "item": "minecraft:bricks", "count": 4 }
+    { "item": "minecraft:bricks"},
+    { "item": "minecraft:bricks"},
+    { "item": "minecraft:bricks"},
+    { "item": "minecraft:bricks"}
   ],
   "result": {
     "item": "cornflower:timeworn_brick",
