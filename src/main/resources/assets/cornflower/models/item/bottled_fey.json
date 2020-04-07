@@ -1,3 +1,6 @@
 {
-    "parent": "cornflower:block/bottled_fey"
+    "parent": "item/generated",
+    "textures": {
+        "layer0": "cornflower:item/bottled_fey"
+    }
 }
