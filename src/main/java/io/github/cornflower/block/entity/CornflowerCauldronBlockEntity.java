@@ -16,7 +16,6 @@ import net.minecraft.inventory.Inventories;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.util.DefaultedList;
-import net.minecraft.util.Tickable;
 
 import java.util.Optional;
 
@@ -102,7 +101,9 @@ public class CornflowerCauldronBlockEntity extends BlockEntity implements BlockE
     public Optional<CauldronRecipe> getRecipeForInvContent() {
         BasicInventory binv = new BasicInventory(inv.toArray(new ItemStack[]{}));
 
-        return world.getRecipeManager().getFirstMatch(CornflowerRecipes.CAULDRON_RECIPE_TYPE, binv, world);
+        if (world != null)
+            return world.getRecipeManager().getFirstMatch(CornflowerRecipes.CAULDRON_RECIPE_TYPE, binv, world);
+        else return Optional.empty();
     }
 
     public enum CraftingStage {

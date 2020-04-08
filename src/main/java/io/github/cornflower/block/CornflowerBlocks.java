@@ -23,7 +23,7 @@ public class CornflowerBlocks {
     public static final TimewornBrickSlab TIMEWORN_BRICK_SLAB = (TimewornBrickSlab) registerBlock(new TimewornBrickSlab(), "timeworn_brick_slab");
     public static final TimewornBrickStairs TIMEWORN_BRICK_STAIRS = (TimewornBrickStairs) registerBlock(new TimewornBrickStairs(), "timeworn_brick_stairs");
     public static final TimewornBrickWall TIMEWORN_BRICK_WALL = (TimewornBrickWall) registerBlock(new TimewornBrickWall(), "timeworn_brick_wall");
-    public static final BottledFeyBlock BOTTLED_FEY = (BottledFeyBlock)registerBlock(new BottledFeyBlock(), "bottled_fey");
+    public static final BottledFeyBlock BOTTLED_FEY = (BottledFeyBlock) registerBlock(new BottledFeyBlock(), "bottled_fey");
 
 
     private static Block registerBlockWithoutItem(Block block, String id) {

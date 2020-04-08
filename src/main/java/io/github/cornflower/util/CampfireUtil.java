@@ -17,8 +17,8 @@ public class CampfireUtil {
 
     public static boolean isCampfireLitUnder(World world, BlockPos pos) {
         BlockEntity campfire = world.getBlockEntity(pos.down(1));
-        if(campfire == null) return false;
-        if(!campfire.getType().equals(BlockEntityType.CAMPFIRE)) return false;
+        if (campfire == null) return false;
+        if (!campfire.getType().equals(BlockEntityType.CAMPFIRE)) return false;
         return CampfireBlockAccessor.callIsLitCampfire(world.getBlockState(pos.down(1)));
     }
 }

@@ -8,12 +8,8 @@
 package io.github.cornflower.entity.goal;
 
 import io.github.cornflower.entity.FeyEntity;
-import net.minecraft.entity.ai.TargetFinder;
 import net.minecraft.entity.ai.goal.Goal;
-import net.minecraft.entity.mob.MobEntityWithAi;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Vec3d;
-import net.minecraft.world.WorldView;
 
 public class FeyMoveGoal extends Goal {
 
@@ -33,7 +29,7 @@ public class FeyMoveGoal extends Goal {
 
     @Override
     public boolean canStart() {
-        if(feyEntity.getInputBlock() != null
+        if (feyEntity.getInputBlock() != null
                 && feyEntity.getInputBlock().isWithinDistance(feyEntity.getPos(), maxMoveDistance)
                 && !feyEntity.hasItems()) {
             // Fey can move to input block
@@ -41,7 +37,7 @@ public class FeyMoveGoal extends Goal {
             return true;
         }
 
-        if(feyEntity.getOutputBlock() != null
+        if (feyEntity.getOutputBlock() != null
                 && feyEntity.getOutputBlock().isWithinDistance(feyEntity.getPos(), maxMoveDistance)
                 && feyEntity.hasItems()) {
             // Fey can move to output block
@@ -66,7 +62,7 @@ public class FeyMoveGoal extends Goal {
 
     @Override
     public void tick() {
-        if(feyEntity.getNavigation().isIdle()) {
+        if (feyEntity.getNavigation().isIdle()) {
             feyEntity.getNavigation().startMovingAlong(feyEntity.getNavigation().findPathTo(this.targetPos, 2), 1.0d);
         }
     }

@@ -23,11 +23,7 @@ import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.data.DataTracker;
 import net.minecraft.entity.data.TrackedData;
 import net.minecraft.entity.data.TrackedDataHandlerRegistry;
-import net.minecraft.entity.mob.AmbientEntity;
 import net.minecraft.entity.mob.MobEntityWithAi;
-import net.minecraft.entity.passive.AnimalEntity;
-import net.minecraft.entity.passive.BeeEntity;
-import net.minecraft.entity.passive.PassiveEntity;
 import net.minecraft.inventory.BasicInventory;
 import net.minecraft.inventory.Inventory;
 import net.minecraft.item.ItemStack;
@@ -37,7 +33,6 @@ import net.minecraft.sound.SoundEvent;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 
 public class FeyEntity extends MobEntityWithAi implements Flutterer {
@@ -135,7 +130,7 @@ public class FeyEntity extends MobEntityWithAi implements Flutterer {
 
             public void tick() {
                 //if (!BeeEntity.this.pollinateGoal.isRunning()) {
-                    super.tick();
+                super.tick();
                 //}
             }
         };
@@ -198,7 +193,7 @@ public class FeyEntity extends MobEntityWithAi implements Flutterer {
     protected void dropInventory() {
         super.dropInventory();
 
-        for(int i = 0; i < items.getInvSize(); i++) {
+        for (int i = 0; i < items.getInvSize(); i++) {
             ItemStack stack = items.getInvStack(i);
             if (stack != null) {
                 ItemEntity itemEntity = new ItemEntity(this.world, this.getX(), this.getY(), this.getZ(), stack);
@@ -217,11 +212,11 @@ public class FeyEntity extends MobEntityWithAi implements Flutterer {
         super.readCustomDataFromTag(tag);
         this.dataTracker.set(FEY_FLAGS, tag.getByte("FeyFlags"));
 
-        if(tag.contains("InputContainer")) {
+        if (tag.contains("InputContainer")) {
             this.inputBlock = NbtHelper.toBlockPos(tag.getCompound("InputContainer"));
         }
 
-        if(tag.contains("OutputContainer")) {
+        if (tag.contains("OutputContainer")) {
             this.outputBlock = NbtHelper.toBlockPos(tag.getCompound("OutputContainer"));
         }
     }
@@ -231,11 +226,11 @@ public class FeyEntity extends MobEntityWithAi implements Flutterer {
         super.writeCustomDataToTag(tag);
         tag.putByte("FeyFlags", this.dataTracker.get(FEY_FLAGS));
 
-        if(inputBlock != null) {
+        if (inputBlock != null) {
             tag.put("InputContainer", NbtHelper.fromBlockPos(inputBlock));
         }
 
-        if(outputBlock != null) {
+        if (outputBlock != null) {
             tag.put("OutputContainer", NbtHelper.fromBlockPos(outputBlock));
         }
     }

@@ -27,13 +27,11 @@ import java.util.Random;
 public class CornflowerRuinGenerator {
     public static final Identifier id = new Identifier("cornflower:ruin");
 
-    public static void addParts(StructureManager structureManager, BlockPos blockPos, BlockRotation rotation, List<StructurePiece> pieces, Random random, DefaultFeatureConfig defaultFeatureConfig)
-    {
+    public static void addParts(StructureManager structureManager, BlockPos blockPos, BlockRotation rotation, List<StructurePiece> pieces, Random random, DefaultFeatureConfig defaultFeatureConfig) {
         pieces.add(new CornflowerRuinGenerator.Piece(structureManager, id, blockPos, rotation));
     }
 
-    public static class Piece extends SimpleStructurePiece
-    {
+    public static class Piece extends SimpleStructurePiece {
         private final BlockRotation rotation;
         private final Identifier template;
 
@@ -46,8 +44,7 @@ public class CornflowerRuinGenerator {
             this.setStructureData(structureManager_1);
         }
 
-        public Piece(StructureManager structureManager, Identifier template, BlockPos pos, BlockRotation rotation)
-        {
+        public Piece(StructureManager structureManager, Identifier template, BlockPos pos, BlockRotation rotation) {
             super(CornflowerWorldFeatures.RUIN_PIECE, 0);
 
             this.rotation = rotation;
@@ -64,22 +61,19 @@ public class CornflowerRuinGenerator {
             compoundTag_1.putString("Rot", this.rotation.name());
         }
 
-        public void setStructureData(StructureManager structureManager)
-        {
+        public void setStructureData(StructureManager structureManager) {
             Structure structure_1 = structureManager.getStructureOrBlank(this.template);
             StructurePlacementData structurePlacementData_1 = (new StructurePlacementData()).setRotation(this.rotation).setMirrored(BlockMirror.NONE).setPosition(pos).addProcessor(BlockIgnoreStructureProcessor.IGNORE_STRUCTURE_BLOCKS);
             this.setStructureData(structure_1, this.pos, structurePlacementData_1);
         }
 
         @Override
-        protected void handleMetadata(String s, BlockPos blockPos, IWorld iWorld, Random random, BlockBox blockBox)
-        {
+        protected void handleMetadata(String s, BlockPos blockPos, IWorld iWorld, Random random, BlockBox blockBox) {
 
         }
 
         @Override
-        public boolean generate(IWorld world, ChunkGenerator<?> generator, Random rand, BlockBox box, ChunkPos pos)
-        {
+        public boolean generate(IWorld world, ChunkGenerator<?> generator, Random rand, BlockBox box, ChunkPos pos) {
             int yHeight = world.getTopY(Heightmap.Type.WORLD_SURFACE_WG, this.pos.getX() + 8, this.pos.getZ() + 8);
             this.pos = this.pos.add(0, yHeight - 1, 0);
             return super.generate(world, generator, rand, box, pos);

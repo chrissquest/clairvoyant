@@ -35,10 +35,10 @@ public class FeyCollectGoal extends Goal {
 
     @Override
     public boolean canStart() {
-        if(feyEntity.getInputBlock() == null) {
+        if (feyEntity.getInputBlock() == null) {
             return false;
         }
-        if(feyEntity.hasItems()) {
+        if (feyEntity.hasItems()) {
             return false;
         }
         return feyEntity.getInputBlock().isWithinDistance(feyEntity.getPos(), pickupDistance);
@@ -46,16 +46,16 @@ public class FeyCollectGoal extends Goal {
 
     @Override
     public boolean shouldContinue() {
-        if(feyEntity.getInputBlock() == null) {
+        if (feyEntity.getInputBlock() == null) {
             return false;
         }
 
-        if(shouldFillInventory) {
+        if (shouldFillInventory) {
             // Continue until all fey slots are filled.
             Inventory feyInventory = feyEntity.getItems();
 
-            for(int i = 0; i < feyInventory.getInvSize(); i++) {
-                if(feyInventory.getInvStack(i) == null) {
+            for (int i = 0; i < feyInventory.getInvSize(); i++) {
+                if (feyInventory.getInvStack(i) == null) {
                     return true;
                 }
             }
@@ -73,33 +73,33 @@ public class FeyCollectGoal extends Goal {
         // TODO: Implement support for sided inventories
         if (feyEntity.getInputBlock() != null) {
             BlockEntity targetBlockEntity = feyEntity.world.getBlockEntity(feyEntity.getInputBlock());
-            if(targetBlockEntity instanceof Inventory) {
-                Inventory targetInventory = (Inventory)targetBlockEntity;
+            if (targetBlockEntity instanceof Inventory) {
+                Inventory targetInventory = (Inventory) targetBlockEntity;
                 Inventory feyInventory = feyEntity.getItems();
 
                 // Check if target inventory is empty
                 int targetSlot = -1;
-                for(int i = 0; i < targetInventory.getInvSize(); i++) {
-                    if(!targetInventory.getInvStack(i).isEmpty()) {
+                for (int i = 0; i < targetInventory.getInvSize(); i++) {
+                    if (!targetInventory.getInvStack(i).isEmpty()) {
                         targetSlot = i;
                         break;
                     }
                 }
 
-                if(targetSlot == -1) {
+                if (targetSlot == -1) {
                     return;
                 }
 
                 // Check if there is an empty spot in the fey inventory
                 int feySlot = -1;
-                for(int i = 0; i < feyInventory.getInvSize(); i++) {
-                    if(feyInventory.getInvStack(i).isEmpty()) {
+                for (int i = 0; i < feyInventory.getInvSize(); i++) {
+                    if (feyInventory.getInvStack(i).isEmpty()) {
                         feySlot = i;
                         break;
                     }
                 }
 
-                if(feySlot == -1) {
+                if (feySlot == -1) {
                     return;
                 }
 
@@ -109,7 +109,7 @@ public class FeyCollectGoal extends Goal {
                 feyInventory.setInvStack(feySlot, stack);
 
                 // Now, set target back to input inventory
-                if(feyEntity.getOutputBlock() != null) {
+                if (feyEntity.getOutputBlock() != null) {
                     feyEntity.setPositionTarget(feyEntity.getOutputBlock(), 0);
                 }
             }

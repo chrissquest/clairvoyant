@@ -30,9 +30,9 @@ public class CornflowerClient implements ClientModInitializer {
     public void onInitializeClient() {
         long startTime = System.currentTimeMillis();
         ColorProviderRegistry.BLOCK.register((state, view, pos, tintIndex) -> {
-            if(view != null) {
+            if (view != null) {
                 BlockEntity be = view.getBlockEntity(pos);
-                if(be instanceof CornflowerCauldronBlockEntity) {
+                if (be instanceof CornflowerCauldronBlockEntity) {
                     switch (((CornflowerCauldronBlockEntity) be).getCraftingStage()) {
                         case CRAFTING:
                             return MaterialColor.MAGENTA.color;
@@ -50,6 +50,6 @@ public class CornflowerClient implements ClientModInitializer {
 
         BlockRenderLayerMap.INSTANCE.putBlock(CornflowerBlocks.BOTTLED_FEY, RenderLayer.getTranslucent());
 
-        Cornflower.LOGGER.info("[Cornflower] Client initialization complete. (Took {}ms)", System.currentTimeMillis()-startTime);
+        Cornflower.LOGGER.info("[Cornflower] Client initialization complete. (Took {}ms)", System.currentTimeMillis() - startTime);
     }
 }

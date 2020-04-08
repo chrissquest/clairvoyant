@@ -7,7 +7,6 @@
 
 package io.github.cornflower.world.feature;
 
-import io.github.cornflower.Cornflower;
 import net.minecraft.structure.StructurePieceType;
 import net.minecraft.util.registry.Registry;
 import net.minecraft.world.biome.Biome;
@@ -27,10 +26,8 @@ public class CornflowerWorldFeatures {
     public static void init() {
         Feature.STRUCTURES.put("cornflower_ruin", RUIN_FEATURE);
 
-        for(Biome biome : Registry.BIOME)
-        {
-            if(biome.getCategory() == Biome.Category.TAIGA)
-            {
+        for (Biome biome : Registry.BIOME) {
+            if (biome.getCategory() == Biome.Category.TAIGA) {
                 biome.addStructureFeature(RUIN_STRUCTURE.configure(FeatureConfig.DEFAULT));
                 biome.addFeature(
                         GenerationStep.Feature.SURFACE_STRUCTURES,

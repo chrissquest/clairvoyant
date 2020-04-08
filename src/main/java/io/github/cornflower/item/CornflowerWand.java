@@ -14,7 +14,7 @@ import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.block.entity.LootableContainerBlockEntity;
 import net.minecraft.client.item.TooltipContext;
-import net.minecraft.entity.*;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -47,8 +47,8 @@ public class CornflowerWand extends Item {
     @Override
     public ActionResult useOnBlock(ItemUsageContext context) {
 
-        if(context.getPlayer() != null && context.getWorld().getBlockEntity(context.getBlockPos()) instanceof LootableContainerBlockEntity) {
-            if(context.getPlayer().isSneaking()) {
+        if (context.getPlayer() != null && context.getWorld().getBlockEntity(context.getBlockPos()) instanceof LootableContainerBlockEntity) {
+            if (context.getPlayer().isSneaking()) {
                 // Set output block
                 blockOutput = context.getBlockPos();
                 context.getPlayer().addChatMessage(new TranslatableText("item.cornflower.wand_cornflower.use_output"), true);
@@ -61,12 +61,12 @@ public class CornflowerWand extends Item {
             }
         }
 
-        if(!context.getWorld().isClient()) {
-            if(context.getWorld().getBlockState(context.getBlockPos()).getBlock() instanceof BottledFeyBlock) {
+        if (!context.getWorld().isClient()) {
+            if (context.getWorld().getBlockState(context.getBlockPos()).getBlock() instanceof BottledFeyBlock) {
                 context.getWorld().removeBlock(context.getBlockPos(), false);
 
                 FeyEntity fey = CornflowerEntities.FEY.create(context.getWorld());
-                if(fey != null) {
+                if (fey != null) {
                     fey.refreshPositionAndAngles(context.getBlockPos(), fey.yaw, fey.pitch);
                     context.getWorld().spawnEntity(fey);
                 }
@@ -81,8 +81,8 @@ public class CornflowerWand extends Item {
     public boolean useOnEntity(ItemStack stack, PlayerEntity user, LivingEntity entity, Hand hand) {
 
         // Handle clicking on a Fey to set the input/output block
-        if(entity instanceof FeyEntity) {
-            FeyEntity feyEntity = (FeyEntity)entity;
+        if (entity instanceof FeyEntity) {
+            FeyEntity feyEntity = (FeyEntity) entity;
 
             feyEntity.setInputBlock(this.blockInput);
             feyEntity.setOutputBlock(this.blockOutput);
@@ -97,10 +97,12 @@ public class CornflowerWand extends Item {
     @Environment(EnvType.CLIENT)
     @Override
     public void appendTooltip(ItemStack itemStack, World world, List<Text> tooltip, TooltipContext tooltipContext) {
-        if(blockInput == null) tooltip.add(new TranslatableText("item.cornflower.wand_cornflower.tooltip1"));
-        else tooltip.add(new TranslatableText("item.cornflower.wand_cornflower.tooltip1").append(blockInput.toShortString()));
-        if(blockOutput == null) tooltip.add(new TranslatableText("item.cornflower.wand_cornflower.tooltip2"));
-        else tooltip.add(new TranslatableText("item.cornflower.wand_cornflower.tooltip2").append(blockOutput.toShortString()));
+        if (blockInput == null) tooltip.add(new TranslatableText("item.cornflower.wand_cornflower.tooltip1"));
+        else
+            tooltip.add(new TranslatableText("item.cornflower.wand_cornflower.tooltip1").append(blockInput.toShortString()));
+        if (blockOutput == null) tooltip.add(new TranslatableText("item.cornflower.wand_cornflower.tooltip2"));
+        else
+            tooltip.add(new TranslatableText("item.cornflower.wand_cornflower.tooltip2").append(blockOutput.toShortString()));
     }
 
     public void setBlockInput(BlockPos blockInput) {

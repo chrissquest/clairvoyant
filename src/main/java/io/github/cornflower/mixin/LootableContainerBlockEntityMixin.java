@@ -30,16 +30,16 @@ public abstract class LootableContainerBlockEntityMixin extends LockableContaine
 
     @Inject(method = "createMenu", at = @At("HEAD"), cancellable = true)
     private void createMenu(int syncId, PlayerInventory playerInventory, PlayerEntity playerEntity, CallbackInfoReturnable<Container> ci) {
-        if(playerEntity.getMainHandStack().getItem() instanceof CornflowerWand) {
+        if (playerEntity.getMainHandStack().getItem() instanceof CornflowerWand) {
             ItemStack stack = playerEntity.getMainHandStack();
-            if(!playerEntity.isSneaking()) ((CornflowerWand)stack.getItem()).setBlockInput(this.pos);
+            if (!playerEntity.isSneaking()) ((CornflowerWand) stack.getItem()).setBlockInput(this.pos);
             playerEntity.addChatMessage(new TranslatableText("item.cornflower.wand_cornflower.use_input"), true);
             ci.setReturnValue(null);
             ci.cancel();
         }
-        if(playerEntity.getOffHandStack().getItem() instanceof CornflowerWand) {
+        if (playerEntity.getOffHandStack().getItem() instanceof CornflowerWand) {
             ItemStack stack = playerEntity.getOffHandStack();
-            if(!playerEntity.isSneaking()) ((CornflowerWand)stack.getItem()).setBlockInput(this.pos);
+            if (!playerEntity.isSneaking()) ((CornflowerWand) stack.getItem()).setBlockInput(this.pos);
             playerEntity.addChatMessage(new TranslatableText("item.cornflower.wand_cornflower.use_input"), true);
             ci.setReturnValue(null);
             ci.cancel();

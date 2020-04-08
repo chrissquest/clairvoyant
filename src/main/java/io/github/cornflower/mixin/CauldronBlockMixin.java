@@ -9,8 +9,6 @@ package io.github.cornflower.mixin;
 
 import io.github.cornflower.block.CornflowerBlocks;
 import io.github.cornflower.block.entity.CornflowerCauldronBlockEntity;
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.block.CauldronBlock;
@@ -20,9 +18,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.particle.ParticleTypes;
 import net.minecraft.server.world.ServerWorld;
-import net.minecraft.sound.SoundCategory;
-import net.minecraft.sound.SoundEvent;
-import net.minecraft.sound.SoundEvents;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Clearable;
 import net.minecraft.util.Hand;
@@ -42,16 +37,16 @@ public class CauldronBlockMixin {
 
     @Inject(method = "onUse", at = @At("TAIL"), cancellable = true)
     private void onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hit, CallbackInfoReturnable<ActionResult> ci) {
-        if(world.getBlockState(pos).getBlock().equals(Blocks.CAULDRON)) {
+        if (world.getBlockState(pos).getBlock().equals(Blocks.CAULDRON)) {
             ItemStack itemStack = player.getStackInHand(hand);
-            if(itemStack.getItem().equals(Items.CORNFLOWER)) {
-                if(world.isClient) {
+            if (itemStack.getItem().equals(Items.CORNFLOWER)) {
+                if (world.isClient) {
                     Random random = new Random();
                     for (int i = 0; i < 30; i++) {
                         world.addParticle(ParticleTypes.CLOUD,
-                                (double)pos.getX() + 0.5D + random.nextDouble() / 4.0D * (double)(random.nextBoolean() ? 1 : -1),
-                                (double)pos.getY() + 0.5D + random.nextDouble() / 4.0D * (double)(random.nextBoolean() ? 1 : -1),
-                                (double)pos.getZ() + 0.5D + random.nextDouble() / 4.0D * (double)(random.nextBoolean() ? 1 : -1),
+                                (double) pos.getX() + 0.5D + random.nextDouble() / 4.0D * (double) (random.nextBoolean() ? 1 : -1),
+                                (double) pos.getY() + 0.5D + random.nextDouble() / 4.0D * (double) (random.nextBoolean() ? 1 : -1),
+                                (double) pos.getZ() + 0.5D + random.nextDouble() / 4.0D * (double) (random.nextBoolean() ? 1 : -1),
                                 0,
                                 0,
                                 0
@@ -59,7 +54,7 @@ public class CauldronBlockMixin {
                     }
                     return;
                 }
-                ServerWorld w = (ServerWorld)world;
+                ServerWorld w = (ServerWorld) world;
                 BlockEntity blockEntity = w.getBlockEntity(pos);
                 Clearable.clear(blockEntity);
                 world.setBlockEntity(pos, new CornflowerCauldronBlockEntity());

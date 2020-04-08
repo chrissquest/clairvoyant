@@ -9,13 +9,7 @@ package io.github.cornflower;
 
 
 import io.github.cornflower.util.ModBootstrap;
-import io.github.cornflower.util.ModConstants;
 import net.fabricmc.api.ModInitializer;
-import net.fabricmc.fabric.api.client.itemgroup.FabricItemGroupBuilder;
-import net.fabricmc.loader.util.sat4j.minisat.core.DataStructureFactory;
-import net.minecraft.item.ItemGroup;
-import net.minecraft.item.Items;
-import net.minecraft.util.Identifier;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -28,6 +22,6 @@ public class Cornflower implements ModInitializer {
         long startTime = System.currentTimeMillis();
         LOGGER.info("[Cornflower] Starting initialization.");
         ModBootstrap.bootstrap(); // init things like blocks and items.
-        LOGGER.info("[Cornflower] Finished initialization. (Took {}ms)", System.currentTimeMillis()-startTime);
+        LOGGER.info("[Cornflower] Finished initialization. (Took {}ms)", System.currentTimeMillis() - startTime);
     }
 }

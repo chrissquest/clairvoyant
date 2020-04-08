@@ -13,10 +13,9 @@ import net.minecraft.client.render.entity.EntityRenderDispatcher;
 import net.minecraft.client.render.entity.MobEntityRenderer;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.util.Identifier;
-import net.minecraft.util.math.MathHelper;
 
 @Environment(EnvType.CLIENT)
-public class FeyEntityRenderer extends MobEntityRenderer<FeyEntity, FeyEntityModel>{
+public class FeyEntityRenderer extends MobEntityRenderer<FeyEntity, FeyEntityModel> {
 
     public FeyEntityRenderer(EntityRenderDispatcher entityRenderDispatcher) {
         super(entityRenderDispatcher, new FeyEntityModel(), 0.25F);

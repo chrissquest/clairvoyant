@@ -14,7 +14,6 @@ import net.minecraft.block.Material;
 import net.minecraft.entity.EntityContext;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.shape.VoxelShape;
-import net.minecraft.util.shape.VoxelShapes;
 import net.minecraft.world.BlockView;
 
 public class BottledFeyBlock extends Block {
@@ -25,6 +24,6 @@ public class BottledFeyBlock extends Block {
     @SuppressWarnings("deprecation")
     @Override
     public VoxelShape getOutlineShape(BlockState blockState, BlockView blockView, BlockPos blockPos, EntityContext entityContext) {
-        return  Block.createCuboidShape(4.0D,0.0D,4.0D,12.0D,11.0D,12.0D);
+        return Block.createCuboidShape(4.0D, 0.0D, 4.0D, 12.0D, 11.0D, 12.0D);
     }
 }

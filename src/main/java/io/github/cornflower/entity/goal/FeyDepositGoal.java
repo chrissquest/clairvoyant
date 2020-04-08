@@ -29,10 +29,10 @@ public class FeyDepositGoal extends Goal {
 
     @Override
     public boolean canStart() {
-        if(feyEntity.getInputBlock() == null) {
+        if (feyEntity.getInputBlock() == null) {
             return false;
         }
-        if(!feyEntity.hasItems()) {
+        if (!feyEntity.hasItems()) {
             return false;
         }
         return feyEntity.getOutputBlock().isWithinDistance(feyEntity.getPos(), depositDistance);
@@ -50,33 +50,33 @@ public class FeyDepositGoal extends Goal {
         // TODO: Implement support for sided inventories
         if (feyEntity.getOutputBlock() != null) {
             BlockEntity targetBlockEntity = feyEntity.world.getBlockEntity(feyEntity.getOutputBlock());
-            if(targetBlockEntity instanceof Inventory) {
-                Inventory targetInventory = (Inventory)targetBlockEntity;
+            if (targetBlockEntity instanceof Inventory) {
+                Inventory targetInventory = (Inventory) targetBlockEntity;
                 Inventory feyInventory = feyEntity.getItems();
 
                 // Check if target inventory is full
                 int targetSlot = -1;
-                for(int i = 0; i < targetInventory.getInvSize(); i++) {
-                    if(targetInventory.getInvStack(i).isEmpty()) {
+                for (int i = 0; i < targetInventory.getInvSize(); i++) {
+                    if (targetInventory.getInvStack(i).isEmpty()) {
                         targetSlot = i;
                         break;
                     }
                 }
 
-                if(targetSlot == -1) {
+                if (targetSlot == -1) {
                     return;
                 }
 
                 // Check if fey has item stack to give.
                 int feySlot = -1;
-                for(int i = 0; i < feyInventory.getInvSize(); i++) {
-                    if(!feyInventory.getInvStack(i).isEmpty()) {
+                for (int i = 0; i < feyInventory.getInvSize(); i++) {
+                    if (!feyInventory.getInvStack(i).isEmpty()) {
                         feySlot = i;
                         break;
                     }
                 }
 
-                if(feySlot == -1) {
+                if (feySlot == -1) {
                     return;
                 }
 
@@ -86,7 +86,7 @@ public class FeyDepositGoal extends Goal {
                 targetInventory.setInvStack(targetSlot, stack);
 
                 // Now, set target back to input inventory
-                if(feyEntity.getInputBlock() != null) {
+                if (feyEntity.getInputBlock() != null) {
                     feyEntity.setPositionTarget(feyEntity.getInputBlock(), 0);
                 }
             }
