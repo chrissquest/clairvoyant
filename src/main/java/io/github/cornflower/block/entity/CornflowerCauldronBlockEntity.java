@@ -20,27 +20,13 @@ import net.minecraft.util.Tickable;
 
 import java.util.Optional;
 
-public class CornflowerCauldronBlockEntity extends BlockEntity implements Tickable, BlockEntityClientSerializable {
+public class CornflowerCauldronBlockEntity extends BlockEntity implements BlockEntityClientSerializable {
 
     private DefaultedList<ItemStack> inv = DefaultedList.ofSize(5, ItemStack.EMPTY);
     private CraftingStage craftingStage = CraftingStage.NONE;
 
     public CornflowerCauldronBlockEntity() {
         super(CornflowerBlockEntities.CORNFLOWER_CAULDRON);
-    }
-
-    @Override
-    public void tick() {
-        // This shouldnt tick, we only need to check every time you put in an item
-        /*if((this.world != null ? this.world.getBlockState(this.pos).get(CauldronBlock.LEVEL) : 0) > 0) {
-            if(CampfireUtil.isCampfireLitUnder(this.world, this.pos)) {
-                if(!this.world.isClient()) {
-                    if(this.getRecipeForInvContent().isPresent()) {
-                        this.setCraftingStage(CraftingStage.DONE);
-                    }
-                }
-            }
-        }*/
     }
 
     public CraftingStage getCraftingStage() {
