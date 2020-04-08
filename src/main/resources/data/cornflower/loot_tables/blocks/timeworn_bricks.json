@@ -1,7 +1,7 @@
 {
   "pools": [{
     "entries": [{
-      "name": "cornflower:timeworn_bricks",
+      "name": "cornflower:timeworn_brick",
       "type": "minecraft:item"
     }],
     "rolls": 1,

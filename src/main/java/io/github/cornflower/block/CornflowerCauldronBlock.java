@@ -19,6 +19,7 @@ import net.minecraft.block.CauldronBlock;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.BasicInventory;
+import net.minecraft.inventory.Inventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.particle.ParticleTypes;
 import net.minecraft.sound.SoundCategory;
@@ -70,6 +71,19 @@ public class CornflowerCauldronBlock extends CauldronBlock implements BlockEntit
                     );
                 }
             }
+        }
+    }
+
+    @Override
+    public void onBlockRemoved(BlockState state, World world, BlockPos pos, BlockState newState, boolean moved) {
+        if (state.getBlock() != newState.getBlock()) {
+            BlockEntity blockEntity = world.getBlockEntity(pos);
+            if (blockEntity instanceof CornflowerCauldronBlockEntity) {
+                ItemScatterer.spawn(world, pos, ((CornflowerCauldronBlockEntity) blockEntity).getInv());
+                world.updateHorizontalAdjacent(pos, this);
+            }
+
+            super.onBlockRemoved(state, world, pos, newState, moved);
         }
     }
 
