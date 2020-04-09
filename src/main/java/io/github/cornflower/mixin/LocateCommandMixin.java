@@ -31,6 +31,6 @@ public abstract class LocateCommandMixin {
     @Inject(method = "register", at = @At(value = "RETURN"))
     private static void onRegister(CommandDispatcher<ServerCommandSource> dispatcher, CallbackInfo info) {
         dispatcher.register(literal("locate").requires(source -> source.hasPermissionLevel(2))
-                .then(literal("Cornflower_Ruin").executes(ctx -> execute(ctx.getSource(), "cornflower_ruin"))));
+                .then(literal("Cornflower_Ruin").executes(ctx -> execute(ctx.getSource(), "Cornflower_Ruin"))));
     }
 }

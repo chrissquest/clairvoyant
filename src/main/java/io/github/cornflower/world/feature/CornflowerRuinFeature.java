@@ -13,13 +13,10 @@ import net.minecraft.util.BlockRotation;
 import net.minecraft.util.math.BlockBox;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.biome.Biome;
-import net.minecraft.world.biome.source.BiomeAccess;
 import net.minecraft.world.gen.chunk.ChunkGenerator;
 import net.minecraft.world.gen.feature.AbstractTempleFeature;
 import net.minecraft.world.gen.feature.DefaultFeatureConfig;
 import net.minecraft.world.gen.feature.StructureFeature;
-
-import java.util.Random;
 
 public class CornflowerRuinFeature extends AbstractTempleFeature<DefaultFeatureConfig> {
 
@@ -47,11 +44,6 @@ public class CornflowerRuinFeature extends AbstractTempleFeature<DefaultFeatureC
         return 3;
     }
 
-    @Override
-    public boolean shouldStartAt(BiomeAccess biomeAccess, ChunkGenerator<?> chunkGenerator, Random random, int chunkZ, int i, Biome biome) {
-        return true;
-    }
-
     public static class RuinStructureStart extends StructureStart {
 
         public RuinStructureStart(StructureFeature<?> feature, int chunkX, int chunkZ, BlockBox box, int references, long l) {
@@ -65,7 +57,7 @@ public class CornflowerRuinFeature extends AbstractTempleFeature<DefaultFeatureC
             int z = chunkZ * 16;
             BlockPos startingPos = new BlockPos(x, 0, z);
             BlockRotation rotation = BlockRotation.values()[this.random.nextInt(BlockRotation.values().length)];
-            CornflowerRuinGenerator.addParts(structureManager, startingPos, rotation, this.children, this.random, defaultFeatureConfig);
+            CornflowerRuinGenerator.addParts(structureManager, startingPos, rotation, this.children, defaultFeatureConfig);
             this.setBoundingBoxFromChildren();
         }
     }
