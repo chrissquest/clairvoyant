@@ -13,7 +13,7 @@ import net.minecraft.entity.ai.goal.Goal;
 import net.minecraft.inventory.Inventory;
 import net.minecraft.item.ItemStack;
 
-public class FeyDepositGoal extends Goal {
+public class FeyDepositItemGoal extends Goal implements defaultWeight{
 
     /**
      * The distance the Fey can access inventories from.
@@ -23,9 +23,11 @@ public class FeyDepositGoal extends Goal {
 
     private FeyEntity feyEntity;
 
-    public FeyDepositGoal(FeyEntity entity) {
+    public FeyDepositItemGoal(FeyEntity entity) {
         this.feyEntity = entity;
     }
+
+    public int getDefaultWeight() { return 1; }
 
     @Override
     public boolean canStart() {

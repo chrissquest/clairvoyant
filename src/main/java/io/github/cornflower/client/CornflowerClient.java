@@ -17,6 +17,7 @@ import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.fabricmc.fabric.api.blockrenderlayer.v1.BlockRenderLayerMap;
+import net.fabricmc.fabric.api.client.keybinding.KeyBindingRegistry;
 import net.fabricmc.fabric.api.client.rendereregistry.v1.EntityRendererRegistry;
 import net.fabricmc.fabric.api.client.rendering.v1.ColorProviderRegistry;
 import net.minecraft.block.MaterialColor;
@@ -45,6 +46,9 @@ public class CornflowerClient implements ClientModInitializer {
             }
             return view != null && pos != null ? BiomeColors.getWaterColor(view, pos) : -1;
         }, CornflowerBlocks.CORNFLOWER_CAULDRON);
+
+        KeyBindingRegistry.INSTANCE.addCategory("Cornflower");
+        KeyBindingRegistry.INSTANCE.register(KeyBinds.wandModeKey);
 
         EntityRendererRegistry.INSTANCE.register(CornflowerEntities.FEY, (entityRenderDispatcher, context) -> new FeyEntityRenderer(entityRenderDispatcher));
 

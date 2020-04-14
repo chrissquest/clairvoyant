@@ -10,13 +10,14 @@ package io.github.cornflower.entity.goal;
 import io.github.cornflower.entity.FeyEntity;
 import net.minecraft.entity.ai.goal.Goal;
 
-public class FeyIdleGoal extends Goal {
+public class FeyIdleGoal extends Goal implements defaultWeight{
 
     private FeyEntity feyEntity;
-
     public FeyIdleGoal(FeyEntity feyEntity) {
         this.feyEntity = feyEntity;
     }
+
+    public int getDefaultWeight() { return 3; }
 
     @Override
     public boolean canStart() {

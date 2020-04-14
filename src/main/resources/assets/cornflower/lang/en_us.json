@@ -5,8 +5,14 @@
   "item.cornflower.wand_cornflower.use_input": "Set input",
   "item.cornflower.wand_cornflower.use_output": "Set output",
   "item.cornflower.wand_cornflower.use_fey": "Transferred to fey",
-  "item.cornflower.wand_cornflower.tooltip1": "Input Block: ",
-  "item.cornflower.wand_cornflower.tooltip2": "Output Block: ",
+  "item.cornflower.wand_cornflower.use_mode_none": "Mode set to none",
+  "item.cornflower.wand_cornflower.use_mode_item": "Mode set to item",
+  "item.cornflower.wand_cornflower.use_mode_animal": "Mode set to animal",
+  "item.cornflower.wand_cornflower.tooltip_mode_none": "Mode: None",
+  "item.cornflower.wand_cornflower.tooltip_mode_item": "Mode: Item",
+  "item.cornflower.wand_cornflower.tooltip_mode_animal": "Mode: Animal",
+  "item.cornflower.wand_cornflower.tooltip_input": "Input Block: ",
+  "item.cornflower.wand_cornflower.tooltip_output": "Output Block: ",
   "item.cornflower.cornflower_essence": "Cornflower Essence",
   "item.cornflower.bottled_essence": "Bottled Essence",
 
@@ -18,9 +24,12 @@
   "block.cornflower.timeworn_brick_stairs": "Timeworn Brick Stairs",
   "block.cornflower.timeworn_brick_wall": "Timeworn Brick Wall",
 
+  "entity.cornflower.fey": "Fey",
 
   "advancements.cornflower.root.title": "Cornflower",
   "advancements.cornflower.root.description": "Wonder what you get if you break enough of them?",
   "advancements.cornflower.create_fey.title": "Automated",
-  "advancements.cornflower.create_fey.description": "Just a fancy tech mod."
+  "advancements.cornflower.create_fey.description": "Just a fancy tech mod.",
+
+  "key.cornflower.wand_mode_key": "Wand Mode"
 }

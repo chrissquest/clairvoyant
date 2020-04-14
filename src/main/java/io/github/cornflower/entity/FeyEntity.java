@@ -7,14 +7,14 @@
 
 package io.github.cornflower.entity;
 
-import io.github.cornflower.entity.goal.FeyCollectGoal;
-import io.github.cornflower.entity.goal.FeyDepositGoal;
-import io.github.cornflower.entity.goal.FeyIdleGoal;
-import io.github.cornflower.entity.goal.FeyMoveGoal;
+import com.mojang.datafixers.types.templates.TypeTemplate;
+import io.github.cornflower.Cornflower;
+import io.github.cornflower.entity.goal.*;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.*;
 import net.minecraft.entity.ai.control.FlightMoveControl;
 import net.minecraft.entity.ai.control.JumpControl;
+import net.minecraft.entity.ai.goal.Goal;
 import net.minecraft.entity.ai.goal.GoalSelector;
 import net.minecraft.entity.ai.pathing.BirdNavigation;
 import net.minecraft.entity.ai.pathing.EntityNavigation;
@@ -29,16 +29,20 @@ import net.minecraft.inventory.Inventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtHelper;
+import net.minecraft.nbt.Tag;
 import net.minecraft.sound.SoundEvent;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class FeyEntity extends MobEntityWithAi implements Flutterer {
     private static final TrackedData<Byte> FEY_FLAGS;
-
-    // Item transport Fey
+    // Type of Fey
+    private FeyType type = FeyType.NONE;
 
     /**
      * The size of the inventory of the item transport fey.
@@ -50,6 +54,7 @@ public class FeyEntity extends MobEntityWithAi implements Flutterer {
     private BlockPos outputBlock;
     // TODO: Persist items in NBT data. See DonkeyEntity.
     private BasicInventory items;
+    private List<Goal> Goals = new ArrayList<>();
 
     public FeyEntity(EntityType<? extends FeyEntity> entityType, World world) {
         super(entityType, world);
@@ -67,10 +72,29 @@ public class FeyEntity extends MobEntityWithAi implements Flutterer {
 
     @Override
     protected void initGoals() {
-        this.goalSelector.add(3, new FeyIdleGoal(this));
-        this.goalSelector.add(2, new FeyMoveGoal(this));
-        this.goalSelector.add(1, new FeyCollectGoal(this));
-        this.goalSelector.add(1, new FeyDepositGoal(this));
+        // Because I guess it's not possible to remove all goals
+        if (Goals != null) {
+            for (Goal goal : Goals) {
+                goalSelector.remove(goal);
+            }
+
+            if (type == FeyType.TRANSPORT_ITEM) {
+                Goals.add(new FeyIdleGoal(this));
+                Goals.add(new FeyMoveItemGoal(this));
+                Goals.add(new FeyCollectItemGoal(this));
+                Goals.add(new FeyDepositItemGoal(this));
+            } else if (type == FeyType.TRANSPORT_ANIMAL) {
+                Goals.add(new FeyIdleGoal(this));
+                Goals.add(new FeyMoveAnimalGoal(this));
+                Goals.add(new FeyCollectAnimalGoal(this));
+                Goals.add(new FeyDepositAnimalGoal(this));
+            }
+
+            for (Goal goal : Goals) {
+                if (goal instanceof defaultWeight)
+                    goalSelector.add(((defaultWeight) goal).getDefaultWeight(), goal);
+            }
+        }
     }
 
     @Override
@@ -129,9 +153,7 @@ public class FeyEntity extends MobEntityWithAi implements Flutterer {
             }
 
             public void tick() {
-                //if (!BeeEntity.this.pollinateGoal.isRunning()) {
                 super.tick();
-                //}
             }
         };
         birdNavigation.setCanPathThroughDoors(false);
@@ -153,7 +175,6 @@ public class FeyEntity extends MobEntityWithAi implements Flutterer {
     @Override
     public void tick() {
         super.tick();
-        //this.setVelocity(this.getVelocity().multiply(1.0D, 0.6D, 1.0D));
     }
 
     @Override
@@ -185,6 +206,7 @@ public class FeyEntity extends MobEntityWithAi implements Flutterer {
         if (this.isInvulnerableTo(source)) {
             return false;
         } else {
+            Cornflower.LOGGER.info("Enumtostring : " + type.toString() + "  Enumtoname : " + type.name() + "  Stringtoenum : " + FeyType.valueOf("NONE"));
             return super.damage(source, amount);
         }
     }
@@ -207,10 +229,17 @@ public class FeyEntity extends MobEntityWithAi implements Flutterer {
         }
     }
 
+    @SuppressWarnings("ConstantConditions")
     @Override
     public void readCustomDataFromTag(CompoundTag tag) {
         super.readCustomDataFromTag(tag);
         this.dataTracker.set(FEY_FLAGS, tag.getByte("FeyFlags"));
+
+        if (tag.contains("Type")) {
+            this.type = FeyType.getType(tag.get("Type").asString());
+            // Need to re init goals because the entity loads those before nbt
+            initGoals();
+        }
 
         if (tag.contains("InputContainer")) {
             this.inputBlock = NbtHelper.toBlockPos(tag.getCompound("InputContainer"));
@@ -225,6 +254,10 @@ public class FeyEntity extends MobEntityWithAi implements Flutterer {
     public void writeCustomDataToTag(CompoundTag tag) {
         super.writeCustomDataToTag(tag);
         tag.putByte("FeyFlags", this.dataTracker.get(FEY_FLAGS));
+
+        if (type != null) {
+            tag.putString("Type", type.toString());
+        }
 
         if (inputBlock != null) {
             tag.put("InputContainer", NbtHelper.fromBlockPos(inputBlock));
@@ -268,7 +301,14 @@ public class FeyEntity extends MobEntityWithAi implements Flutterer {
         this.outputBlock = outputBlock;
     }
 
+    public void setType(FeyType type) {
+        this.type = type;
+        // Need to re init goals if the type changes
+        initGoals();
+    }
+
     static {
         FEY_FLAGS = DataTracker.registerData(FeyEntity.class, TrackedDataHandlerRegistry.BYTE);
     }
+
 }

@@ -11,27 +11,24 @@ import io.github.cornflower.entity.FeyEntity;
 import net.minecraft.entity.ai.goal.Goal;
 import net.minecraft.util.math.BlockPos;
 
-public class FeyMoveGoal extends Goal {
+public class FeyMoveAnimalGoal extends Goal implements defaultWeight{
 
-    /**
-     * The maximum distance this fey will move to get to the input or output blocks.
-     * TODO: Make this modifiable by the user?
-     */
     private static final int maxMoveDistance = 64;
 
     private FeyEntity feyEntity;
 
     private BlockPos targetPos;
 
-    public FeyMoveGoal(FeyEntity entity) {
+    public FeyMoveAnimalGoal(FeyEntity entity) {
         this.feyEntity = entity;
     }
 
-    @Override
+    public int getDefaultWeight() { return 2; }
+
     public boolean canStart() {
         if (feyEntity.getInputBlock() != null
                 && feyEntity.getInputBlock().isWithinDistance(feyEntity.getPos(), maxMoveDistance)
-                && !feyEntity.hasItems()) {
+                && !feyEntity.hasPassengers()) {
             // Fey can move to input block
             this.targetPos = feyEntity.getInputBlock();
             return true;
@@ -39,7 +36,7 @@ public class FeyMoveGoal extends Goal {
 
         if (feyEntity.getOutputBlock() != null
                 && feyEntity.getOutputBlock().isWithinDistance(feyEntity.getPos(), maxMoveDistance)
-                && feyEntity.hasItems()) {
+                && feyEntity.hasPassengers()) {
             // Fey can move to output block
             this.targetPos = feyEntity.getOutputBlock();
             return true;
@@ -56,8 +53,6 @@ public class FeyMoveGoal extends Goal {
     @Override
     public void start() {
         super.start();
-
-
     }
 
     @Override
