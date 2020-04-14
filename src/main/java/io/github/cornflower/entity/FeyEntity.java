@@ -26,8 +26,10 @@ import net.minecraft.entity.data.TrackedDataHandlerRegistry;
 import net.minecraft.entity.mob.MobEntityWithAi;
 import net.minecraft.inventory.BasicInventory;
 import net.minecraft.inventory.Inventory;
+import net.minecraft.inventory.InventoryListener;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.NbtHelper;
 import net.minecraft.nbt.Tag;
 import net.minecraft.sound.SoundEvent;
@@ -39,7 +41,7 @@ import net.minecraft.world.World;
 import java.util.ArrayList;
 import java.util.List;
 
-public class FeyEntity extends MobEntityWithAi implements Flutterer {
+public class FeyEntity extends MobEntityWithAi implements Flutterer, InventoryListener {
     private static final TrackedData<Byte> FEY_FLAGS;
     // Type of Fey
     private FeyType type = FeyType.NONE;
@@ -52,12 +54,12 @@ public class FeyEntity extends MobEntityWithAi implements Flutterer {
 
     private BlockPos inputBlock;
     private BlockPos outputBlock;
-    // TODO: Persist items in NBT data. See DonkeyEntity.
     private BasicInventory items;
     private List<Goal> Goals = new ArrayList<>();
 
     public FeyEntity(EntityType<? extends FeyEntity> entityType, World world) {
         super(entityType, world);
+        this.method_6721();
 
         this.moveControl = new FlightMoveControl(this, 20, true);
     }
@@ -66,8 +68,6 @@ public class FeyEntity extends MobEntityWithAi implements Flutterer {
     protected void initDataTracker() {
         super.initDataTracker();
         this.dataTracker.startTracking(FEY_FLAGS, (byte) 0);
-
-        items = new BasicInventory(inventorySize);
     }
 
     @Override
@@ -206,7 +206,6 @@ public class FeyEntity extends MobEntityWithAi implements Flutterer {
         if (this.isInvulnerableTo(source)) {
             return false;
         } else {
-            Cornflower.LOGGER.info("Enumtostring : " + type.toString() + "  Enumtoname : " + type.name() + "  Stringtoenum : " + FeyType.valueOf("NONE"));
             return super.damage(source, amount);
         }
     }
@@ -234,7 +233,6 @@ public class FeyEntity extends MobEntityWithAi implements Flutterer {
     public void readCustomDataFromTag(CompoundTag tag) {
         super.readCustomDataFromTag(tag);
         this.dataTracker.set(FEY_FLAGS, tag.getByte("FeyFlags"));
-
         if (tag.contains("Type")) {
             this.type = FeyType.getType(tag.get("Type").asString());
             // Need to re init goals because the entity loads those before nbt
@@ -248,6 +246,38 @@ public class FeyEntity extends MobEntityWithAi implements Flutterer {
         if (tag.contains("OutputContainer")) {
             this.outputBlock = NbtHelper.toBlockPos(tag.getCompound("OutputContainer"));
         }
+
+        if(tag.contains("Items")){
+            ListTag listTag = tag.getList("Items", 10);
+            // From donkey entity, doesn't seem needed?
+            this.method_6721();
+
+            for(int i = 0; i < listTag.size(); ++i) {
+                CompoundTag compoundTag = listTag.getCompound(i);
+                int j = compoundTag.getByte("Slot") & 255;
+                if (j >= 0 && j < this.items.getInvSize()) {
+                    this.items.setInvStack(j, ItemStack.fromTag(compoundTag));
+                }
+            }
+        }
+    }
+
+    protected void method_6721() {
+        BasicInventory basicInventory = this.items;
+        this.items = new BasicInventory(inventorySize);
+        if (basicInventory != null) {
+            basicInventory.removeListener(this);
+            int i = Math.min(basicInventory.getInvSize(), this.items.getInvSize());
+
+            for(int j = 0; j < i; ++j) {
+                ItemStack itemStack = basicInventory.getInvStack(j);
+                if (!itemStack.isEmpty()) {
+                    this.items.setInvStack(j, itemStack.copy());
+                }
+            }
+        }
+
+        this.items.addListener(this);
     }
 
     @Override
@@ -266,6 +296,23 @@ public class FeyEntity extends MobEntityWithAi implements Flutterer {
         if (outputBlock != null) {
             tag.put("OutputContainer", NbtHelper.fromBlockPos(outputBlock));
         }
+
+        if(!items.isInvEmpty()){
+            ListTag listTag = new ListTag();
+
+            for(int i = 0; i < this.items.getInvSize(); ++i) {
+                ItemStack itemStack = this.items.getInvStack(i);
+                if (!itemStack.isEmpty()) {
+                    CompoundTag compoundTag = new CompoundTag();
+                    compoundTag.putByte("Slot", (byte)i);
+                    itemStack.toTag(compoundTag);
+                    listTag.add(compoundTag);
+                }
+            }
+
+            tag.put("Items", listTag);
+        }
+
     }
 
     @Override
@@ -311,4 +358,7 @@ public class FeyEntity extends MobEntityWithAi implements Flutterer {
         FEY_FLAGS = DataTracker.registerData(FeyEntity.class, TrackedDataHandlerRegistry.BYTE);
     }
 
+    @Override
+    public void onInvChange(Inventory inventory) {
+    }
 }

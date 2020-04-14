@@ -69,7 +69,7 @@ public class CornflowerWand extends Item {
                 return ActionResult.SUCCESS;
             }
             // Set chest input/output
-            // TODO: Make it work for different types of inventories
+            // TODO: Make it work for different types of inventories?
             else if (mode == FeyType.TRANSPORT_ITEM && context.getPlayer() != null && context.getWorld().getBlockEntity(context.getBlockPos()) instanceof LootableContainerBlockEntity) {
                 if (context.getPlayer().isSneaking()) {
                     // Set output block
