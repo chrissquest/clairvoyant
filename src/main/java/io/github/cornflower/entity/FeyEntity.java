@@ -7,8 +7,6 @@
 
 package io.github.cornflower.entity;
 
-import com.mojang.datafixers.types.templates.TypeTemplate;
-import io.github.cornflower.Cornflower;
 import io.github.cornflower.entity.goal.*;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.*;
@@ -31,7 +29,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.NbtHelper;
-import net.minecraft.nbt.Tag;
 import net.minecraft.sound.SoundEvent;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.util.math.BlockPos;
@@ -234,7 +231,7 @@ public class FeyEntity extends MobEntityWithAi implements Flutterer, InventoryLi
         super.readCustomDataFromTag(tag);
         this.dataTracker.set(FEY_FLAGS, tag.getByte("FeyFlags"));
         if (tag.contains("Type")) {
-            this.type = FeyType.getType(tag.get("Type").asString());
+            this.type = FeyType.valueOf(tag.get("Type").asString());
             // Need to re init goals because the entity loads those before nbt
             initGoals();
         }
@@ -247,12 +244,12 @@ public class FeyEntity extends MobEntityWithAi implements Flutterer, InventoryLi
             this.outputBlock = NbtHelper.toBlockPos(tag.getCompound("OutputContainer"));
         }
 
-        if(tag.contains("Items")){
+        if (tag.contains("Items")) {
             ListTag listTag = tag.getList("Items", 10);
             // From donkey entity, doesn't seem needed?
             this.method_6721();
 
-            for(int i = 0; i < listTag.size(); ++i) {
+            for (int i = 0; i < listTag.size(); ++i) {
                 CompoundTag compoundTag = listTag.getCompound(i);
                 int j = compoundTag.getByte("Slot") & 255;
                 if (j >= 0 && j < this.items.getInvSize()) {
@@ -269,7 +266,7 @@ public class FeyEntity extends MobEntityWithAi implements Flutterer, InventoryLi
             basicInventory.removeListener(this);
             int i = Math.min(basicInventory.getInvSize(), this.items.getInvSize());
 
-            for(int j = 0; j < i; ++j) {
+            for (int j = 0; j < i; ++j) {
                 ItemStack itemStack = basicInventory.getInvStack(j);
                 if (!itemStack.isEmpty()) {
                     this.items.setInvStack(j, itemStack.copy());
@@ -297,14 +294,14 @@ public class FeyEntity extends MobEntityWithAi implements Flutterer, InventoryLi
             tag.put("OutputContainer", NbtHelper.fromBlockPos(outputBlock));
         }
 
-        if(!items.isInvEmpty()){
+        if (!items.isInvEmpty()) {
             ListTag listTag = new ListTag();
 
-            for(int i = 0; i < this.items.getInvSize(); ++i) {
+            for (int i = 0; i < this.items.getInvSize(); ++i) {
                 ItemStack itemStack = this.items.getInvStack(i);
                 if (!itemStack.isEmpty()) {
                     CompoundTag compoundTag = new CompoundTag();
-                    compoundTag.putByte("Slot", (byte)i);
+                    compoundTag.putByte("Slot", (byte) i);
                     itemStack.toTag(compoundTag);
                     listTag.add(compoundTag);
                 }

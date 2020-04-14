@@ -9,28 +9,31 @@ package io.github.cornflower.item;
 
 import io.github.cornflower.Cornflower;
 import io.github.cornflower.block.BottledFeyBlock;
+import io.github.cornflower.block.entity.CornflowerCauldronBlockEntity;
 import io.github.cornflower.client.KeyBinds;
 import io.github.cornflower.entity.CornflowerEntities;
 import io.github.cornflower.entity.FeyEntity;
 import io.github.cornflower.entity.FeyType;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
-import net.minecraft.block.Block;
 import net.minecraft.block.entity.LootableContainerBlockEntity;
 import net.minecraft.client.item.TooltipContext;
+import net.minecraft.entity.ItemEntity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.inventory.Inventory;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemUsageContext;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.NbtHelper;
 import net.minecraft.text.Text;
 import net.minecraft.text.TranslatableText;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
+import net.minecraft.util.ItemScatterer;
 import net.minecraft.util.TypedActionResult;
-import net.minecraft.util.hit.HitResult;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.RayTraceContext;
 import net.minecraft.world.World;
 
 import java.util.List;
@@ -38,10 +41,6 @@ import java.util.List;
 import static io.github.cornflower.group.CornflowerGroup.CORNFLOWER_GROUP;
 
 public class CornflowerWand extends Item {
-
-    private BlockPos blockInput;
-    private BlockPos blockOutput;
-    private FeyType mode = FeyType.NONE;
 
     public CornflowerWand() {
         super(new Settings().group(CORNFLOWER_GROUP).maxCount(1));
@@ -58,6 +57,11 @@ public class CornflowerWand extends Item {
         // If it's in item mode and a chest, set it to input/output. The input actually does not work by default, we're using a mixin for that
         // If it's in animal mode, set it to input/output
         if (!context.getWorld().isClient()) {
+            CompoundTag tag = context.getStack().getTag();
+            Cornflower.LOGGER.info("Used on block");
+            Cornflower.LOGGER.info("Item: " + context.getStack());
+            Cornflower.LOGGER.info("tag " + tag);
+
             if (context.getWorld().getBlockState(context.getBlockPos()).getBlock() instanceof BottledFeyBlock) {
                 context.getWorld().removeBlock(context.getBlockPos(), false);
 
@@ -70,29 +74,31 @@ public class CornflowerWand extends Item {
             }
             // Set chest input/output
             // TODO: Make it work for different types of inventories?
-            else if (mode == FeyType.TRANSPORT_ITEM && context.getPlayer() != null && context.getWorld().getBlockEntity(context.getBlockPos()) instanceof LootableContainerBlockEntity) {
-                if (context.getPlayer().isSneaking()) {
-                    // Set output block
-                    blockOutput = context.getBlockPos();
-                    context.getPlayer().addChatMessage(new TranslatableText("item.cornflower.wand_cornflower.use_output"), true);
-                    return ActionResult.SUCCESS;
-                }/*else {
+            else if (tag != null && tag.contains("Type")) {
+                if (tag.getString("Type").equals(FeyType.TRANSPORT_ITEM.toString()) && context.getPlayer() != null && context.getWorld().getBlockEntity(context.getBlockPos()) instanceof LootableContainerBlockEntity) {
+                    if (context.getPlayer().isSneaking()) {
+                        // Set output block
+                        tag.put("BlockOutput", NbtHelper.fromBlockPos(context.getBlockPos()));
+                        context.getPlayer().addChatMessage(new TranslatableText("item.cornflower.wand_cornflower.use_output"), true);
+                        return ActionResult.SUCCESS;
+                    }/*else {
                 // Set input block, actually in chest mixin
                 blockInput = context.getBlockPos();
                 context.getPlayer().addChatMessage(new TranslatableText("item.cornflower.wand_cornflower.use_input"), true);
                 return ActionResult.SUCCESS;
                 } */
-            } else if (mode == FeyType.TRANSPORT_ANIMAL && context.getPlayer() != null) {
-                if (context.getPlayer().isSneaking()) {
-                    // Set output block
-                    blockOutput = context.getBlockPos();
-                    context.getPlayer().addChatMessage(new TranslatableText("item.cornflower.wand_cornflower.use_output"), true);
-                    return ActionResult.SUCCESS;
-                } else {
-                    // Set input block, actually in chest mixin
-                    blockInput = context.getBlockPos();
-                    context.getPlayer().addChatMessage(new TranslatableText("item.cornflower.wand_cornflower.use_input"), true);
-                    return ActionResult.SUCCESS;
+                } else if (tag.getString("Type").equals(FeyType.TRANSPORT_ANIMAL.toString()) && context.getPlayer() != null) {
+                    if (context.getPlayer().isSneaking()) {
+                        // Set output block
+                        tag.put("BlockOutput", NbtHelper.fromBlockPos(context.getBlockPos()));
+                        context.getPlayer().addChatMessage(new TranslatableText("item.cornflower.wand_cornflower.use_output"), true);
+                        return ActionResult.SUCCESS;
+                    } else {
+                        // Set input block, actually in chest mixin
+                        tag.put("BlockInput", NbtHelper.fromBlockPos(context.getBlockPos()));
+                        context.getPlayer().addChatMessage(new TranslatableText("item.cornflower.wand_cornflower.use_input"), true);
+                        return ActionResult.SUCCESS;
+                    }
                 }
             }
         }
@@ -107,9 +113,18 @@ public class CornflowerWand extends Item {
         if (entity instanceof FeyEntity) {
             FeyEntity feyEntity = (FeyEntity) entity;
 
-            feyEntity.setInputBlock(this.blockInput);
-            feyEntity.setOutputBlock(this.blockOutput);
-            feyEntity.setType(mode);
+            CompoundTag tag = stack.getTag();
+            if (tag != null) {
+                if (tag.contains("BlockInput") && tag.get("BlockInput") != null)
+                    feyEntity.setInputBlock(NbtHelper.toBlockPos((CompoundTag) tag.get("BlockInput")));
+                if (tag.contains("BlockOutput") && tag.get("BlockOutput") != null)
+                    feyEntity.setOutputBlock(NbtHelper.toBlockPos((CompoundTag) tag.get("BlockOutput")));
+                if (tag.contains("Type"))
+                    feyEntity.setType(FeyType.valueOf(tag.getString("Type")));
+                // Clear Fey inventory
+                ItemScatterer.spawn(entity.getEntityWorld(), new BlockPos(entity.getPos()), feyEntity.getItems());
+                feyEntity.removeAllPassengers();
+            }
 
             user.addChatMessage(new TranslatableText("item.cornflower.wand_cornflower.use_fey"), true);
 
@@ -122,8 +137,36 @@ public class CornflowerWand extends Item {
     public TypedActionResult<ItemStack> use(World world, PlayerEntity user, Hand hand) {
         // Change modes with mode click
         if (KeyBinds.wandModeKey.isPressed()) {
-            // Shift returns the next mode
+            if (user.getMainHandStack().getItem() == CornflowerItems.CORNFLOWER_WAND) {
+                // Shift returns the next mode
+                Cornflower.LOGGER.info("Item used " + user.getMainHandStack());
+                useSpecificHand(user, user.getMainHandStack());
+            }
+            if (user.getOffHandStack().getItem() == CornflowerItems.CORNFLOWER_WAND) {
+                // Shift returns the next mode
+                Cornflower.LOGGER.info("Item used " + user.getOffHandStack());
+                useSpecificHand(user, user.getOffHandStack());
+            }
+            return TypedActionResult.success(user.getStackInHand(hand));
+        } else return TypedActionResult.pass(user.getStackInHand(hand));
+    }
+
+    public void useSpecificHand(PlayerEntity user, ItemStack stack) {
+        CompoundTag tag = stack.getTag();
+        if (tag == null) {
+            Cornflower.LOGGER.info("Tag null");
+            // I think i need to rewrite this without the "subtag" whatever that is
+            CompoundTag compoundTag = new CompoundTag();
+            compoundTag.putString("Type", "NONE");
+            stack.setTag(compoundTag);
+            Cornflower.LOGGER.info("set tag " + compoundTag);
+        } else if (tag.contains("Type")) {
+            Cornflower.LOGGER.info("Has tag");
+            FeyType mode = FeyType.valueOf(tag.getString("Type"));
+            Cornflower.LOGGER.info("tag " + tag.getString("Type"));
             mode = mode.shift();
+            Cornflower.LOGGER.info("mode " + mode);
+            tag.putString("Type", mode.toString());
             // Print out what mode was just set
             if (mode == FeyType.TRANSPORT_ITEM)
                 user.addChatMessage(new TranslatableText("item.cornflower.wand_cornflower.use_mode_item"), true);
@@ -133,34 +176,42 @@ public class CornflowerWand extends Item {
                 user.addChatMessage(new TranslatableText("item.cornflower.wand_cornflower.use_mode_none"), true);
 
             // Clear input/output blocks
-            blockInput = null;
-            blockOutput = null;
-
-            return TypedActionResult.success(user.getStackInHand(hand));
-        } else return TypedActionResult.pass(user.getStackInHand(hand));
+            tag.remove("BlockInput");
+            tag.remove("BlockOutput");
+        }
     }
 
     @Environment(EnvType.CLIENT)
     @Override
     public void appendTooltip(ItemStack itemStack, World world, List<Text> tooltip, TooltipContext tooltipContext) {
-        // Mode tooltip
-        if (mode == FeyType.TRANSPORT_ITEM)
-            tooltip.add(new TranslatableText("item.cornflower.wand_cornflower.tooltip_mode_item"));
-        else if (mode == FeyType.TRANSPORT_ANIMAL)
-            tooltip.add(new TranslatableText("item.cornflower.wand_cornflower.tooltip_mode_animal"));
-        else
-            tooltip.add(new TranslatableText("item.cornflower.wand_cornflower.tooltip_mode_none"));
-        // Input / Output tooltip
-        if (blockInput == null) tooltip.add(new TranslatableText("item.cornflower.wand_cornflower.tooltip_input"));
-        else
-            tooltip.add(new TranslatableText("item.cornflower.wand_cornflower.tooltip_input").append(blockInput.toShortString()));
-        if (blockOutput == null) tooltip.add(new TranslatableText("item.cornflower.wand_cornflower.tooltip_output"));
-        else
-            tooltip.add(new TranslatableText("item.cornflower.wand_cornflower.tooltip_output").append(blockOutput.toShortString()));
+        CompoundTag tag = itemStack.getTag();
+        if (tag != null) {
+            //Cornflower.LOGGER.info(" type: " + tag.getString("Type"));
+            // Mode tooltip
+            if (tag.contains("Type")) {
+                if (tag.getString("Type").equals(FeyType.TRANSPORT_ITEM.toString()))
+                    tooltip.add(new TranslatableText("item.cornflower.wand_cornflower.tooltip_mode_item"));
+                else if (tag.getString("Type").equals(FeyType.TRANSPORT_ANIMAL.toString()))
+                    tooltip.add(new TranslatableText("item.cornflower.wand_cornflower.tooltip_mode_animal"));
+                else
+                    tooltip.add(new TranslatableText("item.cornflower.wand_cornflower.tooltip_mode_none"));
+            }
+            // Input / Output tooltip
+            if (tag.contains("BlockInput") && tag.get("BlockInput") != null) {
+                tooltip.add(new TranslatableText("item.cornflower.wand_cornflower.tooltip_input").append(NbtHelper.toBlockPos((CompoundTag) tag.get("BlockInput")).toShortString()));
+            } else
+                tooltip.add(new TranslatableText("item.cornflower.wand_cornflower.tooltip_input"));
+            if (tag.contains("BlockOutput") && tag.get("BlockOutput") != null)
+                tooltip.add(new TranslatableText("item.cornflower.wand_cornflower.tooltip_output").append(NbtHelper.toBlockPos((CompoundTag) tag.get("BlockOutput")).toShortString()));
+            else
+                tooltip.add(new TranslatableText("item.cornflower.wand_cornflower.tooltip_output"));
+        }
     }
 
-    public void setBlockInput(BlockPos blockInput) {
-        this.blockInput = blockInput;
+    public void setBlockInput(BlockPos blockInput, ItemStack stack) {
+        CompoundTag tag = stack.getTag();
+        if (tag != null)
+            tag.put("BlockInput", NbtHelper.fromBlockPos(blockInput));
     }
 
 }

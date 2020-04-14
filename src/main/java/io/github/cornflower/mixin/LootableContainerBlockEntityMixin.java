@@ -32,14 +32,14 @@ public abstract class LootableContainerBlockEntityMixin extends LockableContaine
     private void createMenu(int syncId, PlayerInventory playerInventory, PlayerEntity playerEntity, CallbackInfoReturnable<Container> ci) {
         if (playerEntity.getMainHandStack().getItem() instanceof CornflowerWand) {
             ItemStack stack = playerEntity.getMainHandStack();
-            if (!playerEntity.isSneaking()) ((CornflowerWand) stack.getItem()).setBlockInput(this.pos);
+            if (!playerEntity.isSneaking()) ((CornflowerWand) stack.getItem()).setBlockInput(this.pos, stack);
             playerEntity.addChatMessage(new TranslatableText("item.cornflower.wand_cornflower.use_input"), true);
             ci.setReturnValue(null);
             ci.cancel();
         }
         if (playerEntity.getOffHandStack().getItem() instanceof CornflowerWand) {
             ItemStack stack = playerEntity.getOffHandStack();
-            if (!playerEntity.isSneaking()) ((CornflowerWand) stack.getItem()).setBlockInput(this.pos);
+            if (!playerEntity.isSneaking()) ((CornflowerWand) stack.getItem()).setBlockInput(this.pos, stack);
             playerEntity.addChatMessage(new TranslatableText("item.cornflower.wand_cornflower.use_input"), true);
             ci.setReturnValue(null);
             ci.cancel();
