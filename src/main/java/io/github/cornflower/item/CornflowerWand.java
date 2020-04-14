@@ -117,10 +117,13 @@ public class CornflowerWand extends Item {
             if (tag != null) {
                 if (tag.contains("BlockInput") && tag.get("BlockInput") != null)
                     feyEntity.setInputBlock(NbtHelper.toBlockPos((CompoundTag) tag.get("BlockInput")));
+                else feyEntity.setInputBlock(null);
                 if (tag.contains("BlockOutput") && tag.get("BlockOutput") != null)
                     feyEntity.setOutputBlock(NbtHelper.toBlockPos((CompoundTag) tag.get("BlockOutput")));
-                if (tag.contains("Type"))
+                else feyEntity.setOutputBlock(null);
+                if (tag.contains("Type") && tag.getString("Type") != null)
                     feyEntity.setType(FeyType.valueOf(tag.getString("Type")));
+                else feyEntity.setType(FeyType.NONE);
                 // Clear Fey inventory
                 ItemScatterer.spawn(entity.getEntityWorld(), new BlockPos(entity.getPos()), feyEntity.getItems());
                 feyEntity.removeAllPassengers();
