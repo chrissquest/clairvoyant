@@ -34,7 +34,9 @@ public class FeyDepositAnimalGoal extends Goal implements defaultWeight{
     }
 
     public boolean shouldContinue() {
-        // Continue until fey no longer has items.
+        // TODO: Double check how this works, debug when shouldContinue runs, and is it running correctly
+        // The fey often gets confused when depositing an animal, not sure why exactly
+        // Continue until fey no longer has animals.
         return feyEntity.hasPassengers() && feyEntity.getOutputBlock() != null;
     }
 

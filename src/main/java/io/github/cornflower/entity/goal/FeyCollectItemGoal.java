@@ -64,7 +64,7 @@ public class FeyCollectItemGoal extends Goal implements defaultWeight{
 
             return false;
         } else {
-            // Continue until the fey has any items.
+            // Continue until the fey has no? items.
             return !feyEntity.hasItems();
         }
     }

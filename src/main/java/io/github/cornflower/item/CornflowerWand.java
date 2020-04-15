@@ -58,9 +58,6 @@ public class CornflowerWand extends Item {
         // If it's in animal mode, set it to input/output
         if (!context.getWorld().isClient()) {
             CompoundTag tag = context.getStack().getTag();
-            Cornflower.LOGGER.info("Used on block");
-            Cornflower.LOGGER.info("Item: " + context.getStack());
-            Cornflower.LOGGER.info("tag " + tag);
 
             if (context.getWorld().getBlockState(context.getBlockPos()).getBlock() instanceof BottledFeyBlock) {
                 context.getWorld().removeBlock(context.getBlockPos(), false);
@@ -142,12 +139,10 @@ public class CornflowerWand extends Item {
         if (KeyBinds.wandModeKey.isPressed()) {
             if (user.getMainHandStack().getItem() == CornflowerItems.CORNFLOWER_WAND) {
                 // Shift returns the next mode
-                Cornflower.LOGGER.info("Item used " + user.getMainHandStack());
                 useSpecificHand(user, user.getMainHandStack());
             }
             if (user.getOffHandStack().getItem() == CornflowerItems.CORNFLOWER_WAND) {
                 // Shift returns the next mode
-                Cornflower.LOGGER.info("Item used " + user.getOffHandStack());
                 useSpecificHand(user, user.getOffHandStack());
             }
             return TypedActionResult.success(user.getStackInHand(hand));
@@ -157,18 +152,13 @@ public class CornflowerWand extends Item {
     public void useSpecificHand(PlayerEntity user, ItemStack stack) {
         CompoundTag tag = stack.getTag();
         if (tag == null) {
-            Cornflower.LOGGER.info("Tag null");
             // I think i need to rewrite this without the "subtag" whatever that is
             CompoundTag compoundTag = new CompoundTag();
             compoundTag.putString("Type", "NONE");
             stack.setTag(compoundTag);
-            Cornflower.LOGGER.info("set tag " + compoundTag);
         } else if (tag.contains("Type")) {
-            Cornflower.LOGGER.info("Has tag");
             FeyType mode = FeyType.valueOf(tag.getString("Type"));
-            Cornflower.LOGGER.info("tag " + tag.getString("Type"));
             mode = mode.shift();
-            Cornflower.LOGGER.info("mode " + mode);
             tag.putString("Type", mode.toString());
             // Print out what mode was just set
             if (mode == FeyType.TRANSPORT_ITEM)
@@ -189,7 +179,6 @@ public class CornflowerWand extends Item {
     public void appendTooltip(ItemStack itemStack, World world, List<Text> tooltip, TooltipContext tooltipContext) {
         CompoundTag tag = itemStack.getTag();
         if (tag != null) {
-            //Cornflower.LOGGER.info(" type: " + tag.getString("Type"));
             // Mode tooltip
             if (tag.contains("Type")) {
                 if (tag.getString("Type").equals(FeyType.TRANSPORT_ITEM.toString()))
