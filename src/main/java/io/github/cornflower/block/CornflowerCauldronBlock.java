@@ -97,7 +97,7 @@ public class CornflowerCauldronBlock extends CauldronBlock implements BlockEntit
                 if (be instanceof CornflowerCauldronBlockEntity) {
                     CornflowerCauldronBlockEntity cauldron = (CornflowerCauldronBlockEntity) be;
                     ItemStack stack = player.getStackInHand(hand);
-                    if (!stack.isEmpty() && world.getBlockState(pos).get(CornflowerCauldronBlock.LEVEL) > 0) {
+                    if (!stack.isEmpty() && world.getBlockState(pos).get(CornflowerCauldronBlock.LEVEL) > 0 && CampfireUtil.isCampfireLitUnder(world, pos)) {
                         if (stack.getItem() instanceof CornflowerWand) {
                             // If craftable
                             if (cauldron.getRecipeForInvContent().isPresent()) {

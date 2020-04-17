@@ -7,9 +7,7 @@
 
 package io.github.cornflower.item;
 
-import io.github.cornflower.Cornflower;
 import io.github.cornflower.block.BottledFeyBlock;
-import io.github.cornflower.block.entity.CornflowerCauldronBlockEntity;
 import io.github.cornflower.client.KeyBinds;
 import io.github.cornflower.entity.CornflowerEntities;
 import io.github.cornflower.entity.FeyEntity;
@@ -18,10 +16,9 @@ import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.block.entity.LootableContainerBlockEntity;
 import net.minecraft.client.item.TooltipContext;
-import net.minecraft.entity.ItemEntity;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.inventory.Inventory;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemUsageContext;
@@ -136,17 +133,18 @@ public class CornflowerWand extends Item {
     // Right clicking
     public TypedActionResult<ItemStack> use(World world, PlayerEntity user, Hand hand) {
         // Change modes with mode click
-        if (KeyBinds.wandModeKey.isPressed()) {
-            if (user.getMainHandStack().getItem() == CornflowerItems.CORNFLOWER_WAND) {
-                // Shift returns the next mode
-                useSpecificHand(user, user.getMainHandStack());
-            }
-            if (user.getOffHandStack().getItem() == CornflowerItems.CORNFLOWER_WAND) {
-                // Shift returns the next mode
-                useSpecificHand(user, user.getOffHandStack());
-            }
-            return TypedActionResult.success(user.getStackInHand(hand));
-        } else return TypedActionResult.pass(user.getStackInHand(hand));
+        if (!world.isClient() || !KeyBinds.wandModeKey.isPressed()) return TypedActionResult.pass(user.getStackInHand(hand));
+
+        if (user.getMainHandStack().getItem() == CornflowerItems.CORNFLOWER_WAND) {
+            // Shift returns the next mode
+            useSpecificHand(user, user.getMainHandStack());
+        }
+        if (user.getOffHandStack().getItem() == CornflowerItems.CORNFLOWER_WAND) {
+            // Shift returns the next mode
+            useSpecificHand(user, user.getOffHandStack());
+        }
+        return TypedActionResult.success(user.getStackInHand(hand));
+
     }
 
     public void useSpecificHand(PlayerEntity user, ItemStack stack) {

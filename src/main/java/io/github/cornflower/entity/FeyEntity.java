@@ -356,6 +356,9 @@ public class FeyEntity extends MobEntityWithAi implements Flutterer, InventoryLi
     }
 
     @Override
-    public void onInvChange(Inventory inventory) {
-    }
+    public void onInvChange(Inventory inventory) {}
+
+    @Override
+    public boolean canImmediatelyDespawn(double distanceSquared) { return false; }
+
 }
