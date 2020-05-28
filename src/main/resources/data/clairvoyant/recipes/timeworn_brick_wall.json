@@ -1,0 +1,14 @@
+{
+  "type": "crafting_shaped",
+  "pattern": [
+    "TTT",
+    "TTT"
+  ],
+  "key": {
+    "T": { "item": "clairvoyant:timeworn_brick" }
+  },
+  "result": {
+    "item": "clairvoyant:timeworn_brick_wall",
+    "count": 6
+  }
+}

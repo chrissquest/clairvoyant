@@ -1,0 +1,7 @@
+{
+    "variants": {
+        "type=bottom": { "model": "clairvoyant:block/timeworn_brick_slab" },
+        "type=top": { "model": "clairvoyant:block/timeworn_brick_slab_top" },
+        "type=double": { "model": "clairvoyant:block/timeworn_brick" }
+    }
+}

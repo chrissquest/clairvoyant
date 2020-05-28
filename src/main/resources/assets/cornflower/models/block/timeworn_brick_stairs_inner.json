@@ -1,8 +1,0 @@
-{
-    "parent": "block/inner_stairs",
-    "textures": {
-        "bottom": "cornflower:block/timeworn_brick",
-        "top": "cornflower:block/timeworn_brick",
-        "side": "cornflower:block/timeworn_brick"
-    }
-}

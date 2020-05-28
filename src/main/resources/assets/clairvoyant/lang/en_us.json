@@ -1,0 +1,35 @@
+{
+  "itemGroup.clairvoyant.clairvoyant_group": "Cornfloweries",
+
+  "item.clairvoyant.wand_clairvoyant": "Cornflower Wand",
+  "item.clairvoyant.wand_clairvoyant.use_input": "Set input",
+  "item.clairvoyant.wand_clairvoyant.use_output": "Set output",
+  "item.clairvoyant.wand_clairvoyant.use_fey": "Transferred to fey",
+  "item.clairvoyant.wand_clairvoyant.use_mode_none": "Mode set to none",
+  "item.clairvoyant.wand_clairvoyant.use_mode_item": "Mode set to item",
+  "item.clairvoyant.wand_clairvoyant.use_mode_animal": "Mode set to animal",
+  "item.clairvoyant.wand_clairvoyant.tooltip_mode_none": "Mode: None",
+  "item.clairvoyant.wand_clairvoyant.tooltip_mode_item": "Mode: Item",
+  "item.clairvoyant.wand_clairvoyant.tooltip_mode_animal": "Mode: Animal",
+  "item.clairvoyant.wand_clairvoyant.tooltip_input": "Input Block: ",
+  "item.clairvoyant.wand_clairvoyant.tooltip_output": "Output Block: ",
+  "item.clairvoyant.clairvoyant_essence": "Cornflower Essence",
+  "item.clairvoyant.bottled_essence": "Bottled Essence",
+
+
+  "block.clairvoyant.clairvoyant_cauldron": "Cornflower Cauldron",
+  "block.clairvoyant.bottled_fey": "Bottled Fey",
+  "block.clairvoyant.timeworn_brick": "Timeworn Bricks",
+  "block.clairvoyant.timeworn_brick_slab": "Timeworn Brick Slab",
+  "block.clairvoyant.timeworn_brick_stairs": "Timeworn Brick Stairs",
+  "block.clairvoyant.timeworn_brick_wall": "Timeworn Brick Wall",
+
+  "entity.clairvoyant.fey": "Fey",
+
+  "advancements.clairvoyant.root.title": "Cornflower",
+  "advancements.clairvoyant.root.description": "Wonder what you get if you break enough of them?",
+  "advancements.clairvoyant.create_fey.title": "Automated",
+  "advancements.clairvoyant.create_fey.description": "Just a fancy tech mod.",
+
+  "key.clairvoyant.wand_mode_key": "Wand Mode"
+}

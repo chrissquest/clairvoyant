@@ -1,7 +1,0 @@
-{
-    "variants": {
-        "type=bottom": { "model": "cornflower:block/timeworn_brick_slab" },
-        "type=top": { "model": "cornflower:block/timeworn_brick_slab_top" },
-        "type=double": { "model": "cornflower:block/timeworn_brick" }
-    }
-}

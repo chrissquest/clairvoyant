@@ -1,44 +1,29 @@
 {
   "schemaVersion": 1,
-  "id": "cornflower",
+  "id": "clairvoyant",
   "version": "${version}",
 
-  "name": "Cornflower",
-  "description": "ModFest 1.15 submission from Team Cornflower.",
+  "name": "Clairvoyant",
+  "description": "Chris's take on continuing 'Cornflower' from ModFest 1.15",
   "authors": [
-    {
-      "name": "JoeZwet",
-      "contact": {
-        "homepage": "https://joezwet.me"
-      }
-    },
     {
       "name": "Chriss",
       "contact": {
         "homepage": "https://chriswiz.ga"
       }
-    },
-    {
-      "name": "SovietPropaganda",
-      "contact": {
-
-      }
     }
   ],
-  "contact": {
-    "sources": "https://github.com/Modfest-1-15-Team-Cornflower/Cornflower"
-  },
 
   "license": "GPL-3.0-only",
-  "icon": "assets/cornflower/icon.png",
+  "icon": "assets/clairvoyant/icon.png",
 
   "environment": "*",
   "entrypoints": {
-    "main": [ "io.github.cornflower.Cornflower" ],
-    "client": [ "io.github.cornflower.client.CornflowerClient" ]
+    "main": [ "io.github.clairvoyant.Clairvoyant" ],
+    "client": [ "io.github.clairvoyant.client.ClairvoyantClient" ]
   },
   "mixins": [
-    "cornflower.mixins.json"
+    "clairvoyant.mixins.json"
   ],
 
   "depends": {

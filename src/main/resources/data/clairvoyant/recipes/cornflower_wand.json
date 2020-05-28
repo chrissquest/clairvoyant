@@ -1,0 +1,18 @@
+{
+  "type": "crafting_shaped",
+  "group": "wand_clairvoyant",
+  "pattern": [
+    "  E",
+    " S ",
+    "G  "
+  ],
+  "key": {
+    "E": { "item": "clairvoyant:cornflower_essence" },
+    "S": { "item": "minecraft:stick" },
+    "G": { "item": "minecraft:gold_nugget" }
+  },
+  "result": {
+    "item": "clairvoyant:wand_clairvoyant",
+    "count": 1
+  }
+}

@@ -1,6 +1,6 @@
 /*
- * This file is part of Cornflower
- * Copyright (C) 2020, Team Cornflower.
+ * This file is part of Clairvoyant
+ * Copyright (C) 2020, Chriss.
  *
  * This code is licensed under GNU General Public License v3.0, the full license text can be found in LICENSE
  */
@@ -19,15 +19,10 @@ version = "${project.mod_version}+fabric.${project.minecraft_version}"
 group = project.maven_group
 
 minecraft {
-	refmapName = "cornflower.refmap.json"
+	refmapName = "clairvoyant.refmap.json"
 }
 
 repositories {
-	maven {
-		maven { url 'https://maven.blamejared.com' }
-		name = "Spinnery"
-		url  "https://dl.bintray.com/spinnery/Spinnery"
-	}
 }
 
 dependencies {
@@ -35,15 +30,15 @@ dependencies {
 	mappings "net.fabricmc:yarn:${project.yarn_mappings}:v2"
 	modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
 	modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
-	modImplementation "vazkii.patchouli:Patchouli:${project.patchouli_version}"
+	modImplementation "io.github.prospector:modmenu:${project.modmenu_version}"
 }
 
 license {
 	header = project.file('HEADER')
 	ext {
 		year = Calendar.getInstance().get(Calendar.YEAR)
-		name = 'Team Cornflower'
-		mod = 'Cornflower'
+		name = 'Chriss'
+		mod = 'Clairvoyant'
 	}
 }
 

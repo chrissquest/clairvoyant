@@ -1,0 +1,16 @@
+{
+  "type": "crafting_shaped",
+  "group": "bottled_essence",
+  "pattern": [
+    "E",
+    "B"
+  ],
+  "key": {
+    "E": { "item": "clairvoyant:cornflower_essence" },
+    "B": { "item": "minecraft:glass_bottle" }
+  },
+  "result": {
+    "item": "clairvoyant:bottled_essence",
+    "count": 1
+  }
+}

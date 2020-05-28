@@ -1,0 +1,19 @@
+{
+    "required": true,
+    "minVersion": "0.8",
+    "package": "io.github.clairvoyant.mixin",
+    "compatibilityLevel": "JAVA_8",
+    "mixins": [
+        "CampfireBlockAccessor",
+        "CauldronBlockMixin",
+        "LocateCommandMixin",
+        "LootableContainerBlockEntityMixin",
+        "MixinDefaultBiomeFeatures"
+    ],
+    "client": [
+        "AbstractClientPlayerEntityMixin"
+    ],
+    "injectors": {
+        "defaultRequire": 1
+  }
+}

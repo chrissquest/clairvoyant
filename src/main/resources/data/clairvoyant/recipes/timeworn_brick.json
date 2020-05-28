@@ -1,0 +1,14 @@
+{
+  "type": "clairvoyant:cauldron",
+  "items": [
+    { "item": "clairvoyant:clairvoyant_essence" },
+    { "item": "minecraft:bricks"},
+    { "item": "minecraft:bricks"},
+    { "item": "minecraft:bricks"},
+    { "item": "minecraft:bricks"}
+  ],
+  "result": {
+    "item": "clairvoyant:timeworn_brick",
+    "count": 4
+  }
+}

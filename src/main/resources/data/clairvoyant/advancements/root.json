@@ -1,0 +1,35 @@
+{
+  "display": {
+    "icon": {
+      "item": "minecraft:clairvoyant"
+    },
+    "title": {
+      "translate": "advancements.clairvoyant.root.title"
+    },
+    "description": {
+      "translate": "advancements.clairvoyant.root.description"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false,
+    "background": "clairvoyant:textures/block/timeworn_brick.png"
+  },
+  "criteria": {
+    "clairvoyant": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "item": "minecraft:clairvoyant"
+          }
+        ]
+      }
+    }
+  },
+  "requirements": [
+    [
+      "clairvoyant"
+    ]
+  ]
+}
