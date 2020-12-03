@@ -16,8 +16,9 @@ import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockBox;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.ChunkPos;
-import net.minecraft.world.Heightmap;
-import net.minecraft.world.IWorld;
+import net.minecraft.world.ServerWorldAccess;
+import net.minecraft.world.StructureWorldAccess;
+import net.minecraft.world.gen.StructureAccessor;
 import net.minecraft.world.gen.chunk.ChunkGenerator;
 import net.minecraft.world.gen.feature.DefaultFeatureConfig;
 
@@ -61,24 +62,20 @@ public class ClairvoyantRuinGenerator {
             compoundTag_1.putString("Rot", this.rotation.name());
         }
 
+        @Override
+        protected void handleMetadata(String metadata, BlockPos pos, ServerWorldAccess serverWorldAccess, Random random, BlockBox boundingBox) {
+
+        }
+
         public void setStructureData(StructureManager structureManager) {
             Structure structure_1 = structureManager.getStructureOrBlank(this.template);
-            StructurePlacementData structurePlacementData_1 = (new StructurePlacementData()).setRotation(this.rotation).setMirrored(BlockMirror.NONE).addProcessor(BlockIgnoreStructureProcessor.IGNORE_STRUCTURE_BLOCKS);
+            StructurePlacementData structurePlacementData_1 = (new StructurePlacementData()).setRotation(this.rotation).setMirror(BlockMirror.NONE).addProcessor(BlockIgnoreStructureProcessor.IGNORE_STRUCTURE_BLOCKS);
             this.setStructureData(structure_1, this.pos, structurePlacementData_1);
         }
 
         @Override
-        protected void handleMetadata(String s, BlockPos blockPos, IWorld iWorld, Random random, BlockBox blockBox) {
-        }
-
-        @Override
-        public boolean generate(IWorld world, ChunkGenerator<?> generator, Random rand, BlockBox box, ChunkPos pos) {
-            int yHeight = world.getTopY(Heightmap.Type.WORLD_SURFACE_WG, this.pos.getX(), this.pos.getZ());
-            BlockPos oldPos = this.pos;
-            this.pos = this.pos.add(0, yHeight - 1, 0);
-            boolean result = super.generate(world, generator, rand, box, pos);
-            this.pos = oldPos;
-            return result;
+        public boolean generate(StructureWorldAccess structureWorldAccess, StructureAccessor structureAccessor, ChunkGenerator chunkGenerator, Random random, BlockBox boundingBox, ChunkPos chunkPos, BlockPos blockPos) {
+            return super.generate(structureWorldAccess, structureAccessor, chunkGenerator, random, boundingBox, chunkPos, blockPos);
         }
     }
 }

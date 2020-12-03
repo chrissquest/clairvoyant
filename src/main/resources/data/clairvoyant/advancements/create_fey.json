@@ -2,7 +2,7 @@
   "parent": "clairvoyant:root",
   "display": {
     "icon": {
-      "item": "clairvoyant:bottled_essence"
+      "item": "clairvoyant:bottled_cornflower"
     },
     "title": {
       "translate": "advancements.clairvoyant.create_fey.title"

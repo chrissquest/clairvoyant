@@ -58,8 +58,8 @@ public class FeyDepositItemGoal extends Goal implements defaultWeight{
 
                 // Check if target inventory is full
                 int targetSlot = -1;
-                for (int i = 0; i < targetInventory.getInvSize(); i++) {
-                    if (targetInventory.getInvStack(i).isEmpty()) {
+                for (int i = 0; i < targetInventory.size(); i++) {
+                    if (targetInventory.getStack(i).isEmpty()) {
                         targetSlot = i;
                         break;
                     }
@@ -71,8 +71,8 @@ public class FeyDepositItemGoal extends Goal implements defaultWeight{
 
                 // Check if fey has item stack to give.
                 int feySlot = -1;
-                for (int i = 0; i < feyInventory.getInvSize(); i++) {
-                    if (!feyInventory.getInvStack(i).isEmpty()) {
+                for (int i = 0; i < feyInventory.size(); i++) {
+                    if (!feyInventory.getStack(i).isEmpty()) {
                         feySlot = i;
                         break;
                     }
@@ -83,9 +83,9 @@ public class FeyDepositItemGoal extends Goal implements defaultWeight{
                 }
 
                 // Move a stack from the fey inventory to the target inventory
-                ItemStack stack = feyInventory.getInvStack(feySlot);
-                feyInventory.removeInvStack(feySlot);
-                targetInventory.setInvStack(targetSlot, stack);
+                ItemStack stack = feyInventory.getStack(feySlot);
+                feyInventory.removeStack(feySlot);
+                targetInventory.setStack(targetSlot, stack);
 
                 // Now, set target back to input inventory
                 if (feyEntity.getInputBlock() != null) {

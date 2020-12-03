@@ -10,12 +10,13 @@ package io.github.clairvoyant.block.entity;
 import io.github.clairvoyant.recipe.CauldronRecipe;
 import io.github.clairvoyant.recipe.ClairvoyantRecipes;
 import net.fabricmc.fabric.api.block.entity.BlockEntityClientSerializable;
+import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntity;
-import net.minecraft.inventory.BasicInventory;
 import net.minecraft.inventory.Inventories;
+import net.minecraft.inventory.SimpleInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.util.DefaultedList;
+import net.minecraft.util.collection.DefaultedList;
 
 import java.util.Optional;
 
@@ -75,8 +76,8 @@ public class CornflowerCauldronBlockEntity extends BlockEntity implements BlockE
     }
 
     @Override
-    public void fromTag(CompoundTag tag) {
-        super.fromTag(tag);
+    public void fromTag(BlockState state, CompoundTag tag) {
+        super.fromTag(state, tag);
         this.setCraftingStage(CraftingStage.values()[tag.getInt("craftingStage")]);
         Inventories.fromTag(tag, this.inv);
     }
@@ -89,8 +90,8 @@ public class CornflowerCauldronBlockEntity extends BlockEntity implements BlockE
     }
 
     @Override
-    public void fromClientTag(CompoundTag compoundTag) {
-        this.fromTag(compoundTag);
+    public void fromClientTag(CompoundTag tag) {
+        this.fromTag(null, tag);
     }
 
     @Override
@@ -99,7 +100,7 @@ public class CornflowerCauldronBlockEntity extends BlockEntity implements BlockE
     }
 
     public Optional<CauldronRecipe> getRecipeForInvContent() {
-        BasicInventory binv = new BasicInventory(inv.toArray(new ItemStack[]{}));
+        SimpleInventory binv = new SimpleInventory(inv.toArray(new ItemStack[]{}));
 
         if (world != null)
             return world.getRecipeManager().getFirstMatch(ClairvoyantRecipes.CAULDRON_RECIPE_TYPE, binv, world);

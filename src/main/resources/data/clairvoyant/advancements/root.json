@@ -1,7 +1,7 @@
 {
   "display": {
     "icon": {
-      "item": "minecraft:clairvoyant"
+      "item": "minecraft:cornflower"
     },
     "title": {
       "translate": "advancements.clairvoyant.root.title"
@@ -16,12 +16,12 @@
     "background": "clairvoyant:textures/block/timeworn_brick.png"
   },
   "criteria": {
-    "clairvoyant": {
+    "cornflower": {
       "trigger": "minecraft:inventory_changed",
       "conditions": {
         "items": [
           {
-            "item": "minecraft:clairvoyant"
+            "item": "minecraft:cornflower"
           }
         ]
       }
@@ -29,7 +29,7 @@
   },
   "requirements": [
     [
-      "clairvoyant"
+      "cornflower"
     ]
   ]
 }

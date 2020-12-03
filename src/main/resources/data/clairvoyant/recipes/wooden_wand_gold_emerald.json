@@ -1,0 +1,18 @@
+{
+  "type": "crafting_shaped",
+  "group": "wand_wooden_gold_emerald",
+  "pattern": [
+    "  G",
+    " S ",
+    "E  "
+  ],
+  "key": {
+    "G": { "item": "minecraft:gold_nugget" },
+    "S": { "item": "minecraft:stick" },
+    "E": { "item": "minecraft:emerald" }
+  },
+  "result": {
+    "item": "clairvoyant:wooden_wand",
+    "count": 1
+  }
+}

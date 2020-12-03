@@ -7,31 +7,26 @@
 
 package io.github.clairvoyant.world.feature;
 
+import com.mojang.serialization.Codec;
 import net.minecraft.structure.StructureManager;
 import net.minecraft.structure.StructureStart;
 import net.minecraft.util.BlockRotation;
 import net.minecraft.util.math.BlockBox;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.registry.DynamicRegistryManager;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.gen.chunk.ChunkGenerator;
-import net.minecraft.world.gen.feature.AbstractTempleFeature;
 import net.minecraft.world.gen.feature.DefaultFeatureConfig;
 import net.minecraft.world.gen.feature.StructureFeature;
 
-public class ClairvoyantRuinFeature extends AbstractTempleFeature<DefaultFeatureConfig> {
+public class ClairvoyantRuinFeature extends StructureFeature<DefaultFeatureConfig> {
 
-    public ClairvoyantRuinFeature() {
-        super(DefaultFeatureConfig::deserialize);
+    public ClairvoyantRuinFeature(Codec<DefaultFeatureConfig> codec) {
+        super(codec);
     }
 
-    @Override
-    protected int getSeedModifier() {
-        return 0;
-    }
-
-    @Override
-    public StructureStartFactory getStructureStartFactory() {
-        return RuinStructureStart::new;
+    public StructureStartFactory<DefaultFeatureConfig> getStructureStartFactory() {
+        return ClairvoyantRuinFeature.Start::new;
     }
 
     @Override
@@ -39,25 +34,19 @@ public class ClairvoyantRuinFeature extends AbstractTempleFeature<DefaultFeature
         return "clairvoyant_ruin";
     }
 
-    @Override
-    public int getRadius() {
-        return 3;
-    }
+    public static class Start extends StructureStart<DefaultFeatureConfig> {
 
-    public static class RuinStructureStart extends StructureStart {
-
-        public RuinStructureStart(StructureFeature<?> feature, int chunkX, int chunkZ, BlockBox box, int references, long l) {
-            super(feature, chunkX, chunkZ, box, references, l);
+        public Start(StructureFeature<DefaultFeatureConfig> structureFeature, int chunkX, int chunkZ, BlockBox box, int references, long l) {
+            super(structureFeature, chunkX, chunkZ, box, references, l);
         }
 
-        @Override
-        public void initialize(ChunkGenerator<?> chunkGenerator, StructureManager structureManager, int chunkX, int chunkZ, Biome biome) {
-            DefaultFeatureConfig defaultFeatureConfig = chunkGenerator.getStructureConfig(biome, ClairvoyantWorldFeatures.RUIN_FEATURE);
+        public void init(DynamicRegistryManager registryManager, ChunkGenerator chunkGenerator, StructureManager manager, int chunkX, int chunkZ, Biome biome, DefaultFeatureConfig config) {
+            //DefaultFeatureConfig defaultFeatureConfig = chunkGenerator.getStructureConfig(biome, ClairvoyantWorldFeatures.RUIN_FEATURE);
             int x = chunkX * 16;
             int z = chunkZ * 16;
             BlockPos startingPos = new BlockPos(x, 0, z);
             BlockRotation rotation = BlockRotation.values()[this.random.nextInt(BlockRotation.values().length)];
-            ClairvoyantRuinGenerator.addParts(structureManager, startingPos, rotation, this.children, defaultFeatureConfig);
+            //ClairvoyantRuinGenerator.addParts(manager, startingPos, rotation, this.children, defaultFeatureConfig);
             this.setBoundingBoxFromChildren();
         }
     }

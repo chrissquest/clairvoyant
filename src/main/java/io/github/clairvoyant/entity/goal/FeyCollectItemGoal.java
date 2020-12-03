@@ -56,8 +56,8 @@ public class FeyCollectItemGoal extends Goal implements defaultWeight{
             // Continue until all fey slots are filled.
             Inventory feyInventory = feyEntity.getItems();
 
-            for (int i = 0; i < feyInventory.getInvSize(); i++) {
-                if (feyInventory.getInvStack(i) == null) {
+            for (int i = 0; i < feyInventory.size(); i++) {
+                if (feyInventory.getStack(i) == null) {
                     return true;
                 }
             }
@@ -81,8 +81,8 @@ public class FeyCollectItemGoal extends Goal implements defaultWeight{
 
                 // Check if target inventory is empty
                 int targetSlot = -1;
-                for (int i = 0; i < targetInventory.getInvSize(); i++) {
-                    if (!targetInventory.getInvStack(i).isEmpty()) {
+                for (int i = 0; i < targetInventory.size(); i++) {
+                    if (!targetInventory.getStack(i).isEmpty()) {
                         targetSlot = i;
                         break;
                     }
@@ -94,8 +94,8 @@ public class FeyCollectItemGoal extends Goal implements defaultWeight{
 
                 // Check if there is an empty spot in the fey inventory
                 int feySlot = -1;
-                for (int i = 0; i < feyInventory.getInvSize(); i++) {
-                    if (feyInventory.getInvStack(i).isEmpty()) {
+                for (int i = 0; i < feyInventory.size(); i++) {
+                    if (feyInventory.getStack(i).isEmpty()) {
                         feySlot = i;
                         break;
                     }
@@ -106,9 +106,9 @@ public class FeyCollectItemGoal extends Goal implements defaultWeight{
                 }
 
                 // Move a stack from the target container to the fey inventory
-                ItemStack stack = targetInventory.getInvStack(targetSlot);
-                targetInventory.removeInvStack(targetSlot);
-                feyInventory.setInvStack(feySlot, stack);
+                ItemStack stack = targetInventory.getStack(targetSlot);
+                targetInventory.removeStack(targetSlot);
+                feyInventory.setStack(feySlot, stack);
 
                 // Set the target to output
                 if (feyEntity.getOutputBlock() != null) {

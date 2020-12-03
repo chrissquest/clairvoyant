@@ -8,17 +8,23 @@
 package io.github.clairvoyant.entity;
 
 import net.fabricmc.fabric.api.entity.FabricEntityTypeBuilder;
-import net.minecraft.entity.EntityCategory;
+import net.fabricmc.fabric.api.object.builder.v1.entity.FabricDefaultAttributeRegistry;
 import net.minecraft.entity.EntityDimensions;
 import net.minecraft.entity.EntityType;
+import net.minecraft.entity.SpawnGroup;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.registry.Registry;
 
 public class ClairvoyantEntities {
 
-    public static final EntityType<FeyEntity> FEY = FabricEntityTypeBuilder.create(EntityCategory.AMBIENT, FeyEntity::new).size(EntityDimensions.fixed(6 / 16F, 6 / 16F)).build();
+    // Build the EntityType
+    public static final EntityType<FeyEntity> FEY = FabricEntityTypeBuilder.<FeyEntity>create(SpawnGroup.AMBIENT, FeyEntity::new).size(EntityDimensions.fixed(6 / 16F, 6 / 16F)).build();
 
     public static void init() {
+        // Have to register Entity Attributes, and the entity separately , because vanilla hides this fabric has a register
+        FabricDefaultAttributeRegistry.register(FEY, FeyEntity.createMobAttributes());
+
+        // Register the entities
         Registry.register(Registry.ENTITY_TYPE, new Identifier("clairvoyant", "fey"), FEY);
     }
 }

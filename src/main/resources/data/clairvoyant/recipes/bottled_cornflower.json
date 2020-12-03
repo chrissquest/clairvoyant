@@ -1,6 +1,6 @@
 {
   "type": "crafting_shaped",
-  "group": "bottled_essence",
+  "group": "bottled_cornflower",
   "pattern": [
     "E",
     "B"
@@ -10,7 +10,7 @@
     "B": { "item": "minecraft:glass_bottle" }
   },
   "result": {
-    "item": "clairvoyant:bottled_essence",
+    "item": "clairvoyant:bottled_cornflower",
     "count": 1
   }
 }

@@ -31,6 +31,7 @@ dependencies {
 	modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
 	modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
 	modImplementation "io.github.prospector:modmenu:${project.modmenu_version}"
+    implementation 'org.jetbrains:annotations:15.0'
 }
 
 license {

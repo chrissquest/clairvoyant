@@ -1,6 +1,6 @@
 {
   "parent":"item/generated",
   "textures": {
-    "layer0": "clairvoyant:item/bottled_essence"
+    "layer0": "clairvoyant:item/clairvoyant_eye"
   }
 }

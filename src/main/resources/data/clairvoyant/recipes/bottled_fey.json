@@ -1,7 +1,7 @@
 {
   "type": "clairvoyant:cauldron",
   "items": [
-    { "item": "clairvoyant:bottled_essence" },
+    { "item": "clairvoyant:bottled_cornflower" },
     { "item": "minecraft:diamond" },
     { "item": "minecraft:clay_ball" }
   ],

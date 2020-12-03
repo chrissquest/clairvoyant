@@ -47,12 +47,9 @@ public class ClairvoyantClient implements ClientModInitializer {
             return view != null && pos != null ? BiomeColors.getWaterColor(view, pos) : -1;
         }, ClairvoyantBlocks.CORNFLOWER_CAULDRON);
 
-        KeyBindingRegistry.INSTANCE.addCategory("Cornflower");
-        KeyBindingRegistry.INSTANCE.register(KeyBinds.wandModeKey);
-
         EntityRendererRegistry.INSTANCE.register(ClairvoyantEntities.FEY, (entityRenderDispatcher, context) -> new FeyEntityRenderer(entityRenderDispatcher));
 
-        BlockRenderLayerMap.INSTANCE.putBlock(ClairvoyantBlocks.BOTTLED_FEY, RenderLayer.getTranslucent());
+        BlockRenderLayerMap.INSTANCE.putBlock(ClairvoyantBlocks.BOTTLED_FEY, RenderLayer.getCutout());
 
         Clairvoyant.LOGGER.info("[Cornflower] Client initialization complete. (Took {}ms)", System.currentTimeMillis() - startTime);
     }

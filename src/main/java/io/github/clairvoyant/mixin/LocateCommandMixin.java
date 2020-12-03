@@ -23,7 +23,6 @@ public abstract class LocateCommandMixin {
 
     private LocateCommandMixin() {}
 
-    @Shadow
     private static int execute(ServerCommandSource source, String name) {
         throw new AssertionError();
     }

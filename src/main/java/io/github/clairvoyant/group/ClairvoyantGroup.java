@@ -7,16 +7,16 @@
 
 package io.github.clairvoyant.group;
 
+import io.github.clairvoyant.item.ClairvoyantItems;
 import io.github.clairvoyant.util.ModConstants;
 import net.fabricmc.fabric.api.client.itemgroup.FabricItemGroupBuilder;
-import net.minecraft.block.Blocks;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Identifier;
 
 public class ClairvoyantGroup {
 
-    public static final ItemGroup CORNFLOWER_GROUP = FabricItemGroupBuilder.create(new Identifier(ModConstants.MOD_ID, "clairvoyant_group")).icon(() -> new ItemStack(Blocks.CORNFLOWER)).build();
+    public static final ItemGroup CLAIRVOYANT_GROUP = FabricItemGroupBuilder.create(new Identifier(ModConstants.MOD_ID, "clairvoyant_group")).icon(() -> new ItemStack(ClairvoyantItems.CLAIRVOYANT_EYE)).build();
 
     public static void init() {}
 }

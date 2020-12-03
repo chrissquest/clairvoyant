@@ -19,6 +19,7 @@ import net.minecraft.client.item.TooltipContext;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemUsageContext;
 import net.minecraft.nbt.CompoundTag;
@@ -34,12 +35,10 @@ import net.minecraft.world.World;
 
 import java.util.List;
 
-import static io.github.clairvoyant.group.ClairvoyantGroup.CORNFLOWER_GROUP;
+public class Wand extends Item {
 
-public class ClairvoyantWand extends Item {
-
-    public ClairvoyantWand() {
-        super(new Settings().group(CORNFLOWER_GROUP).maxCount(1));
+    public Wand(ItemGroup group) {
+        super(new Settings().group(group).maxCount(1));
     }
 
     @Override
@@ -72,24 +71,24 @@ public class ClairvoyantWand extends Item {
                     if (context.getPlayer().isSneaking()) {
                         // Set output block
                         tag.put("BlockOutput", NbtHelper.fromBlockPos(context.getBlockPos()));
-                        context.getPlayer().addChatMessage(new TranslatableText("item.clairvoyant.wand_clairvoyant.use_output"), true);
+                        context.getPlayer().sendMessage(new TranslatableText("item.clairvoyant.wand.use_output"), true);
                         return ActionResult.SUCCESS;
                     }/*else {
                 // Set input block, actually in chest mixin
                 blockInput = context.getBlockPos();
-                context.getPlayer().addChatMessage(new TranslatableText("item.clairvoyant.wand_clairvoyant.use_input"), true);
+                context.getPlayer().addChatMessage(new TranslatableText("item.clairvoyant.wand.use_input"), true);
                 return ActionResult.SUCCESS;
                 } */
                 } else if (tag.getString("Type").equals(FeyType.TRANSPORT_ANIMAL.toString()) && context.getPlayer() != null) {
                     if (context.getPlayer().isSneaking()) {
                         // Set output block
                         tag.put("BlockOutput", NbtHelper.fromBlockPos(context.getBlockPos()));
-                        context.getPlayer().addChatMessage(new TranslatableText("item.clairvoyant.wand_clairvoyant.use_output"), true);
+                        context.getPlayer().sendMessage(new TranslatableText("item.clairvoyant.wand.use_output"), true);
                         return ActionResult.SUCCESS;
                     } else {
                         // Set input block, actually in chest mixin
                         tag.put("BlockInput", NbtHelper.fromBlockPos(context.getBlockPos()));
-                        context.getPlayer().addChatMessage(new TranslatableText("item.clairvoyant.wand_clairvoyant.use_input"), true);
+                        context.getPlayer().sendMessage(new TranslatableText("item.clairvoyant.wand.use_input"), true);
                         return ActionResult.SUCCESS;
                     }
                 }
@@ -100,7 +99,7 @@ public class ClairvoyantWand extends Item {
     }
 
     @Override
-    public boolean useOnEntity(ItemStack stack, PlayerEntity user, LivingEntity entity, Hand hand) {
+    public ActionResult useOnEntity(ItemStack stack, PlayerEntity user, LivingEntity entity, Hand hand) {
 
         // Handle clicking on a Fey to set the input/output block
         if (entity instanceof FeyEntity) {
@@ -122,9 +121,9 @@ public class ClairvoyantWand extends Item {
                 feyEntity.removeAllPassengers();
             }
 
-            user.addChatMessage(new TranslatableText("item.clairvoyant.wand_clairvoyant.use_fey"), true);
+            user.sendMessage(new TranslatableText("item.clairvoyant.wand.use_fey"), true);
 
-            return true;
+            return ActionResult.SUCCESS;
         }
         return super.useOnEntity(stack, user, entity, hand);
     }
@@ -132,13 +131,14 @@ public class ClairvoyantWand extends Item {
     // Right clicking
     public TypedActionResult<ItemStack> use(World world, PlayerEntity user, Hand hand) {
         // Change modes with mode click
-        if (!world.isClient() || !KeyBinds.wandModeKey.isPressed()) return TypedActionResult.pass(user.getStackInHand(hand));
+        if (!world.isClient() || !KeyBinds.wandModeKey.isPressed())
+            return TypedActionResult.pass(user.getStackInHand(hand));
 
-        if (user.getMainHandStack().getItem() == ClairvoyantItems.CORNFLOWER_WAND) {
+        if (user.getMainHandStack().getItem() == this.asItem()) {
             // Shift returns the next mode
             useSpecificHand(user, user.getMainHandStack());
         }
-        if (user.getOffHandStack().getItem() == ClairvoyantItems.CORNFLOWER_WAND) {
+        if (user.getOffHandStack().getItem() == this.asItem()) {
             // Shift returns the next mode
             useSpecificHand(user, user.getOffHandStack());
         }
@@ -149,7 +149,7 @@ public class ClairvoyantWand extends Item {
     public void useSpecificHand(PlayerEntity user, ItemStack stack) {
         CompoundTag tag = stack.getTag();
         if (tag == null) {
-            // I think i need to rewrite this without the "subtag" whatever that is
+            // Sets default tags
             CompoundTag compoundTag = new CompoundTag();
             compoundTag.putString("Type", "NONE");
             stack.setTag(compoundTag);
@@ -159,11 +159,11 @@ public class ClairvoyantWand extends Item {
             tag.putString("Type", mode.toString());
             // Print out what mode was just set
             if (mode == FeyType.TRANSPORT_ITEM)
-                user.addChatMessage(new TranslatableText("item.clairvoyant.wand_clairvoyant.use_mode_item"), true);
+                user.sendMessage(new TranslatableText("item.clairvoyant.wand.use_mode_item"), true);
             else if (mode == FeyType.TRANSPORT_ANIMAL)
-                user.addChatMessage(new TranslatableText("item.clairvoyant.wand_clairvoyant.use_mode_animal"), true);
+                user.sendMessage(new TranslatableText("item.clairvoyant.wand.use_mode_animal"), true);
             else
-                user.addChatMessage(new TranslatableText("item.clairvoyant.wand_clairvoyant.use_mode_none"), true);
+                user.sendMessage(new TranslatableText("item.clairvoyant.wand.use_mode_none"), true);
 
             // Clear input/output blocks
             tag.remove("BlockInput");
@@ -179,21 +179,21 @@ public class ClairvoyantWand extends Item {
             // Mode tooltip
             if (tag.contains("Type")) {
                 if (tag.getString("Type").equals(FeyType.TRANSPORT_ITEM.toString()))
-                    tooltip.add(new TranslatableText("item.clairvoyant.wand_clairvoyant.tooltip_mode_item"));
+                    tooltip.add(new TranslatableText("item.clairvoyant.wand.tooltip_mode_item"));
                 else if (tag.getString("Type").equals(FeyType.TRANSPORT_ANIMAL.toString()))
-                    tooltip.add(new TranslatableText("item.clairvoyant.wand_clairvoyant.tooltip_mode_animal"));
+                    tooltip.add(new TranslatableText("item.clairvoyant.wand.tooltip_mode_animal"));
                 else
-                    tooltip.add(new TranslatableText("item.clairvoyant.wand_clairvoyant.tooltip_mode_none"));
+                    tooltip.add(new TranslatableText("item.clairvoyant.wand.tooltip_mode_none"));
             }
             // Input / Output tooltip
             if (tag.contains("BlockInput") && tag.get("BlockInput") != null) {
-                tooltip.add(new TranslatableText("item.clairvoyant.wand_clairvoyant.tooltip_input").append(NbtHelper.toBlockPos((CompoundTag) tag.get("BlockInput")).toShortString()));
+                tooltip.add(new TranslatableText("item.clairvoyant.wand.tooltip_input").append(NbtHelper.toBlockPos((CompoundTag) tag.get("BlockInput")).toShortString()));
             } else
-                tooltip.add(new TranslatableText("item.clairvoyant.wand_clairvoyant.tooltip_input"));
+                tooltip.add(new TranslatableText("item.clairvoyant.wand.tooltip_input"));
             if (tag.contains("BlockOutput") && tag.get("BlockOutput") != null)
-                tooltip.add(new TranslatableText("item.clairvoyant.wand_clairvoyant.tooltip_output").append(NbtHelper.toBlockPos((CompoundTag) tag.get("BlockOutput")).toShortString()));
+                tooltip.add(new TranslatableText("item.clairvoyant.wand.tooltip_output").append(NbtHelper.toBlockPos((CompoundTag) tag.get("BlockOutput")).toShortString()));
             else
-                tooltip.add(new TranslatableText("item.clairvoyant.wand_clairvoyant.tooltip_output"));
+                tooltip.add(new TranslatableText("item.clairvoyant.wand.tooltip_output"));
         }
     }
 

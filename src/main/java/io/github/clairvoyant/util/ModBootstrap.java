@@ -24,6 +24,6 @@ public class ModBootstrap {
         ClairvoyantBlockEntities.init();
         ClairvoyantEntities.init();
         ClairvoyantRecipes.init();
-        ClairvoyantWorldFeatures.init();
+        //ClairvoyantWorldFeatures.init();
     }
 }

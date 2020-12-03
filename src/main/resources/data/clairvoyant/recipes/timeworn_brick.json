@@ -1,7 +1,7 @@
 {
   "type": "clairvoyant:cauldron",
   "items": [
-    { "item": "clairvoyant:clairvoyant_essence" },
+    { "item": "clairvoyant:cornflower_essence" },
     { "item": "minecraft:bricks"},
     { "item": "minecraft:bricks"},
     { "item": "minecraft:bricks"},

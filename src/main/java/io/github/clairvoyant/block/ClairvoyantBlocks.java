@@ -14,7 +14,7 @@ import net.minecraft.item.Item;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.registry.Registry;
 
-import static io.github.clairvoyant.group.ClairvoyantGroup.CORNFLOWER_GROUP;
+import static io.github.clairvoyant.group.ClairvoyantGroup.CLAIRVOYANT_GROUP;
 
 public class ClairvoyantBlocks {
 
@@ -23,7 +23,9 @@ public class ClairvoyantBlocks {
     public static final TimewornBrickSlab TIMEWORN_BRICK_SLAB = (TimewornBrickSlab) registerBlock(new TimewornBrickSlab(), "timeworn_brick_slab");
     public static final TimewornBrickStairs TIMEWORN_BRICK_STAIRS = (TimewornBrickStairs) registerBlock(new TimewornBrickStairs(), "timeworn_brick_stairs");
     public static final TimewornBrickWall TIMEWORN_BRICK_WALL = (TimewornBrickWall) registerBlock(new TimewornBrickWall(), "timeworn_brick_wall");
-    public static final BottledFeyBlock BOTTLED_FEY = (BottledFeyBlock) registerBlock(new BottledFeyBlock(), "bottled_fey");
+
+    // Separate because i want this non stackable
+    public static final BottledFeyBlock BOTTLED_FEY = (BottledFeyBlock) registerBlock(new BottledFeyBlock(), "bottled_fey", 1);
 
 
     private static Block registerBlockWithoutItem(Block block, String id) {
@@ -32,7 +34,14 @@ public class ClairvoyantBlocks {
 
     private static Block registerBlock(Block block, String id) {
         Block registered = registerBlockWithoutItem(block, id);
-        Registry.register(Registry.ITEM, new Identifier(ModConstants.MOD_ID, id), new BlockItem(registered, new Item.Settings().group(CORNFLOWER_GROUP)));
+        Registry.register(Registry.ITEM, new Identifier(ModConstants.MOD_ID, id), new BlockItem(registered, new Item.Settings().group(CLAIRVOYANT_GROUP)));
+        return registered;
+    }
+
+    // Kinda really dumb java doesn't have default parameters, but im sure theres some ethical reason
+    private static Block registerBlock(Block block, String id, int count) {
+        Block registered = registerBlockWithoutItem(block, id);
+        Registry.register(Registry.ITEM, new Identifier(ModConstants.MOD_ID, id), new BlockItem(registered, new Item.Settings().group(CLAIRVOYANT_GROUP).maxCount(count)));
         return registered;
     }
 

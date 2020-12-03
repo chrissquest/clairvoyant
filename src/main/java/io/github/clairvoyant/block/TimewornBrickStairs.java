@@ -7,13 +7,13 @@
 
 package io.github.clairvoyant.block;
 
-import net.fabricmc.fabric.api.block.FabricBlockSettings;
+import net.fabricmc.fabric.api.object.builder.v1.block.FabricBlockSettings;
 import net.minecraft.block.Blocks;
 import net.minecraft.block.StairsBlock;
 import net.minecraft.util.DyeColor;
 
 public class TimewornBrickStairs extends StairsBlock {
     public TimewornBrickStairs() {
-        super(ClairvoyantBlocks.TIMEWORN_BRICK.getDefaultState(), FabricBlockSettings.copy(Blocks.BRICKS).materialColor(DyeColor.GRAY).build());
+        super(ClairvoyantBlocks.TIMEWORN_BRICK.getDefaultState(), FabricBlockSettings.copyOf(Blocks.BRICKS).materialColor(DyeColor.GRAY));
     }
 }

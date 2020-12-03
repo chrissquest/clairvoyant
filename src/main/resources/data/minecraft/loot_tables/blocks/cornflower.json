@@ -6,7 +6,7 @@
       "entries": [
         {
           "type": "minecraft:item",
-          "name": "minecraft:clairvoyant"
+          "name": "minecraft:cornflower"
         },
         {
           "type": "minecraft:item",
@@ -29,7 +29,7 @@
               "function": "minecraft:explosion_decay"
             }
           ],
-          "name": "clairvoyant:clairvoyant_essence"
+          "name": "clairvoyant:cornflower_essence"
         }
       ],
       "conditions": [

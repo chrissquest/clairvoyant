@@ -16,15 +16,16 @@ import net.minecraft.entity.ai.goal.Goal;
 import net.minecraft.entity.ai.goal.GoalSelector;
 import net.minecraft.entity.ai.pathing.BirdNavigation;
 import net.minecraft.entity.ai.pathing.EntityNavigation;
-import net.minecraft.entity.attribute.EntityAttributes;
+import net.minecraft.entity.attribute.DefaultAttributeContainer.Builder;
 import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.data.DataTracker;
 import net.minecraft.entity.data.TrackedData;
 import net.minecraft.entity.data.TrackedDataHandlerRegistry;
-import net.minecraft.entity.mob.MobEntityWithAi;
-import net.minecraft.inventory.BasicInventory;
+import net.minecraft.entity.mob.AmbientEntity;
+import net.minecraft.entity.mob.MobEntity;
 import net.minecraft.inventory.Inventory;
-import net.minecraft.inventory.InventoryListener;
+import net.minecraft.inventory.InventoryChangedListener;
+import net.minecraft.inventory.SimpleInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
@@ -38,7 +39,9 @@ import net.minecraft.world.World;
 import java.util.ArrayList;
 import java.util.List;
 
-public class FeyEntity extends MobEntityWithAi implements Flutterer, InventoryListener {
+import static net.minecraft.entity.attribute.EntityAttributes.*;
+
+public class FeyEntity extends AmbientEntity implements Flutterer, InventoryChangedListener {
     private static final TrackedData<Byte> FEY_FLAGS;
     // Type of Fey
     private FeyType type = FeyType.NONE;
@@ -51,12 +54,12 @@ public class FeyEntity extends MobEntityWithAi implements Flutterer, InventoryLi
 
     private BlockPos inputBlock;
     private BlockPos outputBlock;
-    private BasicInventory items;
+    private SimpleInventory items;
     private List<Goal> Goals = new ArrayList<>();
 
     public FeyEntity(EntityType<? extends FeyEntity> entityType, World world) {
         super(entityType, world);
-        this.method_6721();
+        this.create_inventory();
 
         this.moveControl = new FlightMoveControl(this, 20, true);
     }
@@ -94,14 +97,8 @@ public class FeyEntity extends MobEntityWithAi implements Flutterer, InventoryLi
         }
     }
 
-    @Override
-    protected void initAttributes() {
-        super.initAttributes();
-        this.getAttributes().register(EntityAttributes.FLYING_SPEED);
-
-        this.getAttributeInstance(EntityAttributes.MAX_HEALTH).setBaseValue(6.0D);
-        this.getAttributeInstance(EntityAttributes.FLYING_SPEED).setBaseValue(0.6000000238418579D);
-        this.getAttributeInstance(EntityAttributes.MOVEMENT_SPEED).setBaseValue(0.30000001192092896D);
+    public static Builder createMobAttributes() {
+        return MobEntity.createMobAttributes().add(GENERIC_MAX_HEALTH, 6.0D).add(GENERIC_FLYING_SPEED, 0.6D).add(GENERIC_MOVEMENT_SPEED, 0.3D);
     }
 
     @Override
@@ -130,7 +127,8 @@ public class FeyEntity extends MobEntityWithAi implements Flutterer, InventoryLi
     }
 
     @Override
-    protected void tickCramming() {}
+    protected void tickCramming() {
+    }
 
     @Override
     protected EntityNavigation createNavigation(World world) {
@@ -198,17 +196,20 @@ public class FeyEntity extends MobEntityWithAi implements Flutterer, InventoryLi
     }
 
     @Override
-    public void onInvChange(Inventory inventory) {}
+    public void onInventoryChanged(Inventory sender) {
+    }
 
     @Override
-    public boolean canImmediatelyDespawn(double distanceSquared) { return false; }
+    public boolean canImmediatelyDespawn(double distanceSquared) {
+        return false;
+    }
 
     @Override
     protected void dropInventory() {
         super.dropInventory();
 
-        for (int i = 0; i < items.getInvSize(); i++) {
-            ItemStack stack = items.getInvStack(i);
+        for (int i = 0; i < items.size(); i++) {
+            ItemStack stack = items.getStack(i);
             if (stack != null) {
                 ItemEntity itemEntity = new ItemEntity(this.world, this.getX(), this.getY(), this.getZ(), stack);
 
@@ -216,7 +217,7 @@ public class FeyEntity extends MobEntityWithAi implements Flutterer, InventoryLi
                 float g = this.random.nextFloat() * 6.2831855F;
                 itemEntity.setVelocity((-MathHelper.sin(g) * f), 0.20000000298023224D, (MathHelper.cos(g) * f));
 
-                items.removeInvStack(i);
+                items.removeStack(i);
             }
         }
     }
@@ -243,29 +244,29 @@ public class FeyEntity extends MobEntityWithAi implements Flutterer, InventoryLi
         if (tag.contains("Items")) {
             ListTag listTag = tag.getList("Items", 10);
             // From donkey entity, doesn't seem needed?
-            this.method_6721();
+            this.create_inventory();
 
             for (int i = 0; i < listTag.size(); ++i) {
                 CompoundTag compoundTag = listTag.getCompound(i);
                 int j = compoundTag.getByte("Slot") & 255;
-                if (j >= 0 && j < this.items.getInvSize()) {
-                    this.items.setInvStack(j, ItemStack.fromTag(compoundTag));
+                if (j >= 0 && j < this.items.size()) {
+                    this.items.setStack(j, ItemStack.fromTag(compoundTag));
                 }
             }
         }
     }
 
-    protected void method_6721() {
-        BasicInventory basicInventory = this.items;
-        this.items = new BasicInventory(inventorySize);
+    protected void create_inventory() {
+        SimpleInventory basicInventory = this.items;
+        this.items = new SimpleInventory(inventorySize);
         if (basicInventory != null) {
             basicInventory.removeListener(this);
-            int i = Math.min(basicInventory.getInvSize(), this.items.getInvSize());
+            int i = Math.min(basicInventory.size(), this.items.size());
 
             for (int j = 0; j < i; ++j) {
-                ItemStack itemStack = basicInventory.getInvStack(j);
+                ItemStack itemStack = basicInventory.getStack(j);
                 if (!itemStack.isEmpty()) {
-                    this.items.setInvStack(j, itemStack.copy());
+                    this.items.setStack(j, itemStack.copy());
                 }
             }
         }
@@ -290,11 +291,11 @@ public class FeyEntity extends MobEntityWithAi implements Flutterer, InventoryLi
             tag.put("OutputContainer", NbtHelper.fromBlockPos(outputBlock));
         }
 
-        if (!items.isInvEmpty()) {
+        if (!items.isEmpty()) {
             ListTag listTag = new ListTag();
 
-            for (int i = 0; i < this.items.getInvSize(); ++i) {
-                ItemStack itemStack = this.items.getInvStack(i);
+            for (int i = 0; i < this.items.size(); ++i) {
+                ItemStack itemStack = this.items.getStack(i);
                 if (!itemStack.isEmpty()) {
                     CompoundTag compoundTag = new CompoundTag();
                     compoundTag.putByte("Slot", (byte) i);
@@ -318,7 +319,7 @@ public class FeyEntity extends MobEntityWithAi implements Flutterer, InventoryLi
     }
 
     public boolean hasItems() {
-        return !items.isInvEmpty();
+        return !items.isEmpty();
     }
 
     public Inventory getItems() {

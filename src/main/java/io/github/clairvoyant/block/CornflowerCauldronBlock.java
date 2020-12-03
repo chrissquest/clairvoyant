@@ -9,17 +9,20 @@ package io.github.clairvoyant.block;
 
 
 import io.github.clairvoyant.block.entity.CornflowerCauldronBlockEntity;
-import io.github.clairvoyant.item.ClairvoyantWand;
+import io.github.clairvoyant.item.Wand;
 import io.github.clairvoyant.util.CampfireUtil;
-import net.fabricmc.fabric.api.block.FabricBlockSettings;
+import net.fabricmc.fabric.api.object.builder.v1.block.FabricBlockSettings;
 import net.minecraft.block.BlockEntityProvider;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.block.CauldronBlock;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.inventory.BasicInventory;
+import net.minecraft.inventory.Inventory;
+import net.minecraft.inventory.SimpleInventory;
+import net.minecraft.item.BucketItem;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.Items;
 import net.minecraft.particle.ParticleTypes;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvents;
@@ -37,7 +40,7 @@ import java.util.Random;
 public class CornflowerCauldronBlock extends CauldronBlock implements BlockEntityProvider {
 
     public CornflowerCauldronBlock() {
-        super(FabricBlockSettings.copy(Blocks.CAULDRON).materialColor(DyeColor.LIGHT_BLUE).build());
+        super(FabricBlockSettings.copyOf(Blocks.CAULDRON).materialColor(DyeColor.LIGHT_BLUE));
     }
 
     @Override
@@ -74,15 +77,15 @@ public class CornflowerCauldronBlock extends CauldronBlock implements BlockEntit
     }
 
     @Override
-    public void onBlockRemoved(BlockState state, World world, BlockPos pos, BlockState newState, boolean moved) {
-        if (state.getBlock() != newState.getBlock()) {
+    public void onStateReplaced(BlockState state, World world, BlockPos pos, BlockState newState, boolean moved) {
+        if (!state.isOf(newState.getBlock())) {
             BlockEntity blockEntity = world.getBlockEntity(pos);
-            if (blockEntity instanceof CornflowerCauldronBlockEntity) {
-                ItemScatterer.spawn(world, pos, ((CornflowerCauldronBlockEntity) blockEntity).getInv());
-                world.updateHorizontalAdjacent(pos, this);
+            if (blockEntity instanceof Inventory) {
+                ItemScatterer.spawn(world, pos, (Inventory)blockEntity);
+                world.updateComparators(pos, this);
             }
 
-            super.onBlockRemoved(state, world, pos, newState, moved);
+            super.onStateReplaced(state, world, pos, newState, moved);
         }
     }
 
@@ -97,11 +100,11 @@ public class CornflowerCauldronBlock extends CauldronBlock implements BlockEntit
                     CornflowerCauldronBlockEntity cauldron = (CornflowerCauldronBlockEntity) be;
                     ItemStack stack = player.getStackInHand(hand);
                     if (!stack.isEmpty() && world.getBlockState(pos).get(CornflowerCauldronBlock.LEVEL) > 0 && CampfireUtil.isCampfireLitUnder(world, pos)) {
-                        if (stack.getItem() instanceof ClairvoyantWand) {
+                        if (stack.getItem() instanceof Wand) {
                             // If craftable
                             if (cauldron.getRecipeForInvContent().isPresent()) {
-                                // Craft the recipe item and lower water level
-                                ItemScatterer.spawn(world, pos, new BasicInventory(cauldron.getRecipeForInvContent().get().craft(new BasicInventory(cauldron.getInv().toArray(new ItemStack[]{})))));
+                                // Craft the recipe item and lower water levels
+                                ItemScatterer.spawn(world, pos, new SimpleInventory(cauldron.getRecipeForInvContent().get().craft(new SimpleInventory(cauldron.getInv().toArray(new ItemStack[]{})))));
                                 this.setLevel(world, pos, state, state.get(LEVEL) - 1);
                             } else {
                                 // Else spill out the items
@@ -110,7 +113,8 @@ public class CornflowerCauldronBlock extends CauldronBlock implements BlockEntit
                             cauldron.clearInv();
                             cauldron.setCraftingStage(CornflowerCauldronBlockEntity.CraftingStage.NONE);
                             return ActionResult.SUCCESS;
-                        } else {
+                            // If it's not a bucket or bottle then take it as an ingredient
+                        } else if (stack.getItem() != Items.WATER_BUCKET && stack.getItem() != Items.GLASS_BOTTLE && stack.getItem() != Items.BUCKET && stack.getItem() != Items.POTION) {
                             if (!cauldron.isInvFull()) {
                                 cauldron.addItem(stack.split(1));
                                 // Update water color when added ingredient

@@ -52,7 +52,7 @@ public class FeyCollectAnimalGoal extends Goal implements defaultWeight{
             BlockPos in = feyEntity.getInputBlock();
             BlockBox mobInArea = BlockBox.create(in.getX() - pickupDistance, in.getY() - pickupDistance, in.getZ() - pickupDistance, in.getX() + pickupDistance, in.getY() + pickupDistance, in.getZ() + pickupDistance);
             // Animal to grab                           get closest                from list          that is type         boundry             ?                       ?                that is not itself     nearest to input
-            LivingEntity targetAnimal = feyEntity.world.getClosestEntity(feyEntity.world.getEntities(LivingEntity.class, Box.from(mobInArea), null), TargetPredicate.DEFAULT, feyEntity, in.getX(), in.getY(), in.getZ());
+            LivingEntity targetAnimal = feyEntity.world.getClosestEntity(feyEntity.world.getEntitiesByClass(LivingEntity.class, Box.from(mobInArea), null), TargetPredicate.DEFAULT, feyEntity, in.getX(), in.getY(), in.getZ());
             // If there is an animal to grab
             if (targetAnimal != null) {
                 // Check if there are animals

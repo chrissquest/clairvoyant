@@ -1,6 +1,6 @@
 {
     "parent": "item/generated",
     "textures": {
-        "layer0": "clairvoyant:item/bottled_fey"
+        "layer0": "clairvoyant:block/bottled_fey"
     }
 }

@@ -12,11 +12,11 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
 import net.minecraft.inventory.Inventory;
 import net.minecraft.item.ItemStack;
+import net.minecraft.network.PacketByteBuf;
 import net.minecraft.recipe.*;
-import net.minecraft.util.DefaultedList;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.JsonHelper;
-import net.minecraft.util.PacketByteBuf;
+import net.minecraft.util.collection.DefaultedList;
 import net.minecraft.world.World;
 
 
@@ -39,11 +39,11 @@ public class CauldronRecipe implements Recipe<Inventory> {
     @Override
     public boolean matches(Inventory inv, World world) {
 
-        ItemStack[] tempInv = new ItemStack[inv.getInvSize()];
+        ItemStack[] tempInv = new ItemStack[inv.size()];
         int invLength = 0;
         boolean match = true;
 
-        for (int i = 0; i < tempInv.length; i++) tempInv[i] = inv.getInvStack(i).copy();
+        for (int i = 0; i < tempInv.length; i++) tempInv[i] = inv.getStack(i).copy();
         for (ItemStack stack : tempInv) if (stack != null && !stack.isEmpty()) invLength++;
 
         if (ingredients.size() != invLength) match = false;
